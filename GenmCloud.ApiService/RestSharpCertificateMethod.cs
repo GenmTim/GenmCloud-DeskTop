@@ -17,7 +17,6 @@ namespace GenmCloud.Service
     using GenmCloud.Shared.HttpContact;
     using Newtonsoft.Json;
     using RestSharp;
-    using System.Text;
     using System.Threading.Tasks;
 
     /// <summary>

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace GenmCloud.Shared.HttpContact
+﻿namespace GenmCloud.Shared.HttpContact
 {
     public class BaseResponse
     {

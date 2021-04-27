@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace GenmCloud.Shared.HttpContact.Response
+﻿namespace GenmCloud.Shared.HttpContact.Response
 {
     /// <summary>
     /// 请求返回定义类

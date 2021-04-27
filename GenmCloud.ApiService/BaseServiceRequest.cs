@@ -3,9 +3,6 @@ using GenmCloud.Shared.Common;
 using GenmCloud.Shared.HttpContact;
 using Newtonsoft.Json;
 using RestSharp;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace GenmCloud.ApiService

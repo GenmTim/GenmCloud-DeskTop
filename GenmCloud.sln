@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GenmCloud.ApiService", "Gen
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GenmCloud.Shared", "GenmCloud.Shared\GenmCloud.Shared.csproj", "{CA29CCEA-D63D-4835-B8B3-3382D2069000}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Modules", "Modules", "{5B5A9D7F-6E84-41CE-92B2-F133392586AD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,6 +38,9 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{AB787680-D56F-4DC1-BFE5-58F842AC026F} = {5B5A9D7F-6E84-41CE-92B2-F133392586AD}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {CB502FFB-66F1-4BA8-BB38-E754156FF50F}

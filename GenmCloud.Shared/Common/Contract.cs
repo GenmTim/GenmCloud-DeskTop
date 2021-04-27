@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace GenmCloud.Shared.Common
+﻿namespace GenmCloud.Shared.Common
 {
     public static class Contract
     {

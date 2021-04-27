@@ -1,8 +1,6 @@
 ﻿using AspectInjector.Broker;
 using GenmCloud.Shared.DataInterfaces;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace GenmCloud.Shared.Common.Aop
 {

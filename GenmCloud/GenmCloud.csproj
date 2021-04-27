@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFrameworks>net48;net5.0-windows</TargetFrameworks>
+    <UseWPF>true</UseWPF>
+    <AssemblyName>GenmCloud</AssemblyName>
+    <ApplicationIcon>h_aid.ico</ApplicationIcon>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="HandyControl" Version="3.1.0" />
+    <PackageReference Include="MaterialDesignThemes" Version="4.0.0" />
+    <PackageReference Include="Prism.DryIoc" Version="8.0.0.1909" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\GenmCloud.ApiService\GenmCloud.ApiService.csproj" />
+    <ProjectReference Include="..\GenmCloud.Chat\GenmCloud.Chat.csproj" />
+  </ItemGroup>
+</Project>

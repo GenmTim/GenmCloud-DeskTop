@@ -1,7 +1,4 @@
 ﻿using GenmCloud.Shared.Dto;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace GenmCloud.Shared.HttpContact.Request
 {
@@ -9,6 +6,6 @@ namespace GenmCloud.Shared.HttpContact.Request
     {
         public override string route { get => "api/User/Login"; }
 
-        public LoginDto Parameter { get; set; } 
+        public LoginDto Parameter { get; set; }
     }
 }

@@ -1,0 +1,76 @@
+﻿<UserControl
+    x:Class="GenmCloud.Views.Login.SignInView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:hc="https://handyorg.github.io/handycontrol"
+    xmlns:local="clr-namespace:GenmCloud.Views.Login"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:prism="http://prismlibrary.com/"
+    prism:ViewModelLocator.AutoWireViewModel="True"
+    mc:Ignorable="d">
+    <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+        <Border Background="White" CornerRadius="4" />
+        <Border
+            Width="420"
+            Height="440"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center">
+            <StackPanel
+                Margin="8"
+                Background="White"
+                Orientation="Vertical">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock
+                        Margin="32,32,0,32"
+                        FontSize="24"
+                        FontWeight="Bold"
+                        Text="登录GenmCloud"
+                        UseLayoutRounding="True" />
+                    <Image
+                        Width="{Binding Source.PixelWidth, Mode=OneWay, RelativeSource={RelativeSource Self}}"
+                        Height="{Binding Source.PixelHeight, Mode=OneWay, RelativeSource={RelativeSource Self}}"
+                        Source="/Resources/Images/cloud.png"
+                        Stretch="Fill"
+                        UseLayoutRounding="True" />
+                </StackPanel>
+                <hc:SimplePanel>
+                    <StackPanel>
+                        <hc:TextBox
+                            x:Name="usernameBox"
+                            Height="40"
+                            Margin="32,0,32,32"
+                            hc:InfoElement.Placeholder="请输入邮箱号码"
+                            FontSize="12" />
+                        <hc:PasswordBox
+                            x:Name="passwordBox"
+                            Height="40"
+                            Margin="32,0,32,32"
+                            hc:InfoElement.Placeholder="请输入密码"
+                            ShowEyeButton="True" />
+                    </StackPanel>
+                </hc:SimplePanel>
+                <Grid Margin="32,0,32,32">
+                    <Button
+                        Height="40"
+                        HorizontalAlignment="Stretch"
+                        Click="SignInBtn_Click"
+                        Content="登录"
+                        Cursor="Hand"
+                        FontSize="16"
+                        Style="{StaticResource ButtonPrimary}" />
+                </Grid>
+                <StackPanel Margin="32,0,32,32" Orientation="Horizontal">
+                    <CheckBox Content="15天内自动登录" Foreground="Gray" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock
+                        Margin="32,0,0,32"
+                        Foreground="Gray"
+                        Text="还没有账号？" />
+                    <TextBlock Foreground="Blue" Text="立即注册" />
+                </StackPanel>
+            </StackPanel>
+        </Border>
+    </Grid>
+</UserControl>

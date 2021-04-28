@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace GenmCloud.Shared.Dto
+﻿namespace GenmCloud.Shared.Dto
 {
-    public  class LoginDto
+    public class LoginDto
     {
         public string Account { get; set; }
 

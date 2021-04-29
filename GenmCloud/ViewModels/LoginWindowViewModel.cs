@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 
 namespace GenmCloud.ViewModels
 {
+
+
     class LoginWindowViewModel
     {
         public LoginWindowViewModel()

@@ -1,0 +1,9 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:GenmCloud.Chat.Properties">
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="pack://application:,,,/GenmCloud.Core;component/Resources/Styles/Style.xaml" />
+        <ResourceDictionary Source="/Resources/Styles/Style.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+</ResourceDictionary>

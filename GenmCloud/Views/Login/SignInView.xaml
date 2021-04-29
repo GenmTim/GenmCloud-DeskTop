@@ -10,7 +10,7 @@
     prism:ViewModelLocator.AutoWireViewModel="True"
     mc:Ignorable="d">
     <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
-        <Border Background="White" CornerRadius="4" />
+        <Border Background="{DynamicResource RegionBrush}" CornerRadius="4" />
         <Border
             Width="420"
             Height="440"
@@ -18,7 +18,7 @@
             VerticalAlignment="Center">
             <StackPanel
                 Margin="8"
-                Background="White"
+                Background="{DynamicResource RegionBrush}"
                 Orientation="Vertical">
                 <StackPanel Orientation="Horizontal">
                     <TextBlock

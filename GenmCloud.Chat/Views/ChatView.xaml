@@ -1,0 +1,401 @@
+﻿<UserControl
+    x:Class="GenmCloud.Chat.Views.ChatView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:hc="https://handyorg.github.io/handycontrol"
+    xmlns:local="clr-namespace:GenmCloud.Chat.Views"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:prism="http://prismlibrary.com/"
+    xmlns:system="clr-namespace:System;assembly=mscorlib"
+    xmlns:token="clr-namespace:GenmCloud.Core.Data.Token;assembly=GenmCloud.Core"
+    d:DesignHeight="650"
+    d:DesignWidth="1060"
+    prism:ViewModelLocator.AutoWireViewModel="True"
+    Background="White"
+    mc:Ignorable="d">
+    <Grid Margin="0,0,0,24">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="280" />
+            <ColumnDefinition />
+            <ColumnDefinition Width="12" />
+        </Grid.ColumnDefinitions>
+        <!--#region Chat Peopel List-->
+        <hc:SimplePanel Grid.Column="0">
+            <Grid Margin="12,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="40" />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <hc:SimplePanel>
+                    <hc:SearchBar
+                        Height="36"
+                        Padding="12,0,0,0"
+                        hc:BorderElement.CornerRadius="8"
+                        hc:InfoElement.Placeholder="搜索"
+                        Background="#f1f2f7"
+                        BorderBrush="#adc6ff"
+                        BorderThickness="0"
+                        Style="{StaticResource SearchBarPlus}" />
+                </hc:SimplePanel>
+                <Grid Grid.Row="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="48" />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <hc:SimplePanel>
+                        <TextBlock
+                            VerticalAlignment="Center"
+                            Foreground="{StaticResource SecondaryTextBrush}"
+                            Text="最近交流" />
+                        <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
+                            <Button
+                                Width="24"
+                                Height="24"
+                                Padding="0"
+                                hc:BorderElement.CornerRadius="8"
+                                Background="#f0f5ff"
+                                BorderThickness="0"
+                                Cursor="Hand"
+                                Foreground="{StaticResource PrimaryBrush}">
+                                <TextBlock FontFamily="{StaticResource FIconFontFamily}" Text="&#xe61d;" />
+                            </Button>
+                        </StackPanel>
+                    </hc:SimplePanel>
+                    <hc:SimplePanel Grid.Row="1">
+                        <ListBox
+                            x:Name="_chatList"
+                            SelectedValue="{Binding ChatObject, Mode=TwoWay}"
+                            Style="{StaticResource Genm_ListBoxCustom}">
+                            <ListBox.ItemsSource>
+                                <x:Array Type="system:String">
+                                    <system:String>1</system:String>
+                                    <system:String>2</system:String>
+                                </x:Array>
+                            </ListBox.ItemsSource>
+                            <ListBox.ItemContainerStyle>
+                                <Style BasedOn="{StaticResource ListBoxItemCustom}" TargetType="ListBoxItem">
+                                    <Setter Property="Background" Value="{StaticResource TMS_TransparencyRegionBrush}" />
+                                    <Setter Property="Cursor" Value="Hand" />
+                                    <Setter Property="hc:BorderElement.CornerRadius" Value="8" />
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                                                <Border Background="{TemplateBinding Background}" CornerRadius="{TemplateBinding hc:BorderElement.CornerRadius}">
+                                                    <ContentPresenter
+                                                        HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                        VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                                        SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                                                </Border>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Background" Value="#A0F7F8Fb" />
+                                        </Trigger>
+                                        <Trigger Property="IsSelected" Value="True">
+                                            <Setter Property="Background" Value="#f7f8fb" />
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </ListBox.ItemContainerStyle>
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <hc:SimplePanel Height="64">
+                                        <Grid Margin="12,0">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto" />
+                                                <ColumnDefinition />
+                                            </Grid.ColumnDefinitions>
+                                            <hc:Gravatar
+                                                Width="44"
+                                                Height="44"
+                                                Id="1"
+                                                Style="{StaticResource GravatarCircleImg}" />
+                                            <Grid
+                                                Grid.Column="1"
+                                                Margin="8,0,0,0"
+                                                VerticalAlignment="Center">
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="20" />
+                                                    <RowDefinition Height="20" />
+                                                </Grid.RowDefinitions>
+                                                <TextBlock
+                                                    VerticalAlignment="Center"
+                                                    FontSize="14"
+                                                    FontWeight="SemiBold"
+                                                    Foreground="#151b33"
+                                                    Text="蔡承龙"
+                                                    TextTrimming="CharacterEllipsis" />
+                                                <TextBlock
+                                                    Grid.Row="1"
+                                                    VerticalAlignment="Center"
+                                                    Foreground="#757575"
+                                                    Text="你好！"
+                                                    TextTrimming="CharacterEllipsis" />
+                                                <TextBlock
+                                                    HorizontalAlignment="Right"
+                                                    VerticalAlignment="Center"
+                                                    Foreground="#757575"
+                                                    Text="11:15" />
+                                            </Grid>
+                                        </Grid>
+                                    </hc:SimplePanel>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </hc:SimplePanel>
+                </Grid>
+            </Grid>
+        </hc:SimplePanel>
+        <!--#endregion-->
+        <!--#region ChatBox-->
+        <hc:SimplePanel Grid.Column="1">
+            <Border Background="#edf0f5" CornerRadius="8" />
+            <ContentControl prism:RegionManager.RegionName="{x:Static Member=token:RegionToken.ChatContent}" />
+            <!--<Image
+                Width="{Binding Source.PixelWidth, Mode=OneWay, RelativeSource={RelativeSource Self}}"
+                Height="{Binding Source.PixelHeight, Mode=OneWay, RelativeSource={RelativeSource Self}}"
+                Source="pack://application:,,,/GenmCloud.Core;component/Resources/Images/office.png"
+                Stretch="Fill" />-->
+        </hc:SimplePanel>
+        <!--#endregion-->
+        <!--#region Detail-->
+        <hc:SimplePanel Grid.Column="2">
+            <Grid Margin="12,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <StackPanel
+                    Margin="0,40,0,0"
+                    HorizontalAlignment="Center"
+                    Orientation="Vertical">
+                    <hc:Gravatar Id="1" Style="{StaticResource GravatarCircleImg}" />
+                    <TextBlock
+                        Margin="0,12,0,0"
+                        HorizontalAlignment="Center"
+                        FontSize="16"
+                        FontWeight="SemiBold"
+                        Text="蔡承龙" />
+                    <TextBlock
+                        Margin="0,8,0,0"
+                        HorizontalAlignment="Center"
+                        Foreground="{StaticResource SecondaryTextBrush}">
+                        <Run Text="10" />
+                        <Run Text=" 个成员" />
+                    </TextBlock>
+                </StackPanel>
+                <hc:SimplePanel Grid.Row="1" Margin="0,24,0,0">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <Grid.Resources>
+                                <Style BasedOn="{StaticResource RadioBtnCustom}" TargetType="RadioButton">
+                                    <Setter Property="Background" Value="#f6f8fb" />
+                                    <Setter Property="VerticalContentAlignment" Value="Center" />
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="{x:Type RadioButton}">
+                                                <hc:SimplePanel
+                                                    x:Name="templateRoot"
+                                                    Width="{TemplateBinding Width}"
+                                                    Height="{TemplateBinding Height}"
+                                                    Background="Transparent"
+                                                    SnapsToDevicePixels="True">
+                                                    <Border
+                                                        Background="{TemplateBinding Background}"
+                                                        BorderBrush="{TemplateBinding BorderBrush}"
+                                                        BorderThickness="{TemplateBinding BorderThickness}"
+                                                        CornerRadius="{TemplateBinding hc:BorderElement.CornerRadius}">
+                                                        <ContentPresenter
+                                                            x:Name="contentPresenter"
+                                                            Grid.Column="1"
+                                                            Margin="{TemplateBinding Padding}"
+                                                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                                            Focusable="False"
+                                                            RecognizesAccessKey="True"
+                                                            SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                                                    </Border>
+                                                    <Border
+                                                        Margin="4"
+                                                        HorizontalAlignment="Right"
+                                                        VerticalAlignment="Top"
+                                                        Background="White"
+                                                        Style="{StaticResource BorderCircular}">
+                                                        <hc:SimplePanel>
+                                                            <Ellipse
+                                                                Width="5"
+                                                                Height="5"
+                                                                Margin="4"
+                                                                HorizontalAlignment="Center"
+                                                                VerticalAlignment="Center"
+                                                                Fill="{DynamicResource RegionBrush}"
+                                                                RenderTransformOrigin="0.5,0.5" />
+                                                            <Ellipse
+                                                                Name="optionMark"
+                                                                Width="5"
+                                                                Height="5"
+                                                                Margin="4"
+                                                                HorizontalAlignment="Center"
+                                                                VerticalAlignment="Center"
+                                                                Fill="{DynamicResource PrimaryBrush}"
+                                                                RenderTransformOrigin="0.5,0.5" />
+                                                        </hc:SimplePanel>
+                                                    </Border>
+                                                </hc:SimplePanel>
+                                                <ControlTemplate.Triggers>
+                                                    <Trigger Property="IsChecked" Value="False">
+                                                        <Setter TargetName="optionMark" Property="Visibility" Value="Collapsed" />
+                                                    </Trigger>
+                                                    <Trigger Property="IsChecked" Value="true">
+                                                        <Setter TargetName="optionMark" Property="Visibility" Value="Visible" />
+                                                    </Trigger>
+                                                </ControlTemplate.Triggers>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Background" Value="#CFd6e4ff" />
+                                        </Trigger>
+                                        <Trigger Property="IsChecked" Value="True">
+                                            <Setter Property="Background" Value="#d6e4ff" />
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Grid.Resources>
+                            <RadioButton
+                                Height="76"
+                                Margin="0,0,6,0"
+                                hc:BorderElement.CornerRadius="8"
+                                IsChecked="True">
+                                <hc:SimplePanel>
+                                    <StackPanel Margin="12" Orientation="Horizontal">
+                                        <TextBlock
+                                            VerticalAlignment="Center"
+                                            FontFamily="{StaticResource FIconFontFamily}"
+                                            FontSize="24"
+                                            Text="&#xe645;">
+                                            <TextBlock.Style>
+                                                <Style TargetType="TextBlock">
+                                                    <Setter Property="Foreground" Value="#d6dbe4" />
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=RadioButton}, Path=IsChecked}" Value="True">
+                                                            <Setter Property="Foreground" Value="{DynamicResource PrimaryBrush}" />
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBlock.Style>
+                                        </TextBlock>
+                                        <StackPanel Margin="8,0,0,0" Orientation="Vertical">
+                                            <TextBlock
+                                                FontSize="10"
+                                                FontWeight="SemiBold"
+                                                Text="所有文件">
+                                                <TextBlock.Style>
+                                                    <Style TargetType="TextBlock">
+                                                        <Setter Property="Foreground" Value="#bfbfbf" />
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=RadioButton}, Path=IsChecked}" Value="True">
+                                                                <Setter Property="Foreground" Value="{DynamicResource PrimaryBrush}" />
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </TextBlock.Style>
+                                            </TextBlock>
+                                            <TextBlock
+                                                FontSize="24"
+                                                FontWeight="SemiBold"
+                                                Text="231">
+                                                <TextBlock.Style>
+                                                    <Style TargetType="TextBlock">
+                                                        <Setter Property="Foreground" Value="#191e34" />
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=RadioButton}, Path=IsChecked}" Value="True">
+                                                                <Setter Property="Foreground" Value="#1d39c4" />
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </TextBlock.Style>
+                                            </TextBlock>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </hc:SimplePanel>
+                            </RadioButton>
+                            <RadioButton
+                                Grid.Column="1"
+                                Height="76"
+                                Margin="6,0,0,0"
+                                hc:BorderElement.CornerRadius="8"
+                                IsChecked="True">
+                                <hc:SimplePanel>
+                                    <StackPanel Margin="12" Orientation="Horizontal">
+                                        <TextBlock
+                                            VerticalAlignment="Center"
+                                            FontFamily="{StaticResource FIconFontFamily}"
+                                            FontSize="24"
+                                            Text="&#xe648;">
+                                            <TextBlock.Style>
+                                                <Style TargetType="TextBlock">
+                                                    <Setter Property="Foreground" Value="#d6dbe4" />
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=RadioButton}, Path=IsChecked}" Value="True">
+                                                            <Setter Property="Foreground" Value="{DynamicResource PrimaryBrush}" />
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBlock.Style>
+                                        </TextBlock>
+                                        <StackPanel Margin="8,0,0,0" Orientation="Vertical">
+                                            <TextBlock
+                                                FontSize="10"
+                                                FontWeight="SemiBold"
+                                                Text="所有链接">
+                                                <TextBlock.Style>
+                                                    <Style TargetType="TextBlock">
+                                                        <Setter Property="Foreground" Value="#bfbfbf" />
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=RadioButton}, Path=IsChecked}" Value="True">
+                                                                <Setter Property="Foreground" Value="{DynamicResource PrimaryBrush}" />
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </TextBlock.Style>
+                                            </TextBlock>
+                                            <TextBlock
+                                                FontSize="24"
+                                                FontWeight="SemiBold"
+                                                Text="231">
+                                                <TextBlock.Style>
+                                                    <Style TargetType="TextBlock">
+                                                        <Setter Property="Foreground" Value="#191e34" />
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=RadioButton}, Path=IsChecked}" Value="True">
+                                                                <Setter Property="Foreground" Value="#1d39c4" />
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </TextBlock.Style>
+                                            </TextBlock>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </hc:SimplePanel>
+                            </RadioButton>
+                        </Grid>
+                    </Grid>
+                </hc:SimplePanel>
+            </Grid>
+        </hc:SimplePanel>
+        <!--#endregion-->
+    </Grid>
+</UserControl>

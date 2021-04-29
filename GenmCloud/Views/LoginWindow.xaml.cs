@@ -1,4 +1,5 @@
 ﻿using Genm.WPF.Controls;
+using Genm.WPF.Data.Interface;
 using GenmCloud.Core.Data.Token;
 using GenmCloud.Core.Event;
 using GenmCloud.Views.Login;
@@ -14,7 +15,7 @@ namespace GenmCloud.Views
     /// <summary>
     /// LoginWindow.xaml 的交互逻辑
     /// </summary>
-    public partial class LoginWindow : BaseDialogWindow
+    public partial class LoginWindow : BaseDialogWindow, IRouteRegion
     {
         private readonly IRegionManager regionManager;
         private readonly IEventAggregator eventAggregator;
@@ -26,6 +27,11 @@ namespace GenmCloud.Views
             this.eventAggregator = eventAggregator;
             Loaded += (o, s) => { RegionHelper.RequestNavigate(regionManager, RegionToken.LoginContent, typeof(SignInView)); };
             eventAggregator.GetEvent<SignedInEvent>().Subscribe(SignedIn);
+        }
+
+        public static string GetRouteRegionName()
+        {
+            return RegionToken.LoginContent;
         }
 
         private void SignedIn()

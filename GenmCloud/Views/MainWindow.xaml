@@ -9,6 +9,7 @@
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:prism="http://prismlibrary.com/"
     xmlns:system="clr-namespace:System;assembly=mscorlib"
+    xmlns:token="clr-namespace:GenmCloud.Core.Data.Token;assembly=GenmCloud.Core"
     Title="{Binding Title}"
     Width="1224"
     Height="720"
@@ -16,6 +17,7 @@
     MinHeight="720"
     prism:ViewModelLocator.AutoWireViewModel="True"
     Background="White"
+    MouseDown="EliminateFocusEvent"
     WindowStartupLocation="CenterScreen">
     <Window.Resources />
     <WindowChrome.WindowChrome>
@@ -35,7 +37,7 @@
                     FocusVisualStyle="{x:Null}"
                     Focusable="True">
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="24" />
+                        <RowDefinition Height="28" />
                         <RowDefinition />
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
@@ -144,9 +146,10 @@
                                         </Style>
                                     </hc:SimplePanel.Resources>
                                     <ListBox
-                                        ItemsSource="{Binding MenuList}"
+                                        x:Name="menuListBox"
                                         SelectedIndex="0"
-                                        Style="{StaticResource ListBoxCustom_Re}">
+                                        SelectedValue="{Binding NowSelectedMenuItem, Mode=TwoWay}"
+                                        Style="{StaticResource Genm_ListBoxCustom}">
                                         <ListBox.ItemTemplate>
                                             <DataTemplate>
                                                 <RadioButton
@@ -166,7 +169,7 @@
                         </Grid>
                         <!--#region-->
                         <hc:SimplePanel>
-                            <!--<ContentControl Grid.Column="1" prism:RegionManager.RegionName="{x:Static Member=token:RegionToken.MainContent}" />-->
+                            <ContentControl Grid.Column="1" prism:RegionManager.RegionName="{x:Static Member=token:RegionToken.MainContent}" />
                         </hc:SimplePanel>
                         <!--#endregion-->
                     </DockPanel>
@@ -194,16 +197,17 @@
                                 Style="{x:Null}">
                                 <Button
                                     Click="MinimizedDialog"
-                                    Content="&#xe61c;"
+                                    Content="&#xe618;"
                                     Style="{StaticResource WindowMinBtnStyle}" />
                                 <Button
                                     Click="MaximizedDialog"
-                                    Content="&#xe61b;"
+                                    Content="&#xe621;"
                                     Style="{StaticResource WindowMaxBtnStyle}" />
                                 <Button
                                     hc:BackgroundSwitchElement.MouseDownBackground="Red"
                                     Click="CloseDialog"
-                                    Content="&#xe61a;"
+                                    Content="&#xe60c;"
+                                    FontSize="16"
                                     Style="{StaticResource WindowCloseBtnStyle}" />
                             </StackPanel>
                         </hc:SimplePanel>

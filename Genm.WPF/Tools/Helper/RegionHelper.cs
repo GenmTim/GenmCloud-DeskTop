@@ -12,7 +12,17 @@ namespace TMS.DeskTop.Tools.Helper
 
         public static void RequestNavigate(IRegionManager regionManager, string regionName, Type view, NavigationParameters param)
         {
-            regionManager.RequestNavigate(regionName, RouteHelper.GetPath(view), param);
+            RequestNavigate(regionManager, regionName, RouteHelper.GetPath(view), param);
+        }
+
+        public static void RequestNavigate(IRegionManager regionManager, string regionName, string viewPath)
+        {
+            RequestNavigate(regionManager, regionName, viewPath, null);
+        }
+
+        public static void RequestNavigate(IRegionManager regionManager, string regionName, string viewPath, NavigationParameters param)
+        {
+            regionManager.RequestNavigate(regionName, viewPath, param);
         }
 
         public static void RegisterViewWithRegion(IRegionManager regionManager, string regionName, Type viewType)

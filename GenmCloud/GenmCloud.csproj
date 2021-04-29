@@ -29,4 +29,7 @@
     <Resource Include="Resources\Fonts\Menu\iconfontmenu.ttf" />
     <Resource Include="Resources\Images\cloud.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Resources\Styles\" />
+  </ItemGroup>
 </Project>

@@ -1,4 +1,7 @@
 ﻿using Genm.WPF.Tools.Helper;
+using GenmCloud.Chat.Views;
+using GenmCloud.Chat.Views.UserControls;
+using GenmCloud.Core.Data.Token;
 using GenmCloud.Views;
 using GenmCloud.Views.Login;
 using Prism.Ioc;
@@ -7,6 +10,7 @@ using Prism.Regions;
 using System;
 using System.Collections.Generic;
 using System.Windows;
+using TMS.DeskTop.Tools.Helper;
 
 namespace GenmCloud
 {
@@ -22,26 +26,27 @@ namespace GenmCloud
 
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
-            var routeMap = Router.Instance.RouteMap;
-            
-            routeMap[typeof(LoginWindow)] = "login/";
+            containerRegistry.RegisterSingleton<Router>(() => 
             {
-                routeMap[typeof(SignInView)] = routeMap[typeof(LoginWindow)] + "signin/";
-                routeMap[typeof(SignUpView)] = routeMap[typeof(LoginWindow)] + "signup/";
+                return Router.Instance(containerRegistry);
+            });
+            var router = Container.Resolve<Router>();
+
+            router[typeof(LoginWindow)] = RouteHelper.MakeRouteInfo("login/");
+            {
+                router[typeof(SignInView)] = RouteHelper.MakeRouteInfo(typeof(LoginWindow), "signin/", RegionToken.LoginContent);
+                router[typeof(SignUpView)] = RouteHelper.MakeRouteInfo(typeof(LoginWindow), "signup/", RegionToken.LoginContent);
             }
 
-            routeMap[typeof(MainWindow)] = "main/";
-
-            // 进行注册
-            foreach (KeyValuePair<Type, string> kv in routeMap)
+            router[typeof(MainWindow)] = new RouteInfo { Path = "main/" };
             {
-                containerRegistry.RegisterForNavigation(kv.Key, kv.Value);
+                router[typeof(ChatView)] = RouteHelper.MakeRouteInfo(typeof(MainWindow), "chat/", RegionToken.MainContent);
             }
         }
 
         protected override void ConfigureModuleCatalog(IModuleCatalog moduleCatalog)
         {
-            //moduleCatalog.AddModule<Chat.ChatModule>();
+            moduleCatalog.AddModule<Chat.ChatModule>();
         }
 
         protected override void OnInitialized()

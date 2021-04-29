@@ -8,23 +8,8 @@ namespace TMS.DeskTop.Tools.Helper
 {
     public static class RouteHelper
     {
-        public static void RegisterToContainer(IContainerRegistry containerRegistry)
-        {
-            Router.Instance.Injection();
-            foreach (KeyValuePair<Type, string> kv in Router.Instance.RouteMap)
-            {
-                containerRegistry.RegisterForNavigation(kv.Key, kv.Value);
-            }
-        }
+        public static string RouteTag = "_rh_target_view";
 
-        /// <summary>
-        /// 跳转函数
-        /// 
-        /// 搜索公共区域，发送导航请求
-        /// </summary>
-        /// <param name="regionManager"></param>
-        /// <param name="nowView"></param>
-        /// <param name="targetView"></param>
         public static void Goto(IRegionManager regionManager, Type nowView, Type targetView)
         {
             Goto(regionManager, nowView, targetView, null);
@@ -45,10 +30,20 @@ namespace TMS.DeskTop.Tools.Helper
                 {
                     param = new NavigationParameters();
                 }
-                param.Add("target_view", targetView);
+                param.Add(RouteTag, targetView);
 
-                RegionHelper.RequestNavigate(regionManager, GetRegionToken(common_view), GetView(next_route), param);
+                RegionHelper.RequestNavigate(regionManager, GetParentRegionName(common_view), next_route, param);
             }
+        }
+
+        public static RouteInfo MakeRouteInfo(string path)
+        {
+            return new RouteInfo { Path= path };
+        }
+
+        public static RouteInfo MakeRouteInfo(Type parentView, string subPath, string parentRegion)
+        {
+            return new RouteInfo { Path = GetPath(parentView) + subPath, ParentRegion = parentRegion };
         }
 
         /// <summary>
@@ -66,25 +61,46 @@ namespace TMS.DeskTop.Tools.Helper
             if (!next_route.Equals(""))
             {
                 NavigationParameters param = new NavigationParameters();
-                param.Add("target_view", targetView);
+                param.Add(RouteTag, targetView);
 
-                RegionHelper.RequestNavigate(regionManager, GetRegionToken(nowView), GetView(next_route), param);
+                RegionHelper.RequestNavigate(regionManager, GetParentRegionName(nowView), next_route, param);
+            }
+        }
+
+        /// <summary>
+        /// 实现直线路由
+        /// </summary>
+        /// <param name="regionManager"></param>
+        /// <param name="nowView">现在所在的视图的名字</param>
+        /// <param name="targetView">目标视图的名字</param>
+        public static void Route(IRegionManager regionManager, Type nowView, string targetViewPath)
+        {
+            // 寻找下个路由
+            string next_route = GetNextRoute(GetPath(nowView), targetViewPath);
+
+            // 发送导航请求
+            if (!next_route.Equals(""))
+            {
+                NavigationParameters param = new NavigationParameters();
+                param.Add(RouteTag, GetView(targetViewPath));
+
+                RegionHelper.RequestNavigate(regionManager, GetParentRegionName(GetView(next_route)), next_route, param);
             }
         }
 
         public static string GetPath(Type view)
         {
-            return Router.Instance.GetPath(view);
+            return Router.GetInstance().GetPath(view);
         }
 
         public static Type GetView(string path)
         {
-            return Router.Instance.GetView(path);
+            return Router.GetInstance().GetView(path);
         }
 
-        public static string GetRegionToken(Type view)
+        public static string GetParentRegionName(Type view)
         {
-            return Router.Instance.GetRegionName(view);
+            return Router.GetInstance().GetParentRegion(view);
         }
 
         /// <summary>

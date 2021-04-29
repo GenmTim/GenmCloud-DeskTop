@@ -1,29 +1,51 @@
-﻿using System;
+﻿using Genm.WPF.Data.Attributes;
+using Prism.Ioc;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Genm.WPF.Tools.Helper
 {
+    public class RouteInfo
+    {
+        public string Path { get; set; }
+        public string ParentRegion { get; set; }
+    }
+
     public class Router
     {
-        private bool isInjection = false;
-        private static Router instance = null;
-        public static Router Instance
+        private IContainerRegistry containerRegistry;
+
+        private Router(IContainerRegistry containerRegistry)
         {
-            get
+            this.containerRegistry = containerRegistry;
+        }
+
+        private static Router instance;
+
+        public static Router Instance(IContainerRegistry containerRegistry)
+        {
+            if (instance == null)
             {
-                if (instance == null)
-                {
-                    instance = new Router();
-                }
-                return instance;
+                instance = new Router(containerRegistry);
             }
+            return instance;
+        }
+
+        public static Router GetInstance()
+        {
+            if (instance == null)
+            {
+                throw new Exception("需要使用Instance完成构造，才能进行调用");
+            }
+            return instance;
         }
 
         private Dictionary<Type, string> routeMap;
-        public Dictionary<Type, string> RouteMap
+        private Dictionary<Type, string> RouteMap
         {
             get
             {
@@ -36,38 +58,68 @@ namespace Genm.WPF.Tools.Helper
         }
 
         private Dictionary<string, Type> routeReMap;
-        public Dictionary<string, Type> RouteReMap
+        private Dictionary<string, Type> RouteReMap
         {
             get
             {
-                if (!isInjection)
+                if (routeReMap == null)
                 {
-                    throw new Exception("You Need Injection!!!");
+                    routeReMap = new Dictionary<string, Type>();
                 }
                 return routeReMap;
             }
         }
 
-        public Dictionary<Type, string> RegionNameMap { get; set; }
-
-        public void RegisterRegionName(Type view, string regionToken)
+        private Dictionary<Type, string> regionMap;
+        private Dictionary<Type, string> RegionMap
         {
-            RegionNameMap.Add(view, regionToken);
+            get
+            {
+                if (regionMap == null)
+                {
+                    regionMap = new Dictionary<Type, string>();
+                }
+                return regionMap;
+            }
+        }
+       
+        public RouteInfo this[Type view]
+        {
+            get
+            {
+                var routeInfo = new RouteInfo();
+                if (HasRegisteredViewPath(view)) routeInfo.Path = GetPath(view);
+                if (HasRegisteredViewParentRegion(view)) routeInfo.ParentRegion = GetParentRegion(view);
+                return routeInfo;
+            }
+            set
+            {
+                RegisterRouteInfo(view, value);
+            }
         }
 
-        public void Injection()
+        public void RegisterRouteInfo(Type view, RouteInfo info)
         {
-            routeReMap = new Dictionary<string, Type>();
-            foreach (KeyValuePair<Type, string> kvp in RouteMap)
-            {
-                routeReMap.Add(kvp.Value, kvp.Key);
-            }
-            isInjection = true;
+            RegisterPath(view, info.Path);
+            RegisterParentRegion(view, info.ParentRegion);
+        }
+
+        private void RegisterPath(Type view, string path)
+        {
+            RouteMap.Add(view, path);
+            RouteReMap.Add(path, view);
+            containerRegistry.RegisterForNavigation(view, path);
+        }
+
+        private void RegisterParentRegion(Type view, string regionToken)
+        {
+            if (string.IsNullOrEmpty(regionToken)) return;
+            RegionMap.Add(view, regionToken);
         }
 
         public string GetPath(Type view)
         {
-            if (!RouteMap.ContainsKey(view))
+            if (!HasRegisteredViewPath(view))
             {
                 throw new Exception("无注册的视图");
             }
@@ -83,13 +135,23 @@ namespace Genm.WPF.Tools.Helper
             return RouteReMap[path];
         }
 
-        public string GetRegionName(Type view)
+        public string GetParentRegion(Type view)
         {
-            if (!RegionNameMap.ContainsKey(view))
+            if (!HasRegisteredViewParentRegion(view))
             {
                 throw new Exception("无注册的区域");
             }
-            return RegionNameMap[view];
+            return RegionMap[view];
+        }
+
+        public bool HasRegisteredViewPath(Type view)
+        {
+            return RouteMap.ContainsKey(view);
+        }
+
+        public bool HasRegisteredViewParentRegion(Type view)
+        {
+            return RegionMap.ContainsKey(view);
         }
     }
 }

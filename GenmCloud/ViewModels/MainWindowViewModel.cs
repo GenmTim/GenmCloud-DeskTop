@@ -1,37 +1,17 @@
-﻿using Prism.Mvvm;
+﻿using GenmCloud.Chat.Views;
+using GenmCloud.Core.Data.Token;
+using GenmCloud.Core.Data.VO;
+using GenmCloud.Views;
+using Prism.Mvvm;
+using Prism.Regions;
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
+using TMS.DeskTop.Tools.Helper;
 
 namespace GenmCloud.ViewModels
 {
-    public class MenuVO : BindableBase
-    {
-        public string Geometry { get; set; }
 
-        private object tip;
-        public object Tip 
-        {
-            get => tip;
-            set
-            {
-                tip = value;
-                RaisePropertyChanged();
-            }
-        }
-
-        private int unreadMsgNumber;
-        public int UnreadMsgNumber
-        {
-            get => unreadMsgNumber;
-            set
-            {
-                unreadMsgNumber = value;
-                RaisePropertyChanged();
-            }
-        }
-        public Thickness ShowFix { get; set; }
-    }
 
     public class MainWindowViewModel : BindableBase
     {
@@ -42,15 +22,23 @@ namespace GenmCloud.ViewModels
             set { SetProperty(ref _title, value); }
         }
 
-        public List<MenuVO> MenuList { get; set; } = new List<MenuVO>
-        {
-            new MenuVO { Geometry="\xe643", Tip=new TextBlock{ Text="交流", Margin=new Thickness(3) }, UnreadMsgNumber=0, ShowFix=new Thickness(0,4,0,0)},
-            new MenuVO { Geometry="\xe638", Tip=new TextBlock{ Text="文件", Margin=new Thickness(3) }, UnreadMsgNumber=0, ShowFix=new Thickness()},
-        };
+        private readonly IRegionManager regionManager;
 
-        public MainWindowViewModel()
+        private MenuVO nowSelectedMenuItem;
+        public MenuVO NowSelectedMenuItem 
         {
+            get => nowSelectedMenuItem;
+            set
+            {
+                nowSelectedMenuItem = value;
+                RouteHelper.Route(regionManager, typeof(MainWindow), nowSelectedMenuItem.Path);
+                RaisePropertyChanged();
+            }
+        }
 
+        public MainWindowViewModel(IRegionManager regionManager)
+        {
+            this.regionManager = regionManager;
         }
     }
 }

@@ -9,7 +9,7 @@ namespace Genm.WPF.Tools.Helper
         public DateTime EndTime;
     }
 
-    class TimeHelper
+    public class TimeHelper
     {
         public static readonly String DateFormat = "yyyy-MM-dd";
         /// <summary>

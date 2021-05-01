@@ -1,14 +1,10 @@
 ﻿using Prism.Mvvm;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 
-namespace GenmCloud.Core.Data.VO
+namespace Genm.WPF.Data.VO
 {
-    public class MenuVO : BindableBase
+    public class RouteMenuVO
+        : BindableBase
     {
         public string Geometry { get; set; }
 
@@ -33,6 +29,7 @@ namespace GenmCloud.Core.Data.VO
                 RaisePropertyChanged();
             }
         }
+
         public Thickness ShowFix { get; set; }
 
         public string Path { get; set; }

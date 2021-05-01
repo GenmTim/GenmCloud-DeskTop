@@ -5,8 +5,6 @@ using GenmCloud.Core.Event;
 using GenmCloud.Views.Login;
 using Prism.Events;
 using Prism.Regions;
-using System;
-using System.Collections.Generic;
 using System.Windows;
 using TMS.DeskTop.Tools.Helper;
 
@@ -15,7 +13,7 @@ namespace GenmCloud.Views
     /// <summary>
     /// LoginWindow.xaml 的交互逻辑
     /// </summary>
-    public partial class LoginWindow : BaseDialogWindow, IRouteRegion
+    public partial class LoginWindow : BaseDialogWindow, IRouteView
     {
         private readonly IRegionManager regionManager;
         private readonly IEventAggregator eventAggregator;
@@ -25,13 +23,13 @@ namespace GenmCloud.Views
             InitializeComponent();
             this.regionManager = regionManager;
             this.eventAggregator = eventAggregator;
-            Loaded += (o, s) => { RegionHelper.RequestNavigate(regionManager, RegionToken.LoginContent, typeof(SignInView)); };
+            Loaded += RegisterDefaultRegionView;
             eventAggregator.GetEvent<SignedInEvent>().Subscribe(SignedIn);
         }
 
-        public static string GetRouteRegionName()
+        public void RegisterDefaultRegionView(object sender, RoutedEventArgs e)
         {
-            return RegionToken.LoginContent;
+            RegionHelper.RequestNavigate(regionManager, RegionToken.LoginContent, typeof(SignInView));
         }
 
         private void SignedIn()

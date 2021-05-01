@@ -1,11 +1,6 @@
-﻿using Genm.WPF.Data.Attributes;
-using Prism.Ioc;
+﻿using Prism.Ioc;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Genm.WPF.Tools.Helper
 {
@@ -82,7 +77,7 @@ namespace Genm.WPF.Tools.Helper
                 return regionMap;
             }
         }
-       
+
         public RouteInfo this[Type view]
         {
             get

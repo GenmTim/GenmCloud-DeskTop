@@ -1,8 +1,6 @@
 ﻿using Genm.WPF.Tools.Helper;
-using Prism.Ioc;
 using Prism.Regions;
 using System;
-using System.Collections.Generic;
 
 namespace TMS.DeskTop.Tools.Helper
 {
@@ -38,7 +36,7 @@ namespace TMS.DeskTop.Tools.Helper
 
         public static RouteInfo MakeRouteInfo(string path)
         {
-            return new RouteInfo { Path= path };
+            return new RouteInfo { Path = path };
         }
 
         public static RouteInfo MakeRouteInfo(Type parentView, string subPath, string parentRegion)

@@ -1,16 +1,24 @@
 ﻿using Genm.WPF.Tools.Helper;
 using GenmCloud.Chat.Views;
 using GenmCloud.Chat.Views.UserControls;
+using GenmCloud.Core.Data;
 using GenmCloud.Core.Data.Token;
 using Prism.Ioc;
 using Prism.Modularity;
-using Prism.Regions;
 using TMS.DeskTop.Tools.Helper;
 
 namespace GenmCloud.Chat
 {
     public class ChatModule : IModule
     {
+        public readonly static GModuleInfo ModuleInfo = new GModuleInfo
+        {
+            Geometry = "\xe643",
+            Name = "交流",
+            Path = "",
+            ShowFix = new System.Windows.Thickness(0, 4, 0, 0)
+        };
+
         public void OnInitialized(IContainerProvider containerProvider)
         {
         }

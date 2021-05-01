@@ -11,4 +11,7 @@
     <ProjectReference Include="..\Genm.WPF\Genm.WPF.csproj" />
     <ProjectReference Include="..\GenmCloud.Core\GenmCloud.Core.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Data\" />
+  </ItemGroup>
 </Project>

@@ -1,4 +1,4 @@
-﻿namespace GenmCloud.Chat.Data
+﻿namespace GenmCloud.Core.Data.Type
 {
     public enum ChatRoleType
     {

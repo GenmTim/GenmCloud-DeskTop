@@ -147,6 +147,7 @@
                                     </hc:SimplePanel.Resources>
                                     <ListBox
                                         x:Name="menuListBox"
+                                        ItemsSource="{Binding MenuList}"
                                         SelectedIndex="0"
                                         SelectedValue="{Binding NowSelectedMenuItem, Mode=TwoWay}"
                                         Style="{StaticResource Genm_ListBoxCustom}">

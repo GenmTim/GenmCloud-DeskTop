@@ -1,7 +1,8 @@
-﻿using GenmCloud.Chat.Views;
-using GenmCloud.Core.Data.Token;
-using GenmCloud.Core.Data.VO;
+﻿using Genm.WPF.Data.VO;
+using GenmCloud.Core.Data;
 using GenmCloud.Views;
+using Newtonsoft.Json;
+using Prism.Modularity;
 using Prism.Mvvm;
 using Prism.Regions;
 using System.Collections.Generic;
@@ -22,10 +23,22 @@ namespace GenmCloud.ViewModels
             set { SetProperty(ref _title, value); }
         }
 
-        private readonly IRegionManager regionManager;
+        public List<RouteMenuVO> menuList;
+        public List<RouteMenuVO> MenuList
+        {
+            get => menuList;
+            set
+            {
+                menuList = value;
+                RaisePropertyChanged();
+            }
+        }
 
-        private MenuVO nowSelectedMenuItem;
-        public MenuVO NowSelectedMenuItem 
+        private readonly IRegionManager regionManager;
+        private readonly IModuleCatalog moduleCatalog;
+
+        private RouteMenuVO nowSelectedMenuItem;
+        public RouteMenuVO NowSelectedMenuItem
         {
             get => nowSelectedMenuItem;
             set
@@ -36,9 +49,23 @@ namespace GenmCloud.ViewModels
             }
         }
 
-        public MainWindowViewModel(IRegionManager regionManager)
+        public MainWindowViewModel(IRegionManager regionManager, IModuleCatalog moduleCatalog)
         {
             this.regionManager = regionManager;
+            this.moduleCatalog = moduleCatalog;
+            InitRouteMenuList();
+        }
+
+        public void InitRouteMenuList()
+        {
+            var modules = moduleCatalog.Modules;
+            var menuList = new List<RouteMenuVO>();
+            foreach (var item in modules)
+            {
+                var itr = JsonConvert.DeserializeObject<GModuleInfo>(item.ModuleName);
+                menuList.Add(new RouteMenuVO { Geometry = itr.Geometry, Tip = new TextBlock { Text = itr.Name, Margin = new Thickness(3) }, UnreadMsgNumber = 0, ShowFix = itr.ShowFix, Path = itr.Path });
+            }
+            MenuList = menuList;
         }
     }
 }

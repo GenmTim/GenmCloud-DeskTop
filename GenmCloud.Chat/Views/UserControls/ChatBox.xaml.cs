@@ -1,17 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using HandyControl.Tools;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace GenmCloud.Chat.Views.UserControls
 {
@@ -20,9 +8,21 @@ namespace GenmCloud.Chat.Views.UserControls
     /// </summary>
     public partial class ChatBox : UserControl
     {
+        private ScrollViewer _scrollViewer;
+
         public ChatBox()
         {
             InitializeComponent();
+            listBoxChat.ItemContainerGenerator.ItemsChanged += ChatMsgListChanged;
+        }
+
+        private void ChatMsgListChanged(object sender, System.Windows.Controls.Primitives.ItemsChangedEventArgs e)
+        {
+            if (_scrollViewer == null)
+            {
+                _scrollViewer = VisualHelper.GetChild<ScrollViewer>(listBoxChat);
+            }
+            _scrollViewer?.ScrollToBottom();
         }
     }
 }

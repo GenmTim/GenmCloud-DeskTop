@@ -1,10 +1,4 @@
-﻿using Genm.WPF.Data;
-using GenmCloud.Chat.Data;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using GenmCloud.Core.Data.Type;
 using System.Windows;
 using System.Windows.Controls;
 

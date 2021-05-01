@@ -2,6 +2,7 @@
 using GenmCloud.Chat.Views;
 using GenmCloud.Core.Data.Token;
 using GenmCloud.Core.Manager;
+using GenmCloud.Storage.Views;
 using GenmCloud.Views;
 using GenmCloud.Views.Login;
 using Newtonsoft.Json;
@@ -41,14 +42,17 @@ namespace GenmCloud
             router[typeof(MainWindow)] = new RouteInfo { Path = "main/" };
             {
                 router[typeof(ChatView)] = RouteHelper.MakeRouteInfo(typeof(MainWindow), "chat/", RegionToken.MainContent);
+                router[typeof(StorageView)] = RouteHelper.MakeRouteInfo(typeof(MainWindow), "storage/", RegionToken.MainContent);
             }
 
             Chat.ChatModule.ModuleInfo.Path = router[typeof(ChatView)].Path;
+            Storage.StorageModule.ModuleInfo.Path = router[typeof(StorageView)].Path;
         }
 
         protected override void ConfigureModuleCatalog(IModuleCatalog moduleCatalog)
         {
             moduleCatalog.AddModule<Chat.ChatModule>(JsonConvert.SerializeObject(Chat.ChatModule.ModuleInfo));
+            moduleCatalog.AddModule<Storage.StorageModule>(JsonConvert.SerializeObject(Storage.StorageModule.ModuleInfo));
         }
 
         protected override void OnInitialized()

@@ -4,6 +4,6 @@
     xmlns:local="clr-namespace:GenmCloud.Chat.Properties">
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="pack://application:,,,/GenmCloud.Core;component/Resources/Styles/Style.xaml" />
-        <ResourceDictionary Source="/Resources/Styles/Style.xaml" />
+        <ResourceDictionary Source="/Resources/Styles/ChatBubbleStyle.xaml" />
     </ResourceDictionary.MergedDictionaries>
 </ResourceDictionary>

@@ -1,6 +1,7 @@
 ﻿<ResourceDictionary
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:avalonedit="http://icsharpcode.net/sharpdevelop/avalonedit"
     xmlns:genm="clr-namespace:Genm.WPF.Controls;assembly=Genm.WPF"
     xmlns:hc="https://handyorg.github.io/handycontrol"
     xmlns:o="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options">
@@ -170,4 +171,135 @@
         x:Key="TextBtnStyle"
         BasedOn="{StaticResource BtnCustomStyle}"
         TargetType="Button" />
+
+    <Style x:Key="TextEditorCustom" TargetType="avalonedit:TextEditor">
+        <Setter Property="IsReadOnly" Value="True" />
+        <Setter Property="FontFamily" Value="Consolas" />
+        <Setter Property="Margin" Value="4" />
+        <Setter Property="ShowLineNumbers" Value="True" />
+        <Setter Property="LineNumbersForeground" Value="{DynamicResource EditorLineNumbersForeground}" />
+        <Setter Property="Foreground" Value="{DynamicResource EditorForeground}" />
+        <Setter Property="Background" Value="{DynamicResource RegionBrush}" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="avalonedit:TextEditor">
+                    <ControlTemplate.Resources>
+                        <Style TargetType="avalonedit:TextView">
+                            <Setter Property="NonPrintableCharacterBrush" Value="{DynamicResource EditorNonPrintableCharacterBrush}" />
+                            <Setter Property="LinkTextForegroundBrush" Value="{DynamicResource EditorLinkTextForegroundBrush}" />
+                            <Setter Property="LinkTextBackgroundBrush" Value="{DynamicResource EditorLinkTextBackgroundBrush}" />
+                        </Style>
+                        <Style TargetType="avalonedit:TextArea">
+                            <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+                            <Setter Property="SelectionBrush" Value="{DynamicResource EditorSelectionBrush}" />
+                            <Setter Property="SelectionBorder">
+                                <Setter.Value>
+                                    <Pen Brush="{DynamicResource EditorSelectionBorder}" Thickness="1" />
+                                </Setter.Value>
+                            </Setter>
+                            <Setter Property="SelectionCornerRadius" Value="0" />
+                            <Setter Property="SelectionForeground" Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}" />
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="avalonedit:TextArea">
+                                        <DockPanel Focusable="False">
+                                            <ItemsControl
+                                                DockPanel.Dock="Left"
+                                                Focusable="False"
+                                                ItemsSource="{Binding LeftMargins, RelativeSource={RelativeSource TemplatedParent}}">
+                                                <ItemsControl.ItemsPanel>
+                                                    <ItemsPanelTemplate>
+                                                        <StackPanel Orientation="Horizontal" />
+                                                    </ItemsPanelTemplate>
+                                                </ItemsControl.ItemsPanel>
+                                            </ItemsControl>
+                                            <ContentPresenter
+                                                Panel.ZIndex="-1"
+                                                Content="{Binding TextView, RelativeSource={RelativeSource TemplatedParent}}"
+                                                Focusable="False" />
+                                        </DockPanel>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </ControlTemplate.Resources>
+                    <Border
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}">
+                        <ScrollViewer
+                            Name="PART_ScrollViewer"
+                            Padding="{TemplateBinding Padding}"
+                            HorizontalContentAlignment="Left"
+                            VerticalContentAlignment="Top"
+                            CanContentScroll="True"
+                            Content="{Binding TextArea, RelativeSource={RelativeSource TemplatedParent}}"
+                            Focusable="False"
+                            HorizontalScrollBarVisibility="Auto"
+                            VerticalScrollBarVisibility="Auto" />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="WordWrap" Value="True">
+                            <Setter TargetName="PART_ScrollViewer" Property="HorizontalScrollBarVisibility" Value="Disabled" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!--  region AvalonEdit Color  -->
+
+    <Color x:Key="ControlAccentColorKey">#1ba1e2</Color>
+    <Color x:Key="EditorBackgroundColor">White</Color>
+    <Color x:Key="EditorForegroundColor">Black</Color>
+    <Color x:Key="EditorLineNumbersForegroundColor">Black</Color>
+    <Color x:Key="EditorNonPrintableCharacterColor">#3F8080FF</Color>
+    <Color x:Key="EditorLinkTextForegroundColor">#FF4040FF</Color>
+    <Color x:Key="EditorLinkTextBackgroundColor">#00000000</Color>
+
+    <!--  endregion  -->
+
+    <!--  region AvalonEdit Brush  -->
+
+    <SolidColorBrush
+        x:Key="ControlAccentBrushKey"
+        o:Freeze="True"
+        Color="{DynamicResource ControlAccentColorKey}" />
+    <SolidColorBrush
+        x:Key="EditorBackground"
+        o:Freeze="True"
+        Color="{DynamicResource EditorBackgroundColor}" />
+    <SolidColorBrush
+        x:Key="EditorForeground"
+        o:Freeze="True"
+        Color="{DynamicResource EditorForegroundColor}" />
+    <SolidColorBrush
+        x:Key="EditorLineNumbersForeground"
+        o:Freeze="True"
+        Color="{DynamicResource EditorLineNumbersForegroundColor}" />
+    <SolidColorBrush
+        x:Key="EditorSelectionBrush"
+        o:Freeze="True"
+        Opacity="0.75"
+        Color="{DynamicResource ControlAccentColorKey}" />
+    <SolidColorBrush
+        x:Key="EditorSelectionBorder"
+        o:Freeze="True"
+        Opacity="0.75"
+        Color="{DynamicResource ControlAccentColorKey}" />
+    <SolidColorBrush
+        x:Key="EditorNonPrintableCharacterBrush"
+        o:Freeze="True"
+        Color="{DynamicResource EditorNonPrintableCharacterColor}" />
+    <SolidColorBrush
+        x:Key="EditorLinkTextForegroundBrush"
+        o:Freeze="True"
+        Color="{DynamicResource EditorLinkTextForegroundColor}" />
+    <SolidColorBrush
+        x:Key="EditorLinkTextBackgroundBrush"
+        o:Freeze="True"
+        Color="{DynamicResource EditorLinkTextBackgroundColor}" />
+
+    <!--  endregion  -->
 </ResourceDictionary>

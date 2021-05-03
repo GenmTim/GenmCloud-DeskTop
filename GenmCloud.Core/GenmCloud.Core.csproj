@@ -8,6 +8,7 @@
   <ItemGroup>
     <None Remove="Resources\Icon\iconfont.ttf" />
     <None Remove="Resources\Images\office.png" />
+    <None Remove="Resources\Styles\Go.xshd" />
   </ItemGroup>
 
   <ItemGroup>
@@ -27,6 +28,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Resources\Images\office.png" />
+    <Resource Include="Resources\Styles\Go.xshd">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
 
   <ItemGroup>

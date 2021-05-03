@@ -1,10 +1,15 @@
-﻿using Prism.Commands;
+﻿using GenmCloud.Storage.Views;
+using HandyControl.Controls;
+using Prism.Commands;
+using Prism.Ioc;
 using Prism.Mvvm;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
 
 namespace GenmCloud.Storage.ViewModels
 {
@@ -17,9 +22,44 @@ namespace GenmCloud.Storage.ViewModels
             set { SetProperty(ref _message, value); }
         }
 
-        public StorageViewModel()
+        private bool isPopupOpen;
+        public bool IsPopupOpen 
+        {
+            get => isPopupOpen;
+            set
+            {
+                isPopupOpen = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public StorageViewModel(IContainerProvider containerProvider)
         {
             Message = "View A from your Prism Module";
+            PopupWindowCmd = new DelegateCommand(() => 
+            {
+                var window = new PopupWindow
+                {
+                    WindowStartupLocation = WindowStartupLocation.CenterScreen,
+                    AllowsTransparency = true,
+                    ShowTitle = false,
+                    PopupElement = containerProvider.Resolve<ViewA>(),
+                    MinHeight = 200,
+                    MinWidth = 400,
+                    WindowStyle = WindowStyle.None,
+                    ShowBorder = false
+                };
+                window.MouseDown += (s, o) => { window.Close(); };
+                window.Show();
+            });
+            OpenPopupCmd = new DelegateCommand(() => 
+            {
+                IsPopupOpen = true;
+            });
         }
+
+        public DelegateCommand PopupWindowCmd { get; private set; }
+
+        public DelegateCommand OpenPopupCmd { get; private set; }
     }
 }

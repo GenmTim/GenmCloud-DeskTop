@@ -3,27 +3,65 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:genm="clr-namespace:Genm.WPF.Controls;assembly=Genm.WPF"
     xmlns:hc="https://handyorg.github.io/handycontrol"
     xmlns:local="clr-namespace:GenmCloud.Storage.Views"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:prism="http://prismlibrary.com/"
-    d:DesignHeight="300"
-    d:DesignWidth="300"
     prism:ViewModelLocator.AutoWireViewModel="True"
     mc:Ignorable="d">
+    <UserControl.Resources>
+        <DropShadowEffect
+            x:Key="EffectShadowPopup"
+            BlurRadius="12"
+            Direction="270"
+            Opacity="0.3"
+            RenderingBias="Performance"
+            ShadowDepth="1"
+            Color="{StaticResource EffectShadowColor}" />
+    </UserControl.Resources>
     <Grid>
-        <ToggleButton
-            Margin="0,0,6,0"
-            Padding="5"
-            HorizontalAlignment="Right"
-            hc:IconElement.Geometry="{StaticResource CheckedGeometry}"
-            Foreground="{DynamicResource PrimaryBrush}"
-            IsChecked="{Binding IsOpen, ElementName=DrawerCode}"
-            Style="{StaticResource ToggleButtonIconTransparent}" />
         <TextBlock
             HorizontalAlignment="Center"
-            VerticalAlignment="Center"
+            VerticalAlignment="Top"
             Text="{Binding Message}" />
+        <hc:UniformSpacingPanel
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            ChildWrapping="Wrap"
+            Spacing="20">
+            <ToggleButton
+                Padding="5"
+                Content="打开代码块"
+                Foreground="{DynamicResource PrimaryBrush}"
+                IsChecked="{Binding IsOpen, ElementName=DrawerCode}"
+                Style="{StaticResource ToggleButtonCustom}" />
+            <Button Command="{Binding PopupWindowCmd}" Content="打开窗口" />
+            <Button
+                x:Name="openPopupBtn"
+                Command="{Binding OpenPopupCmd}"
+                Content="打开Popup" />
+            <genm:Popup
+                AllowsTransparency="True"
+                HorizontalOffset="-16"
+                IsOpen="{Binding IsPopupOpen, Mode=TwoWay}"
+                Placement="Bottom"
+                PlacementTarget="{Binding ElementName=openPopupBtn}"
+                StaysOpen="False">
+                <hc:SimplePanel>
+                    <Border
+                        Margin="16"
+                        Background="{StaticResource RegionBrush}"
+                        CornerRadius="8"
+                        Effect="{StaticResource EffectShadowPopup}">
+                        <hc:SimplePanel Margin="10">
+                            <local:ViewA Width="200" Height="200" />
+                        </hc:SimplePanel>
+                    </Border>
+                </hc:SimplePanel>
+
+            </genm:Popup>
+        </hc:UniformSpacingPanel>
         <hc:Drawer Name="DrawerCode" Opened="DrawerCode_OnOpened">
             <Border
                 Name="BorderCode"

@@ -3,7 +3,9 @@ using ICSharpCode.AvalonEdit;
 using ICSharpCode.AvalonEdit.Highlighting;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -14,7 +16,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using System.Windows.Shapes;
+using System.Xml;
 
 namespace GenmCloud.Storage.Views
 {
@@ -33,6 +35,7 @@ namespace GenmCloud.Storage.Views
 
         private void DrawerCode_OnOpened(object sender, RoutedEventArgs e)
         {
+            //HighlightingManager.Instance.RegisterHighlighting("Go", new[] { ".go" }, () => { });
             if (!_drawerCodeUsed)
             {
                 var textEditorCustomStyle = ResourceHelper.GetResource<Style>("TextEditorCustom");
@@ -46,13 +49,18 @@ namespace GenmCloud.Storage.Views
                     ["C#"] = new TextEditor
                     {
                         Style = textEditorCustomStyle,
-                        SyntaxHighlighting = HighlightingManager.Instance.GetDefinition("C#")
+                        SyntaxHighlighting = HighlightingManager.Instance.GetDefinition("C++")
                     },
                     ["VM"] = new TextEditor
                     {
                         Style = textEditorCustomStyle,
                         SyntaxHighlighting = HighlightingManager.Instance.GetDefinition("C#")
-                    }
+                    },
+                    ["Golang"] = new TextEditor
+                    {
+                        Style = textEditorCustomStyle,
+                        SyntaxHighlighting = HighlightingManager.Instance.GetDefinition(Path.GetExtension("Go.xshd"))
+                    },
                 };
                 BorderCode.Child = new TabControl
                 {
@@ -68,6 +76,11 @@ namespace GenmCloud.Storage.Views
                         {
                             Header = "VM",
                             Content = _textEditor["VM"]
+                        },
+                        new TabItem
+                        {
+                            Header = "Golang",
+                            Content = _textEditor["Golang"]
                         }
                     }
                 };
@@ -76,8 +89,20 @@ namespace GenmCloud.Storage.Views
             }
 
 
-            _textEditor["C#"].Text = "using HandyControl.Tools;";
+            //网络文件地址
+            string file_url = @"http://localhost:8000/static/download.go";
+            //实例化唯一文件标识
+            Uri file_uri = new Uri(file_url);
+            //返回文件流
+            Stream stream = WebRequest.Create(file_uri).GetResponse().GetResponseStream();
+            //实例化文件内容
+            StreamReader file_content = new StreamReader(stream);
+            //读取文件内容
+            string file_content_str = file_content.ReadToEnd();
+
+            _textEditor["C#"].Text = "#include <iostream>";
             _textEditor["VM"].Text = "using System.Collections.Generic;";
+            _textEditor["Golang"].Text = file_content_str;
         }
     }
 }

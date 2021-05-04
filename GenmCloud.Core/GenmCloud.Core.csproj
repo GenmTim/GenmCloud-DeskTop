@@ -9,6 +9,7 @@
     <None Remove="Resources\Icon\iconfont.ttf" />
     <None Remove="Resources\Images\office.png" />
     <None Remove="Resources\Styles\Go.xshd" />
+    <None Remove="Resources\Styles\Lua.xshd" />
   </ItemGroup>
 
   <ItemGroup>
@@ -29,8 +30,9 @@
     </Resource>
     <Resource Include="Resources\Images\office.png" />
     <Resource Include="Resources\Styles\Go.xshd">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="Resources\Styles\Lua.xshd" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,6 +1,8 @@
 ﻿using HandyControl.Tools;
 using ICSharpCode.AvalonEdit;
 using ICSharpCode.AvalonEdit.Highlighting;
+using ICSharpCode.AvalonEdit.Highlighting.Xshd;
+using ICSharpCode.AvalonEdit.Search;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -35,7 +37,6 @@ namespace GenmCloud.Storage.Views
 
         private void DrawerCode_OnOpened(object sender, RoutedEventArgs e)
         {
-            //HighlightingManager.Instance.RegisterHighlighting("Go", new[] { ".go" }, () => { });
             if (!_drawerCodeUsed)
             {
                 var textEditorCustomStyle = ResourceHelper.GetResource<Style>("TextEditorCustom");
@@ -59,7 +60,7 @@ namespace GenmCloud.Storage.Views
                     ["Golang"] = new TextEditor
                     {
                         Style = textEditorCustomStyle,
-                        SyntaxHighlighting = HighlightingManager.Instance.GetDefinition(Path.GetExtension("Go.xshd"))
+                        SyntaxHighlighting = HighlightingManager.Instance.GetDefinition("Go")
                     },
                 };
                 BorderCode.Child = new TabControl

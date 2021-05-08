@@ -1,21 +1,21 @@
 ﻿using Genm.WPF.Tools.Helper;
+using GenmCloud.ApiService;
 using GenmCloud.Chat.Views;
+using GenmCloud.Common;
 using GenmCloud.Core.Data.Token;
 using GenmCloud.Core.Manager;
 using GenmCloud.Core.Tools.Helper;
+using GenmCloud.Shared.Common;
+using GenmCloud.Shared.DataInterfaces;
 using GenmCloud.Storage.Views;
 using GenmCloud.Views;
 using GenmCloud.Views.Login;
-using ICSharpCode.AvalonEdit.Highlighting;
-using ICSharpCode.AvalonEdit.Highlighting.Xshd;
 using Newtonsoft.Json;
 using Prism.Ioc;
 using Prism.Modularity;
 using Prism.Regions;
-using System;
-using System.IO;
+using System.Configuration;
 using System.Windows;
-using System.Xml;
 using TMS.DeskTop.Tools.Helper;
 
 namespace GenmCloud
@@ -32,7 +32,10 @@ namespace GenmCloud
 
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
+            this.ConfigureServices(containerRegistry);
+            NetCoreProvider.RegisterServiceLocator(Container);
             containerRegistry.RegisterSingleton<ChatMsgManager>();
+            containerRegistry.Register<ILog, GenmCloudNLog>();
             containerRegistry.RegisterSingleton<Router>(() =>
             {
                 return Router.Instance(containerRegistry);
@@ -53,6 +56,8 @@ namespace GenmCloud
 
             Chat.ChatModule.ModuleInfo.Path = router[typeof(ChatView)].Path;
             Storage.StorageModule.ModuleInfo.Path = router[typeof(StorageView)].Path;
+
+            NetCoreProvider.RegisterServiceLocator(Container);
         }
 
         protected override void ConfigureModuleCatalog(IModuleCatalog moduleCatalog)
@@ -63,6 +68,7 @@ namespace GenmCloud
 
         protected override void OnInitialized()
         {
+            Contract.serverUrl = ConfigurationManager.AppSettings["serverAddress"];
             var login = Container.Resolve<LoginWindow>();
             RegionManager.SetRegionManager(login, Container.Resolve<IRegionManager>());
 
@@ -75,7 +81,7 @@ namespace GenmCloud
                 // 编辑器的高亮显示扩展
                 TextEditorHelper.RegisterHighlighting("Go", new[] { ".go" }, "Go.xshd");
                 TextEditorHelper.RegisterHighlighting("Lua", new[] { ".slua", ".lua" }, "Lua.xshd");
-                
+
                 base.OnInitialized();
             }
             else
@@ -85,6 +91,9 @@ namespace GenmCloud
             }
         }
 
-
+        private void ConfigureServices(IContainerRegistry containerRegistry)
+        {
+            containerRegistry.Register<IUserRepository, UserService>();
+        }
     }
 }

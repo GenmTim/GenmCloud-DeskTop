@@ -14,9 +14,9 @@
     Height="600"
     hc:WindowAttach.IsDragElement="True"
     prism:ViewModelLocator.AutoWireViewModel="True"
+    Background="{DynamicResource RegionBrush}"
     WindowStartupLocation="CenterScreen"
     WindowState="Normal"
-    Background="{DynamicResource RegionBrush}"
     mc:Ignorable="d">
     <WindowChrome.WindowChrome>
         <WindowChrome
@@ -28,6 +28,7 @@
             UseAeroCaptionButtons="False" />
     </WindowChrome.WindowChrome>
     <hc:SimplePanel>
+        <ContentControl prism:RegionManager.RegionName="{x:Static Member=token:RegionToken.LoginContent}" />
         <hc:UniformSpacingPanel
             Margin="0,4,4,0"
             HorizontalAlignment="Right"
@@ -53,6 +54,23 @@
             <Button hc:IconElement.Geometry="{StaticResource WindowMinGeometry}" Click="MinimizedDialog" />
             <Button hc:IconElement.Geometry="{StaticResource CloseGeometry}" Click="CloseDialog" />
         </hc:UniformSpacingPanel>
-        <ContentControl prism:RegionManager.RegionName="{x:Static Member=token:RegionToken.LoginContent}" />
+        <hc:SimplePanel
+            Margin="0,40,0,0"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Top">
+            <genm:Toast
+                x:Name="toast"
+                Message="Test_Message"
+                Duration="0:0:0:3" />
+        </hc:SimplePanel>
+        <hc:CircleProgressBar
+            x:Name="globalProgress"
+            Width="20"
+            Height="20"
+            Margin="0,0,0,0"
+            ArcThickness="2"
+            Background="Transparent"
+            IsIndeterminate="False"
+            Visibility="Collapsed" />
     </hc:SimplePanel>
 </genm:BaseDialogWindow>

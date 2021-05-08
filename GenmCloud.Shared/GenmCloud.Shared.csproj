@@ -6,8 +6,8 @@
 
   <ItemGroup>
     <PackageReference Include="AspectInjector" Version="2.5.0" />
-    <PackageReference Include="DryIoc.dll" Version="4.7.6" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="Prism.Core" Version="8.0.0.1909" />
   </ItemGroup>
 
 </Project>

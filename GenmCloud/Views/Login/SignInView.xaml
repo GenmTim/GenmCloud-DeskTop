@@ -13,7 +13,7 @@
         <Border Background="{DynamicResource RegionBrush}" CornerRadius="4" />
         <Border
             Width="420"
-            Height="440"
+            Margin="0,0,0,40"
             HorizontalAlignment="Center"
             VerticalAlignment="Center">
             <StackPanel
@@ -68,7 +68,12 @@
                         Margin="32,0,0,32"
                         Foreground="Gray"
                         Text="还没有账号？" />
-                    <TextBlock Foreground="Blue" Text="立即注册" />
+                    <Button
+                        Click="JumpToRegisterPage"
+                        Content="立即注册"
+                        FontSize="12"
+                        Foreground="Blue"
+                        Style="{StaticResource TextBtnStyle}" />
                 </StackPanel>
             </StackPanel>
         </Border>

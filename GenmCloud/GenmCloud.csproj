@@ -13,9 +13,8 @@
     <None Remove="Resources\Images\cloud.png" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="HandyControl" Version="3.1.0" />
-    <PackageReference Include="MaterialDesignThemes" Version="4.0.0" />
-    <PackageReference Include="Prism.DryIoc" Version="8.0.0.1909" />
+    <PackageReference Include="NLog" Version="4.7.9" />
+    <PackageReference Include="NLog.Config" Version="4.7.9" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Genm.WPF\Genm.WPF.csproj" />
@@ -32,5 +31,10 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\Styles\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="NLog.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 </Project>

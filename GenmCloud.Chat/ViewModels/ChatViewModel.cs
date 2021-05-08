@@ -4,7 +4,6 @@ using GenmCloud.Core.Data.Token;
 using GenmCloud.Core.Data.VO;
 using Prism.Mvvm;
 using Prism.Regions;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using TMS.DeskTop.Tools.Helper;
 

@@ -1,4 +1,8 @@
-﻿using System.Windows.Controls;
+﻿using GenmCloud.Core.Event;
+using GenmCloud.Shared.Dto;
+using Prism.Events;
+using Prism.Regions;
+using System.Windows.Controls;
 
 namespace GenmCloud.Views.Login
 {
@@ -7,9 +11,17 @@ namespace GenmCloud.Views.Login
     /// </summary>
     public partial class SignUpView : UserControl
     {
-        public SignUpView()
+        private readonly IEventAggregator eventAggregator;
+        public SignUpView(IEventAggregator eventAggregator)
         {
             InitializeComponent();
+            this.eventAggregator = eventAggregator;
+        }
+
+        private void RegisterBtnClick(object sender, System.Windows.RoutedEventArgs e)
+        {
+            eventAggregator.GetEvent<SignUpEvent>().Publish(new LoginDto { Username = usernameBox.Text, Password = passwordBox.Password });
+            e.Handled = true;
         }
     }
 }

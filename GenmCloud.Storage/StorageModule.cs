@@ -1,8 +1,6 @@
 ﻿using GenmCloud.Core.Data;
-using GenmCloud.Storage.Views;
 using Prism.Ioc;
 using Prism.Modularity;
-using Prism.Regions;
 
 namespace GenmCloud.Storage
 {

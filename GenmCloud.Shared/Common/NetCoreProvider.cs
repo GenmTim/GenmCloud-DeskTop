@@ -1,6 +1,6 @@
 ﻿namespace GenmCloud.Shared.Common
 {
-    using DryIoc;
+    using Prism.Ioc;
     using System;
 
     /// <summary>
@@ -8,12 +8,12 @@
     /// </summary>
     public class NetCoreProvider
     {
-        public static IContainer Instance { get; private set; }
+        public static IContainerProvider Instance { get; private set; }
 
-        public static void RegisterServiceLocator(IContainer locator)
+        public static void RegisterServiceLocator(IContainerProvider containerProvider)
         {
             if (Instance == null)
-                Instance = locator;
+                Instance = containerProvider;
         }
 
         public static T Resolve<T>()

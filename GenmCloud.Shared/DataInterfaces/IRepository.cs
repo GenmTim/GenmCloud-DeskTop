@@ -30,6 +30,9 @@ namespace GenmCloud.Shared.DataInterfaces
 
     public interface IUserRepository : IRepository<UserDto>
     {
-        Task<BaseResponse<UserInfoDto>> LoginAsync(string account, string passWord);
+        Task<BaseResponse> LoginAsync(string username, string passWord);
+
+
+        Task<BaseResponse> RegisterAsync(string username, string passWord);
     }
 }

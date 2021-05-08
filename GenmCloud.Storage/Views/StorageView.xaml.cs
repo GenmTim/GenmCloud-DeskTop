@@ -1,24 +1,9 @@
 ﻿using HandyControl.Tools;
 using ICSharpCode.AvalonEdit;
 using ICSharpCode.AvalonEdit.Highlighting;
-using ICSharpCode.AvalonEdit.Highlighting.Xshd;
-using ICSharpCode.AvalonEdit.Search;
-using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Xml;
 
 namespace GenmCloud.Storage.Views
 {
@@ -90,20 +75,20 @@ namespace GenmCloud.Storage.Views
             }
 
 
-            //网络文件地址
-            string file_url = @"http://localhost:8000/static/download.go";
-            //实例化唯一文件标识
-            Uri file_uri = new Uri(file_url);
-            //返回文件流
-            Stream stream = WebRequest.Create(file_uri).GetResponse().GetResponseStream();
-            //实例化文件内容
-            StreamReader file_content = new StreamReader(stream);
-            //读取文件内容
-            string file_content_str = file_content.ReadToEnd();
+            ////网络文件地址
+            //string file_url = @"http://localhost:8000/static/download.go";
+            ////实例化唯一文件标识
+            //Uri file_uri = new Uri(file_url);
+            ////返回文件流
+            //Stream stream = WebRequest.Create(file_uri).GetResponse().GetResponseStream();
+            ////实例化文件内容
+            //StreamReader file_content = new StreamReader(stream);
+            ////读取文件内容
+            //string file_content_str = file_content.ReadToEnd();
 
             _textEditor["C#"].Text = "#include <iostream>";
             _textEditor["VM"].Text = "using System.Collections.Generic;";
-            _textEditor["Golang"].Text = file_content_str;
+            //_textEditor["Golang"].Text = file_content_str;
         }
     }
 }

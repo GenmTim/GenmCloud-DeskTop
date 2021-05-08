@@ -3,13 +3,7 @@ using HandyControl.Controls;
 using Prism.Commands;
 using Prism.Ioc;
 using Prism.Mvvm;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
 
 namespace GenmCloud.Storage.ViewModels
 {
@@ -23,7 +17,7 @@ namespace GenmCloud.Storage.ViewModels
         }
 
         private bool isPopupOpen;
-        public bool IsPopupOpen 
+        public bool IsPopupOpen
         {
             get => isPopupOpen;
             set
@@ -36,7 +30,7 @@ namespace GenmCloud.Storage.ViewModels
         public StorageViewModel(IContainerProvider containerProvider)
         {
             Message = "View A from your Prism Module";
-            PopupWindowCmd = new DelegateCommand(() => 
+            PopupWindowCmd = new DelegateCommand(() =>
             {
                 var window = new PopupWindow
                 {
@@ -52,7 +46,7 @@ namespace GenmCloud.Storage.ViewModels
                 window.MouseDown += (s, o) => { window.Close(); };
                 window.Show();
             });
-            OpenPopupCmd = new DelegateCommand(() => 
+            OpenPopupCmd = new DelegateCommand(() =>
             {
                 IsPopupOpen = true;
             });

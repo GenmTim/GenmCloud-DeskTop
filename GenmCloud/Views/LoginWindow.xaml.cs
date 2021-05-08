@@ -1,4 +1,5 @@
 ﻿using Genm.WPF.Controls;
+using Genm.WPF.Data.Event;
 using Genm.WPF.Data.Interface;
 using GenmCloud.Core.Data.Token;
 using GenmCloud.Core.Event;
@@ -25,6 +26,8 @@ namespace GenmCloud.Views
             this.eventAggregator = eventAggregator;
             Loaded += RegisterDefaultRegionView;
             eventAggregator.GetEvent<SignedInEvent>().Subscribe(SignedIn);
+            eventAggregator.GetEvent<ToastShowEvent>().Subscribe(ToastShow);
+            eventAggregator.GetEvent<RunGlobalProgressEvent>().Subscribe(GlobalProgress);
         }
 
         public void RegisterDefaultRegionView(object sender, RoutedEventArgs e)
@@ -35,6 +38,25 @@ namespace GenmCloud.Views
         private void SignedIn()
         {
             DialogResult = true;
+        }
+
+        private void ToastShow(string message)
+        {
+            toast.Show(message);
+        }
+
+        private void GlobalProgress(bool isRun)
+        {
+            if (isRun)
+            {
+                globalProgress.IsIndeterminate = true;
+                globalProgress.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                globalProgress.IsIndeterminate = false;
+                globalProgress.Visibility = Visibility.Collapsed;
+            }
         }
     }
 }

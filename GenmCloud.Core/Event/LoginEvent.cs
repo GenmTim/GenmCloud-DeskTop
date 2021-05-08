@@ -12,4 +12,8 @@ namespace GenmCloud.Core.Event
     {
 
     }
+
+    public class SignUpEvent : PubSubEvent<LoginDto> 
+    {
+    }
 }

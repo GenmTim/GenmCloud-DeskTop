@@ -9,11 +9,19 @@ namespace GenmCloud.ApiService
 {
     public class UserService : BaseService<UserDto>, IUserRepository
     {
-        public async Task<BaseResponse<UserInfoDto>> LoginAsync(string account, string passWord)
+        public async Task<BaseResponse> LoginAsync(string username, string passWord)
         {
-            return await new BaseServiceRequest().GetRequest<BaseResponse<UserInfoDto>>(new UserLoginRequest()
+            return await new BaseServiceRequest().GetRequest<BaseResponse>(new UserLoginRequest()
             {
-                Parameter = new LoginDto() { Account = account, PassWord = passWord }
+                Parameter = new LoginDto() { Username = username, Password = passWord }
+            }, Method.POST);
+        }
+
+        public async Task<BaseResponse> RegisterAsync(string username, string passWord)
+        {
+            return await new BaseServiceRequest().GetRequest<BaseResponse>(new UserRegisterRequest()
+            {
+                Parameter = new LoginDto() { Username = username, Password = passWord }
             }, Method.POST);
         }
     }

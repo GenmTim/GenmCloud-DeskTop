@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Genm.WPF.Data
+﻿namespace Genm.WPF.Data
 {
     public struct ChatInfoModel
     {

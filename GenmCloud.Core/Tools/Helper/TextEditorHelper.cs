@@ -1,11 +1,7 @@
 ﻿using ICSharpCode.AvalonEdit.Highlighting;
 using ICSharpCode.AvalonEdit.Highlighting.Xshd;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Xml;
 
@@ -27,7 +23,7 @@ namespace GenmCloud.Core.Tools.Helper
             {
                 throw new Exception("意料之外的错误");
             }
-            HighlightingManager.Instance.RegisterHighlighting(name,extensions, HighlightingLoader.Load(xshd, HighlightingManager.Instance));
+            HighlightingManager.Instance.RegisterHighlighting(name, extensions, HighlightingLoader.Load(xshd, HighlightingManager.Instance));
         }
     }
 }

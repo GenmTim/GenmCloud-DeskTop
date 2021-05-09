@@ -33,9 +33,9 @@ namespace GenmCloud
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
             this.ConfigureServices(containerRegistry);
-            NetCoreProvider.RegisterServiceLocator(Container);
-            containerRegistry.RegisterSingleton<ChatMsgManager>();
             containerRegistry.Register<ILog, GenmCloudNLog>();
+            containerRegistry.RegisterSingleton<ChatMessageManager>();
+            containerRegistry.RegisterSingleton<WebSocketService>();
             containerRegistry.RegisterSingleton<Router>(() =>
             {
                 return Router.Instance(containerRegistry);
@@ -76,7 +76,8 @@ namespace GenmCloud
             if (result.Value)
             {
                 // 开启各个管理者和服务
-                Container.Resolve<ChatMsgManager>();
+                Container.Resolve<ChatMessageManager>();
+                Container.Resolve<WebSocketService>();
 
                 // 编辑器的高亮显示扩展
                 TextEditorHelper.RegisterHighlighting("Go", new[] { ".go" }, "Go.xshd");

@@ -105,11 +105,11 @@
                             Foreground="#2B2F36"
                             Style="{StaticResource TextBoxExtend}"
                             Text="{Binding Context.ChatString, UpdateSourceTrigger=PropertyChanged}">
-                            <hc:Interaction.Triggers>
+                            <!--<hc:Interaction.Triggers>
                                 <hc:EventTrigger EventName="KeyDown">
                                     <hc:EventToCommand Command="{Binding SendCmd}" PassEventArgsToCommand="True" />
                                 </hc:EventTrigger>
-                            </hc:Interaction.Triggers>
+                            </hc:Interaction.Triggers>-->
                         </TextBox>
                         <hc:UniformSpacingPanel
                             Grid.Column="1"

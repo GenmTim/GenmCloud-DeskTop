@@ -21,6 +21,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Genm.WPF\Genm.WPF.csproj" />
+    <ProjectReference Include="..\GenmCloud.ApiService\GenmCloud.ApiService.csproj" />
     <ProjectReference Include="..\GenmCloud.Shared\GenmCloud.Shared.csproj" />
   </ItemGroup>
 

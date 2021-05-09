@@ -1,4 +1,6 @@
-﻿using GenmCloud.Core.Data.VO;
+﻿using GenmCloud.ApiService;
+using GenmCloud.Core.Data.VO;
+using GenmCloud.Core.Event;
 using Prism.Events;
 using System;
 using System.Collections.Generic;
@@ -6,10 +8,10 @@ using System.Collections.ObjectModel;
 
 namespace GenmCloud.Core.Manager
 {
-    public class ChatMsgManager
+    public class ChatMessageManager
     {
         private Dictionary<ChatObjectVO, ObservableCollection<ChatMsgVO>> ChatMsgMap = new Dictionary<ChatObjectVO, ObservableCollection<ChatMsgVO>>();
-        private static ChatMsgManager instance;
+        private static ChatMessageManager instance;
         private readonly IEventAggregator eventAggregator;
 
         private static long ChatToken = 0;
@@ -20,12 +22,13 @@ namespace GenmCloud.Core.Manager
         }
 
         // 此种单例写法，可以在Prism注册处的代码更为简单，简洁
-        public ChatMsgManager(IEventAggregator eventAggregator)
+        public ChatMessageManager(IEventAggregator eventAggregator)
         {
             if (instance == null)
             {
                 instance = this;
                 this.eventAggregator = eventAggregator;
+                this.eventAggregator.GetEvent<SendChatMsgEvent>().Subscribe(SendMessage);
             }
             else
             {
@@ -40,6 +43,11 @@ namespace GenmCloud.Core.Manager
                 ChatMsgMap[objectVO] = new ObservableCollection<ChatMsgVO>();
             }
             return ChatMsgMap[objectVO];
+        }
+
+        public void SendMessage(string message)
+        {
+            this.eventAggregator.GetEvent<WebSocketSendEvent>().Publish(message);
         }
     }
 }

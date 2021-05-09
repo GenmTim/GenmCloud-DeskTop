@@ -1,5 +1,6 @@
 ﻿using GenmCloud.Core.Data.Token;
 using GenmCloud.Core.Event;
+using GenmCloud.Core.Tools.Helper;
 using GenmCloud.Shared.Dto;
 using Prism.Events;
 using Prism.Regions;
@@ -26,7 +27,7 @@ namespace GenmCloud.Views.Login
 
         private void SignInBtn_Click(object sender, RoutedEventArgs e)
         {
-            eventAggregator.GetEvent<SignInEvent>().Publish(new LoginDto { Username = usernameBox.Text, Password = passwordBox.Password });
+            eventAggregator.GetEvent<SignInEvent>().Publish(new LoginDto { Username = usernameBox.Text, Password = ServiceHelper.SetPassword(passwordBox.Password) });
             e.Handled = true;
         }
 

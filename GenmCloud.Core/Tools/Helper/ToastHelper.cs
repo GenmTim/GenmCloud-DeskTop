@@ -23,11 +23,11 @@ namespace GenmCloud.Core.Tools.Helper
 
         public static void JudgeErrorAndShow(IEventAggregator eventAggregator, BaseResponse response)
         {
-            if (response == null)
+            if (response == null || response.StatusCode == 0)
             {
                 ToastHelper.ShowServerError(eventAggregator);
             }
-            else if (response.StatusCode != 0)
+            else if (response.StatusCode != ServiceHelper.RequestOk)
             {
                 ToastHelper.ShowCommonError(eventAggregator, response);
             }

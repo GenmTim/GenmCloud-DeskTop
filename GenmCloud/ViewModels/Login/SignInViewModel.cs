@@ -26,7 +26,7 @@ namespace GenmCloud.ViewModels.Login
             var r = await userRepository.LoginAsync(loginDto.Username, loginDto.Password);
             eventAggregator.GetEvent<RunGlobalProgressEvent>().Publish(false);
             ToastHelper.JudgeErrorAndShow(eventAggregator, r);
-            if (r == null && r.StatusCode ==0)
+            if (r != null && r.StatusCode ==ServiceHelper.RequestOk)
             {
                 eventAggregator.GetEvent<SignedInEvent>().Publish();
             }

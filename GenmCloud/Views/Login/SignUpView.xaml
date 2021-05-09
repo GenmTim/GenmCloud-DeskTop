@@ -41,7 +41,8 @@
                             Height="40"
                             Margin="32,0,32,32"
                             hc:InfoElement.Placeholder="请输入邮箱号码"
-                            FontSize="12" />
+                            FontSize="12"
+                            TextType="Mail" />
                         <hc:PasswordBox
                             x:Name="passwordBox"
                             Height="40"
@@ -52,9 +53,9 @@
                 </hc:SimplePanel>
                 <Grid Margin="32,0,32,0">
                     <Button
-                        Click="RegisterBtnClick"
                         Height="40"
                         HorizontalAlignment="Stretch"
+                        Click="RegisterBtnClick"
                         Content="注册"
                         Cursor="Hand"
                         FontSize="16"

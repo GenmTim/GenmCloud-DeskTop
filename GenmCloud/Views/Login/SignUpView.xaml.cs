@@ -1,4 +1,5 @@
 ﻿using GenmCloud.Core.Event;
+using GenmCloud.Core.Tools.Helper;
 using GenmCloud.Shared.Dto;
 using Prism.Events;
 using Prism.Regions;
@@ -20,7 +21,7 @@ namespace GenmCloud.Views.Login
 
         private void RegisterBtnClick(object sender, System.Windows.RoutedEventArgs e)
         {
-            eventAggregator.GetEvent<SignUpEvent>().Publish(new LoginDto { Username = usernameBox.Text, Password = passwordBox.Password });
+            eventAggregator.GetEvent<SignUpEvent>().Publish(new LoginDto { Username = usernameBox.Text, Password = ServiceHelper.SetPassword(passwordBox.Password) });
             e.Handled = true;
         }
     }

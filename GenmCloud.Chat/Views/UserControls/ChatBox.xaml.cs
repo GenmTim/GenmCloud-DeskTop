@@ -20,7 +20,7 @@ namespace GenmCloud.Chat.Views.UserControls
         {
             if (_scrollViewer == null)
             {
-                _scrollViewer = VisualHelper.GetChild<ScrollViewer>(listBoxChat);
+                _scrollViewer = contentScrollViewer;
             }
             _scrollViewer?.ScrollToBottom();
         }

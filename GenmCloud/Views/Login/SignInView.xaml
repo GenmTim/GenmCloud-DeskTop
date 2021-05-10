@@ -41,12 +41,14 @@
                             Height="40"
                             Margin="32,0,32,32"
                             hc:InfoElement.Placeholder="请输入邮箱号码"
-                            FontSize="12" />
+                            FontSize="12"
+                            Text="1234@qq.com" />
                         <hc:PasswordBox
                             x:Name="passwordBox"
                             Height="40"
                             Margin="32,0,32,32"
                             hc:InfoElement.Placeholder="请输入密码"
+                            Password="1234"
                             ShowEyeButton="True" />
                     </StackPanel>
                 </hc:SimplePanel>

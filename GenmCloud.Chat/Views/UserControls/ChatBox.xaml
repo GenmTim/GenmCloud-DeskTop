@@ -15,6 +15,35 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/GenmCloud.Chat;component/Resources/Styles/ChatBubbleStyle.xaml" />
             </ResourceDictionary.MergedDictionaries>
+            <Style
+                x:Key="chatListBoxStyle"
+                BasedOn="{StaticResource StackPanelVerticalListBox}"
+                TargetType="ListBox">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type ListBox}">
+                            <Border
+                                Name="Bd"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                SnapsToDevicePixels="true">
+                                <hc:ToggleBlock
+                                    HorizontalContentAlignment="Stretch"
+                                    VerticalContentAlignment="Stretch"
+                                    IsChecked="{Binding HasItems, RelativeSource={RelativeSource TemplatedParent}, Mode=OneWay}">
+                                    <hc:ToggleBlock.UnCheckedContent>
+                                        <hc:Empty />
+                                    </hc:ToggleBlock.UnCheckedContent>
+                                    <hc:ToggleBlock.CheckedContent>
+                                        <ItemsPresenter Margin="{TemplateBinding Padding}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                                    </hc:ToggleBlock.CheckedContent>
+                                </hc:ToggleBlock>
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
         </ResourceDictionary>
     </UserControl.Resources>
     <hc:SimplePanel Grid.Column="2">
@@ -60,33 +89,37 @@
             <Grid Grid.Row="1">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*" />
-                    <RowDefinition Height="80" />
+                    <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
-                <ListBox
-                    Name="listBoxChat"
-                    Background="Transparent"
-                    BorderThickness="0"
-                    ItemsSource="{Binding ChatMsgList}"
-                    ScrollViewer.CanContentScroll="False"
-                    ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                    Style="{StaticResource StackPanelVerticalListBox}">
-                    <ListBox.ItemTemplate>
-                        <DataTemplate>
-                            <local:ChatBubble
-                                attach:UriElement.Uri="{Binding Avatar}"
-                                Content="{Binding Content}"
-                                Role="{Binding Role}"
-                                Style="{StaticResource ChatBubbleBaseStyle}"
-                                Tag="{Binding .}"
-                                Type="{Binding Type}" />
-                        </DataTemplate>
-                    </ListBox.ItemTemplate>
-                </ListBox>
+                <hc:ScrollViewer x:Name="contentScrollViewer" IsInertiaEnabled="True">
+                    <hc:SimplePanel>
+                        <ListBox
+                            Name="listBoxChat"
+                            Margin="0,0,0,16"
+                            Background="Transparent"
+                            BorderThickness="0"
+                            ItemsSource="{Binding ChatMsgList}"
+                            Style="{StaticResource chatListBoxStyle}">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <local:ChatBubble
+                                        Margin="12,12"
+                                        attach:UriElement.Uri="{Binding Avatar}"
+                                        Content="{Binding Content}"
+                                        Role="{Binding Role}"
+                                        Style="{StaticResource ChatBubbleBaseStyle}"
+                                        Tag="{Binding .}"
+                                        Type="{Binding Type}" />
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </hc:SimplePanel>
+                </hc:ScrollViewer>
                 <hc:SimplePanel
                     Grid.Row="1"
                     Height="48"
-                    Margin="20,0"
-                    Background="{StaticResource TMS_TransparencyRegionBrush}">
+                    Margin="20,0,20,20"
+                    Background="Transparent">
                     <Border
                         Background="White"
                         CornerRadius="12"

@@ -59,6 +59,11 @@ namespace GenmCloud.Chat.ViewModels.UserControls
 
         private void SendMsg()
         {
+            if (string.IsNullOrEmpty(Context.ChatString))
+            {
+                return;
+            }
+
             string newMsg = Context.ChatString;
             ChatMsgList.Add(new ChatMsgVO { Content = newMsg, Role = Core.Data.Type.ChatRoleType.Me, Type = Core.Data.Type.ChatMessageType.String, Id = 0 });
             ChatMsgList.Add(new ChatMsgVO { Content = newMsg, Role = Core.Data.Type.ChatRoleType.Other, Type = Core.Data.Type.ChatMessageType.String, Id = 1 });

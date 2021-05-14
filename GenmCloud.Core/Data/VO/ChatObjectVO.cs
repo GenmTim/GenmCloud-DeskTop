@@ -38,5 +38,19 @@ namespace GenmCloud.Core.Data.VO
                 RaisePropertyChanged();
             }
         }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is ChatObjectVO other)
+            {
+                return other.Id == Id;
+            }
+            return false;
+        }
+
+        public override int GetHashCode()
+        {
+            return (int)Id;
+        }
     }
 }

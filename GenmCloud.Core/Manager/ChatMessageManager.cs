@@ -5,6 +5,7 @@ using Prism.Events;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 
 namespace GenmCloud.Core.Manager
 {
@@ -29,6 +30,7 @@ namespace GenmCloud.Core.Manager
                 instance = this;
                 this.eventAggregator = eventAggregator;
                 this.eventAggregator.GetEvent<SendChatMsgEvent>().Subscribe(SendMessage);
+                this.eventAggregator.GetEvent<WebSocketRecvEvent>().Subscribe(NewMessage);
             }
             else
             {
@@ -48,6 +50,17 @@ namespace GenmCloud.Core.Manager
         public void SendMessage(string message)
         {
             this.eventAggregator.GetEvent<WebSocketSendEvent>().Publish(message);
+        }
+
+        private void NewMessage(string msg)
+        {
+            Save(msg);
+        }
+
+        // 聊天记录本地化
+        private static void Save(string msg)
+        {
+            CacheManager.GetInstance().SaveRecord("chat", msg);
         }
     }
 }

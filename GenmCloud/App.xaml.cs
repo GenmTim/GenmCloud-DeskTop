@@ -33,13 +33,28 @@ namespace GenmCloud
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
             this.ConfigureServices(containerRegistry);
+            containerRegistry.RegisterSingleton<Router>(() =>
+            {
+                return Router.GetInstance(containerRegistry);
+            });
+            containerRegistry.RegisterSingleton<CacheManager>(() =>
+            {
+                return CacheManager.GetInstance();
+            });
             containerRegistry.Register<ILog, GenmCloudNLog>();
             containerRegistry.RegisterSingleton<ChatMessageManager>();
             containerRegistry.RegisterSingleton<WebSocketService>();
-            containerRegistry.RegisterSingleton<Router>(() =>
-            {
-                return Router.Instance(containerRegistry);
-            });
+
+            // 注册视图路由
+            this.RegisterRoute();
+            Container.Resolve<CacheManager>();
+
+
+            NetCoreProvider.RegisterServiceLocator(Container);
+        }
+
+        private void RegisterRoute()
+        {
             var router = Container.Resolve<Router>();
 
             router[typeof(LoginWindow)] = RouteHelper.MakeRouteInfo("login/");
@@ -56,8 +71,6 @@ namespace GenmCloud
 
             Chat.ChatModule.ModuleInfo.Path = router[typeof(ChatView)].Path;
             Storage.StorageModule.ModuleInfo.Path = router[typeof(StorageView)].Path;
-
-            NetCoreProvider.RegisterServiceLocator(Container);
         }
 
         protected override void ConfigureModuleCatalog(IModuleCatalog moduleCatalog)

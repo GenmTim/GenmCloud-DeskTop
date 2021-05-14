@@ -64,7 +64,7 @@
                     FontSize="16"
                     FontWeight="SemiBold"
                     Foreground="#000235"
-                    Text="蔡承龙" />
+                    Text="{Binding Context.Name}" />
                 <StackPanel
                     Margin="0,0,0,0"
                     HorizontalAlignment="Right"

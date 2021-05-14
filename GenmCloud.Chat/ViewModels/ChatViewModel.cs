@@ -25,7 +25,7 @@ namespace GenmCloud.Chat.ViewModels
             set
             {
                 chatObject = value;
-                UpdateChatBoxContext();
+                UpdateChatBoxContext(chatObject);
                 RaisePropertyChanged();
             }
         }
@@ -50,9 +50,13 @@ namespace GenmCloud.Chat.ViewModels
             }
         }
 
-        public void UpdateChatBoxContext()
+        public void UpdateChatBoxContext(object chatObject)
         {
-            RegionHelper.RequestNavigate(regionManager, RegionToken.ChatContent, typeof(ChatBox));
+            var param = new NavigationParameters
+            {
+                { "context", chatObject }
+            };
+            RegionHelper.RequestNavigate(regionManager, RegionToken.ChatContent, typeof(ChatBox), param);
         }
 
         public void Simulation()

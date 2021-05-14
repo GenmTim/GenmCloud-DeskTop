@@ -21,7 +21,7 @@ namespace Genm.WPF.Tools.Helper
 
         private static Router instance;
 
-        public static Router Instance(IContainerRegistry containerRegistry)
+        public static Router GetInstance(IContainerRegistry containerRegistry)
         {
             if (instance == null)
             {

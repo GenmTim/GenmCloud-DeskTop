@@ -2,15 +2,19 @@
 using GenmCloud.ApiService;
 using GenmCloud.Chat.Views;
 using GenmCloud.Common;
+using GenmCloud.Contact.Views;
 using GenmCloud.Core.Data.Token;
 using GenmCloud.Core.Manager;
+using GenmCloud.Core.Service.Dialog;
 using GenmCloud.Core.Tools.Helper;
+using GenmCloud.Core.UserControls.Dialog.Views;
 using GenmCloud.Shared.Common;
 using GenmCloud.Shared.DataInterfaces;
 using GenmCloud.Storage.Views;
 using GenmCloud.Views;
 using GenmCloud.Views.Login;
 using Newtonsoft.Json;
+using Prism.Events;
 using Prism.Ioc;
 using Prism.Modularity;
 using Prism.Regions;
@@ -32,27 +36,104 @@ namespace GenmCloud
 
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
-            this.ConfigureServices(containerRegistry);
-            containerRegistry.RegisterSingleton<Router>(() =>
-            {
-                return Router.GetInstance(containerRegistry);
-            });
-            containerRegistry.RegisterSingleton<CacheManager>(() =>
-            {
-                return CacheManager.GetInstance();
-            });
-            containerRegistry.Register<ILog, GenmCloudNLog>();
-            containerRegistry.RegisterSingleton<ChatMessageManager>();
+            // 全局单例IOC工具
+            NetCoreProvider.RegisterServiceLocator(Container);
+
+            // 注册API服务
+            ConfigureServices(containerRegistry);
+
+            // 注册对话框服务
+            containerRegistry.Register<IDialogHostService, DialogHostService>();
+
+            // 注册路由辅助
+            containerRegistry.RegisterSingleton<Router>(() => { return Router.GetInstance(containerRegistry); });
+
+            // 注册本地缓存服务
+            containerRegistry.RegisterSingleton<CacheManager>(() => { return CacheManager.GetInstance(); });
+
+            // 注册通信消息管理
+            containerRegistry.RegisterSingleton<ChatMessageManager>(() => { return ChatMessageManager.GetInstance(); });
+
+            // 注册日志服务
+            containerRegistry.RegisterSingleton<ILog, GenmCloudNLog>();
+
+            // 注册WebSocket通信服务（用于消息通信）
             containerRegistry.RegisterSingleton<WebSocketService>();
 
-            // 注册视图路由
-            this.RegisterRoute();
+            // 视图路由注入
+            RegisterRoute();
+            RegisterDialog(containerRegistry);
+
+            // 开启本地缓存服务
             Container.Resolve<CacheManager>();
-
-
-            NetCoreProvider.RegisterServiceLocator(Container);
         }
 
+        protected override void ConfigureModuleCatalog(IModuleCatalog moduleCatalog)
+        {
+            // 即时通信模块
+            moduleCatalog.AddModule<Chat.ChatModule>(JsonConvert.SerializeObject(Chat.ChatModule.ModuleInfo));
+
+            // 联系人模块
+            moduleCatalog.AddModule<Contact.ContactModule>(JsonConvert.SerializeObject(Contact.ContactModule.ModuleInfo));
+
+            // 云存储模块
+            moduleCatalog.AddModule<Storage.StorageModule>(JsonConvert.SerializeObject(Storage.StorageModule.ModuleInfo));
+        }
+
+        protected override void OnInitialized()
+        {
+            InitSetting();
+
+            var loginResult = Login();
+
+            if (loginResult.Value)
+            {
+                // 开启管理者和服务
+                StartHandler();
+ 
+                base.OnInitialized();
+            }
+            else
+            {
+                if (Application.Current != null)
+                {
+                    Application.Current.Shutdown();
+                }
+            }
+        }
+
+        private void InitSetting()
+        {
+            Contract.serverUrl = ConfigurationManager.AppSettings["serverAddress"];
+
+            // 编辑器的高亮显示扩展
+            TextEditorHelper.RegisterHighlighting("Go", new[] { ".go" }, "Go.xshd");
+            TextEditorHelper.RegisterHighlighting("Lua", new[] { ".slua", ".lua" }, "Lua.xshd");
+        }
+
+        private bool? Login()
+        {
+            var login = Container.Resolve<LoginWindow>();
+            RegionManager.SetRegionManager(login, Container.Resolve<IRegionManager>());
+            return login.ShowDialog();
+        }
+
+        private void StartHandler()
+        {
+            // 通信消息管理者
+            Container.Resolve<ChatMessageManager>();
+
+            // WebSocket通信服务
+            Container.Resolve<WebSocketService>();
+        }
+
+        // 注册相关API服务
+        private void ConfigureServices(IContainerRegistry containerRegistry)
+        {
+            containerRegistry.Register<IUserRepository, UserService>();
+        }
+
+        // 注册视图路由
         private void RegisterRoute()
         {
             var router = Container.Resolve<Router>();
@@ -67,47 +148,21 @@ namespace GenmCloud
             {
                 router[typeof(ChatView)] = RouteHelper.MakeRouteInfo(typeof(MainWindow), "chat/", RegionToken.MainContent);
                 router[typeof(StorageView)] = RouteHelper.MakeRouteInfo(typeof(MainWindow), "storage/", RegionToken.MainContent);
+                router[typeof(ContactView)] = RouteHelper.MakeRouteInfo(typeof(MainWindow), "contact/", RegionToken.MainContent);
             }
 
             Chat.ChatModule.ModuleInfo.Path = router[typeof(ChatView)].Path;
             Storage.StorageModule.ModuleInfo.Path = router[typeof(StorageView)].Path;
+            Contact.ContactModule.ModuleInfo.Path = router[typeof(ContactView)].Path;
         }
 
-        protected override void ConfigureModuleCatalog(IModuleCatalog moduleCatalog)
+        private void RegisterDialog(IContainerRegistry containerRegistry)
         {
-            moduleCatalog.AddModule<Chat.ChatModule>(JsonConvert.SerializeObject(Chat.ChatModule.ModuleInfo));
-            moduleCatalog.AddModule<Storage.StorageModule>(JsonConvert.SerializeObject(Storage.StorageModule.ModuleInfo));
-        }
+            // 问答对话框
+            containerRegistry.RegisterForNavigation<QuestionDialog>();
 
-        protected override void OnInitialized()
-        {
-            Contract.serverUrl = ConfigurationManager.AppSettings["serverAddress"];
-            var login = Container.Resolve<LoginWindow>();
-            RegionManager.SetRegionManager(login, Container.Resolve<IRegionManager>());
-
-            var result = login.ShowDialog();
-            if (result.Value)
-            {
-                // 开启各个管理者和服务
-                Container.Resolve<ChatMessageManager>();
-                Container.Resolve<WebSocketService>();
-
-                // 编辑器的高亮显示扩展
-                TextEditorHelper.RegisterHighlighting("Go", new[] { ".go" }, "Go.xshd");
-                TextEditorHelper.RegisterHighlighting("Lua", new[] { ".slua", ".lua" }, "Lua.xshd");
-
-                base.OnInitialized();
-            }
-            else
-            {
-                if (Application.Current != null)
-                    Application.Current.Shutdown();
-            }
-        }
-
-        private void ConfigureServices(IContainerRegistry containerRegistry)
-        {
-            containerRegistry.Register<IUserRepository, UserService>();
+            // 值输入对话框
+            containerRegistry.RegisterForNavigation<InputValueDialog>();
         }
     }
 }

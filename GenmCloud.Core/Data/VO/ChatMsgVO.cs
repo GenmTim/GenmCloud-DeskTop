@@ -6,6 +6,7 @@ namespace GenmCloud.Core.Data.VO
 {
     public class ChatMsgVO : BindableBase
     {
+        // 对应服务端数据库的ID
         public long Id { get; set; }
 
         private string content;

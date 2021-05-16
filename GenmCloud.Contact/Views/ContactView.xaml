@@ -1,0 +1,245 @@
+﻿<UserControl
+    x:Class="GenmCloud.Contact.Views.ContactView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:genm="clr-namespace:Genm.WPF.Controls;assembly=Genm.WPF"
+    xmlns:hc="https://handyorg.github.io/handycontrol"
+    xmlns:local="clr-namespace:GenmCloud.Contact.Views"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:prism="http://prismlibrary.com/"
+    xmlns:uc="clr-namespace:GenmCloud.Core.UserControls.Common.Views;assembly=GenmCloud.Core"
+    d:DesignHeight="650"
+    d:DesignWidth="1060"
+    prism:ViewModelLocator.AutoWireViewModel="True"
+    mc:Ignorable="d">
+    <UserControl.Resources>
+        <Style x:Key="NavRadioBtnStyle" TargetType="{x:Type RadioButton}">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Foreground" Value="{StaticResource SecondaryTextBrush}" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="SnapsToDevicePixels" Value="true" />
+            <Setter Property="BorderBrush" Value="{StaticResource TMS_TransparencyRegionBrush}" />
+            <Setter Property="BorderThickness" Value="0,0,0,2" />
+            <Setter Property="Height" Value="40" />
+            <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type RadioButton}">
+                        <Grid VerticalAlignment="Center">
+                            <Border
+                                Width="{TemplateBinding Width}"
+                                Height="{TemplateBinding Height}"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}">
+                                <ContentPresenter
+                                    Margin="{TemplateBinding Padding}"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Focusable="False"
+                                    SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                            </Border>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsChecked" Value="true">
+                                <Setter Property="BorderBrush" Value="{StaticResource PrimaryBrush}" />
+                                <Setter Property="Foreground" Value="{StaticResource PrimaryBrush}" />
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="true">
+                                <Setter Property="Foreground" Value="{StaticResource PrimaryBrush}" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style
+            x:Key="funcBtnStyle"
+            BasedOn="{StaticResource ToggleButtonCustom}"
+            TargetType="ToggleButton">
+            <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+            <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}" />
+            <Setter Property="Foreground" Value="#8b8f96" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Foreground" Value="{StaticResource PrimaryBrush}" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Resources>
+    <materialDesign:DialogHost
+        CloseOnClickAway="True"
+        Identifier="ContactDialogRoot"
+        OverlayBackground="{StaticResource TMS_TransparencyRegionBrush}">
+        <hc:SimplePanel>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="240" />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <hc:SimplePanel Background="{StaticResource RegionBrush}">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="80" />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <hc:SimplePanel>
+                                <Grid Margin="8,0,0,0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition />
+                                        <ColumnDefinition Width="40" />
+                                    </Grid.ColumnDefinitions>
+                                    <hc:SimplePanel Height="32">
+                                        <hc:SearchBar Height="20" />
+                                    </hc:SimplePanel>
+                                    <ToggleButton
+                                        x:Name="funcBtn"
+                                        Grid.Column="1"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        Content="&#xe61d;"
+                                        FontFamily="{StaticResource FIconFontFamily}"
+                                        FontSize="18"
+                                        Style="{StaticResource funcBtnStyle}" />
+                                </Grid>
+                            </hc:SimplePanel>
+                            <hc:SimplePanel Grid.Row="1" VerticalAlignment="Bottom">
+                                <UniformGrid Rows="1">
+                                    <RadioButton
+                                        HorizontalAlignment="Center"
+                                        Content="联系人"
+                                        Style="{StaticResource NavRadioBtnStyle}" />
+                                    <RadioButton
+                                        Grid.Column="1"
+                                        HorizontalAlignment="Center"
+                                        Content="群组"
+                                        Style="{StaticResource NavRadioBtnStyle}" />
+                                </UniformGrid>
+                            </hc:SimplePanel>
+                        </Grid>
+                        <Border BorderBrush="{StaticResource TMS_BorderBrush}" BorderThickness="0,0,0,1" />
+                    </Grid>
+                    <!--<Border BorderBrush="{StaticResource TMS_BorderBrush}" BorderThickness="0,0,1,0" />-->
+                </hc:SimplePanel>
+                <hc:SimplePanel Grid.Column="1">
+                    <Border Background="#f5f6f7" CornerRadius="8,0,0,0" />
+                    <TextBlock />
+                </hc:SimplePanel>
+                <genm:Popup
+                    x:Name="menuPopup"
+                    AllowsTransparency="True"
+                    HorizontalOffset="24"
+                    IsOpen="{Binding ElementName=funcBtn, Path=IsChecked, Mode=TwoWay}"
+                    Placement="Left"
+                    PlacementTarget="{Binding ElementName=funcBtn}"
+                    StaysOpen="False"
+                    VerticalOffset="28">
+                    <hc:SimplePanel Width="160">
+                        <Border Background="Transparent" CornerRadius="5" />
+                        <hc:SimplePanel Margin="3">
+                            <Border
+                                Background="White"
+                                CornerRadius="5"
+                                Effect="{StaticResource EffectShadowCom}" />
+                            <hc:SimplePanel>
+                                <hc:SimplePanel.Resources>
+                                    <Style x:Key="fIconTextStyle" TargetType="TextBlock">
+                                        <Setter Property="Foreground" Value="Black" />
+                                        <Setter Property="VerticalAlignment" Value="Center" />
+                                        <Setter Property="FontSize" Value="20" />
+                                        <Setter Property="FontFamily" Value="{StaticResource FIconFontFamily}" />
+                                        <Setter Property="Margin" Value="15,0" />
+                                    </Style>
+                                    <Style x:Key="textStyle" TargetType="TextBlock">
+                                        <Setter Property="Foreground" Value="Black" />
+                                        <Setter Property="VerticalAlignment" Value="Center" />
+                                        <Setter Property="FontSize" Value="14" />
+                                    </Style>
+                                    <Style x:Key="menuItemStyle" TargetType="MenuItem">
+                                        <Setter Property="Cursor" Value="Hand" />
+                                        <Setter Property="Height" Value="50" />
+                                        <Setter Property="Width" Value="{Binding Path=ActualWidth, RelativeSource={RelativeSource AncestorType=Menu, Mode=FindAncestor}}" />
+                                        <Setter Property="Template">
+                                            <Setter.Value>
+                                                <ControlTemplate TargetType="{x:Type MenuItem}">
+                                                    <Border
+                                                        Name="Bd"
+                                                        Background="{TemplateBinding Background}"
+                                                        BorderBrush="{TemplateBinding BorderBrush}"
+                                                        BorderThickness="{TemplateBinding BorderThickness}"
+                                                        CornerRadius="5"
+                                                        SnapsToDevicePixels="True">
+                                                        <hc:SimplePanel Margin="{TemplateBinding Padding}">
+                                                            <ContentPresenter
+                                                                Name="ContentPresenter"
+                                                                Margin="0,3"
+                                                                ContentSource="Header"
+                                                                ContentTemplate="{TemplateBinding HeaderTemplate}"
+                                                                RecognizesAccessKey="True"
+                                                                SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                                                        </hc:SimplePanel>
+                                                    </Border>
+                                                </ControlTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                        <Style.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter Property="Background" Value="{StaticResource BorderBrush}" />
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </hc:SimplePanel.Resources>
+                                <Menu
+                                    HorizontalAlignment="Stretch"
+                                    Background="Transparent"
+                                    Style="{StaticResource MenuBaseStyle}">
+                                    <MenuItem
+                                        Click="MenuItem_Click"
+                                        Style="{StaticResource menuItemStyle}"
+                                        Tag="AddNewContact">
+                                        <MenuItem.Header>
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock Style="{StaticResource fIconTextStyle}" Text="&#xe60a;" />
+                                                <TextBlock Style="{StaticResource textStyle}" Text="添加联系人" />
+                                            </StackPanel>
+                                        </MenuItem.Header>
+                                    </MenuItem>
+                                    <MenuItem
+                                        Click="MenuItem_Click"
+                                        Style="{StaticResource menuItemStyle}"
+                                        Tag="JoinGroup">
+                                        <MenuItem.Header>
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock Style="{StaticResource fIconTextStyle}" Text="&#xe64b;" />
+                                                <TextBlock Style="{StaticResource textStyle}" Text="加入群组" />
+                                            </StackPanel>
+                                        </MenuItem.Header>
+                                    </MenuItem>
+                                    <MenuItem Click="MenuItem_Click" Style="{StaticResource menuItemStyle}">
+                                        <MenuItem.Header>
+                                            <StackPanel Orientation="Horizontal" Tag="CreateGroup">
+                                                <TextBlock Style="{StaticResource fIconTextStyle}" Text="&#xe64b;" />
+                                                <TextBlock Style="{StaticResource textStyle}" Text="创建群组" />
+                                            </StackPanel>
+                                        </MenuItem.Header>
+                                    </MenuItem>
+                                </Menu>
+                            </hc:SimplePanel>
+                        </hc:SimplePanel>
+                    </hc:SimplePanel>
+                </genm:Popup>
+            </Grid>
+            <uc:NameCardView Effect="{StaticResource DialogShadow}" />
+        </hc:SimplePanel>
+    </materialDesign:DialogHost>
+</UserControl>

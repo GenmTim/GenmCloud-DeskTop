@@ -36,7 +36,7 @@ namespace GenmCloud.Chat.ViewModels
         {
             this.regionManager = regionManager;
             Message = "View A from your Prism Module";
-            Simulation();
+            //Simulation();
         }
 
         private ObservableCollection<ChatObjectVO> chatObjectVOList;

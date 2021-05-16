@@ -1,7 +1,9 @@
 ﻿using Genm.WPF.Data.VO;
 using GenmCloud.Core.Data;
+using GenmCloud.Core.Event;
 using GenmCloud.Views;
 using Newtonsoft.Json;
+using Prism.Events;
 using Prism.Modularity;
 using Prism.Mvvm;
 using Prism.Regions;
@@ -36,6 +38,7 @@ namespace GenmCloud.ViewModels
 
         private readonly IRegionManager regionManager;
         private readonly IModuleCatalog moduleCatalog;
+        private readonly IEventAggregator eventAggregator;
 
         private RouteMenuVO nowSelectedMenuItem;
         public RouteMenuVO NowSelectedMenuItem
@@ -49,14 +52,32 @@ namespace GenmCloud.ViewModels
             }
         }
 
-        public MainWindowViewModel(IRegionManager regionManager, IModuleCatalog moduleCatalog)
+        private bool isNameCardOpen;
+        public bool IsNameCardOpen
+        {
+            get => isNameCardOpen;
+            set
+            {
+                isNameCardOpen = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public MainWindowViewModel(IRegionManager regionManager, IEventAggregator eventAggregator, IModuleCatalog moduleCatalog)
         {
             this.regionManager = regionManager;
+            this.eventAggregator = eventAggregator;
             this.moduleCatalog = moduleCatalog;
+            this.eventAggregator.GetEvent<ShowNameCardEvent>().Subscribe(ShowNameCard);
             InitRouteMenuList();
         }
 
-        public void InitRouteMenuList()
+        private void ShowNameCard()
+        {
+            IsNameCardOpen = true;
+        }
+
+        private void InitRouteMenuList()
         {
             var modules = moduleCatalog.Modules;
             var menuList = new List<RouteMenuVO>();

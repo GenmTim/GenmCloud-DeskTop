@@ -1,5 +1,4 @@
-﻿using GenmCloud.Shared.Dto;
-using Prism.Events;
+﻿using Prism.Events;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace GenmCloud.Core.Event
 {
-    public class SendChatMsgEvent : PubSubEvent<ChatDto>
+    public class ShowNameCardEvent : PubSubEvent
     {
     }
 }

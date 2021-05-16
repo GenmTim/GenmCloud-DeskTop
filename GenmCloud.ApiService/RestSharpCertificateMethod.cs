@@ -7,6 +7,7 @@
 namespace GenmCloud.Service
 {
     using GenmCloud.Shared.Common.Aop;
+    using GenmCloud.Shared.Common.Session;
     using GenmCloud.Shared.HttpContact;
     using Newtonsoft.Json;
     using RestSharp;
@@ -34,7 +35,10 @@ namespace GenmCloud.Service
             RestRequest request = new RestRequest(method);
             if (isToken)
             {
-                client.AddDefaultHeader("token", "");
+                if (!string.IsNullOrEmpty(SessionService.Token))
+                {
+                    client.AddDefaultHeader("token", SessionService.Token);
+                }
             }
             switch (method)
             {
@@ -66,13 +70,17 @@ namespace GenmCloud.Service
             }
             var response = await client.ExecuteAsync(request);
             if (response.StatusCode == System.Net.HttpStatusCode.OK)
+            {
                 return JsonConvert.DeserializeObject<Response>(response.Content);
+            }
             else
+            {
                 return new BaseResponse()
                 {
                     StatusCode = (int)response.StatusCode,
                     Message = response.StatusDescription ?? response.ErrorMessage
                 } as Response;
+            }
         }
     }
 }

@@ -10,6 +10,7 @@
     xmlns:prism="http://prismlibrary.com/"
     xmlns:system="clr-namespace:System;assembly=mscorlib"
     xmlns:token="clr-namespace:GenmCloud.Core.Data.Token;assembly=GenmCloud.Core"
+    xmlns:uc="clr-namespace:GenmCloud.Core.UserControls.Common.Views;assembly=GenmCloud.Core"
     Title="{Binding Title}"
     Width="1224"
     Height="720"
@@ -32,188 +33,210 @@
     <Border Background="Transparent">
         <Border BorderThickness="0" CornerRadius="0">
             <materialDesign:DialogHost Grid.Row="1" Identifier="WindowRoot">
-                <Grid
-                    x:Name="panel"
-                    FocusVisualStyle="{x:Null}"
-                    Focusable="True">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="28" />
-                        <RowDefinition />
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="60" />
-                        <ColumnDefinition />
-                    </Grid.ColumnDefinitions>
-                    <Border Effect="{StaticResource EffectShadow1}" />
-                    <Border
-                        Grid.RowSpan="2"
-                        BorderBrush="{StaticResource TMS_BorderBrush}"
-                        BorderThickness="0,0,1,0" />
-                    <DockPanel Grid.Row="1" Grid.ColumnSpan="2">
-                        <Grid
-                            Grid.Column="0"
-                            Width="60"
-                            Panel.ZIndex="1">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="*" />
-                            </Grid.RowDefinitions>
-                            <hc:SimplePanel>
-                                <hc:Gravatar
-                                    Width="40"
-                                    Height="40"
-                                    RenderOptions.BitmapScalingMode="HighQuality"
-                                    Source="/h_aid.ico"
-                                    Style="{StaticResource GravatarCircleImg}" />
-                            </hc:SimplePanel>
-                            <!--#region Left Grid - Menu-->
-                            <Grid Grid.Row="1">
+                <hc:SimplePanel>
+
+                    <Grid
+                        x:Name="panel"
+                        FocusVisualStyle="{x:Null}"
+                        Focusable="True">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="28" />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="60" />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <Border Effect="{StaticResource EffectShadow1}" />
+                        <Border
+                            Grid.RowSpan="2"
+                            BorderBrush="{StaticResource TMS_BorderBrush}"
+                            BorderThickness="0,0,1,0" />
+                        <DockPanel Grid.Row="1" Grid.ColumnSpan="2">
+                            <Grid
+                                Grid.Column="0"
+                                Width="60"
+                                Panel.ZIndex="1">
                                 <Grid.RowDefinitions>
-                                    <RowDefinition Height="400" />
-                                    <RowDefinition Height="24" />
+                                    <RowDefinition Height="Auto" />
                                     <RowDefinition Height="*" />
-                                    <RowDefinition Height="24" />
                                 </Grid.RowDefinitions>
-                                <hc:SimplePanel Margin="0,24,0,0">
-                                    <hc:SimplePanel.Resources>
-                                        <Style TargetType="RadioButton">
-                                            <Setter Property="Background" Value="Transparent" />
-                                            <Setter Property="Cursor" Value="Hand" />
-                                            <Setter Property="Foreground" Value="{StaticResource BorderBrush}" />
-                                            <Setter Property="Height" Value="80" />
-                                            <Setter Property="FocusVisualStyle" Value="{x:Null}" />
-                                            <Setter Property="Width" Value="40" />
-                                            <Setter Property="FontSize" Value="28" />
-                                            <Setter Property="BorderThickness" Value="0" />
-                                            <Setter Property="SnapsToDevicePixels" Value="true" />
-                                            <Setter Property="Template">
-                                                <Setter.Value>
-                                                    <ControlTemplate TargetType="RadioButton">
-                                                        <hc:SimplePanel Width="{TemplateBinding Width}" Height="{TemplateBinding Height}">
-                                                            <hc:SimplePanel VerticalAlignment="Center">
-                                                                <Border
-                                                                    Width="40"
-                                                                    Height="40"
-                                                                    Background="{TemplateBinding Background}"
-                                                                    BorderBrush="{TemplateBinding BorderBrush}"
-                                                                    BorderThickness="{TemplateBinding BorderThickness}"
-                                                                    CornerRadius="10">
-                                                                    <TextBlock
-                                                                        Margin="{TemplateBinding Padding}"
-                                                                        HorizontalAlignment="Center"
-                                                                        VerticalAlignment="Center"
-                                                                        Focusable="False"
-                                                                        FontFamily="{StaticResource MenuIconFontFamily}"
-                                                                        FontSize="{TemplateBinding FontSize}"
-                                                                        Foreground="{TemplateBinding Foreground}"
-                                                                        Text="{TemplateBinding attach:IconFontElement.Geometry}" />
-                                                                </Border>
-                                                                <hc:Badge
-                                                                    x:Name="badge"
-                                                                    BadgeMargin="0,-5,-5,0"
-                                                                    BorderThickness="0"
-                                                                    FontSize="10"
-                                                                    Style="{StaticResource BadgeDanger}"
-                                                                    Value="{TemplateBinding attach:ValueAttach.Integer}" />
-                                                            </hc:SimplePanel>
-                                                        </hc:SimplePanel>
-                                                        <ControlTemplate.Triggers>
-                                                            <Trigger SourceName="badge" Property="Value" Value="0">
-                                                                <Setter TargetName="badge" Property="Visibility" Value="Collapsed" />
-                                                            </Trigger>
-                                                            <Trigger Property="IsMouseOver" Value="true">
-                                                                <Setter Property="Background" Value="#CC63BCFB" />
-                                                                <Setter Property="Foreground" Value="White" />
-                                                            </Trigger>
-                                                            <Trigger Property="IsChecked" Value="true">
-                                                                <Setter Property="Background" Value="#63BCFB" />
-                                                                <Setter Property="Foreground" Value="White" />
-                                                            </Trigger>
-                                                        </ControlTemplate.Triggers>
-                                                    </ControlTemplate>
-                                                </Setter.Value>
-                                            </Setter>
-                                        </Style>
-                                        <Style BasedOn="{StaticResource PoptipBaseStyle}" TargetType="{x:Type hc:Poptip}">
-                                            <Setter Property="Background" Value="#dd111111" />
-                                            <Setter Property="Focusable" Value="False" />
-                                            <Setter Property="IsHitTestVisible" Value="False" />
-                                            <Setter Property="PlacementType" Value="Right" />
-                                            <Setter Property="BorderThickness" Value="0" />
-                                            <Setter Property="Foreground" Value="White" />
-                                            <Setter Property="FontSize" Value="13" />
-                                            <Setter Property="Offset" Value="7" />
-                                        </Style>
-                                    </hc:SimplePanel.Resources>
-                                    <ListBox
-                                        x:Name="menuListBox"
-                                        ItemsSource="{Binding MenuList}"
-                                        SelectedIndex="0"
-                                        SelectedValue="{Binding NowSelectedMenuItem, Mode=TwoWay}"
-                                        Style="{StaticResource Genm_ListBoxCustom}">
-                                        <ListBox.ItemTemplate>
-                                            <DataTemplate>
-                                                <RadioButton
-                                                    Padding="{Binding ShowFix}"
-                                                    attach:IconFontElement.Geometry="{Binding Geometry}"
-                                                    attach:ValueAttach.Integer="{Binding UnreadMsgNumber}"
-                                                    hc:Poptip.Content="{Binding Tip}"
-                                                    hc:Poptip.Placement="Right"
-                                                    Cursor="Hand"
-                                                    IsChecked="{Binding Path=IsSelected, RelativeSource={RelativeSource AncestorType=ListBoxItem, Mode=FindAncestor}}" />
-                                            </DataTemplate>
-                                        </ListBox.ItemTemplate>
-                                    </ListBox>
+                                <hc:SimplePanel>
+                                    <hc:Gravatar
+                                        Width="40"
+                                        Height="40"
+                                        RenderOptions.BitmapScalingMode="HighQuality"
+                                        Source="/h_aid.ico"
+                                        Style="{StaticResource GravatarCircleImg}" />
                                 </hc:SimplePanel>
+                                <!--#region Left Grid - Menu-->
+                                <Grid Grid.Row="1">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="400" />
+                                        <RowDefinition Height="24" />
+                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="24" />
+                                    </Grid.RowDefinitions>
+                                    <hc:SimplePanel Margin="0,24,0,0">
+                                        <hc:SimplePanel.Resources>
+                                            <Style TargetType="RadioButton">
+                                                <Setter Property="Background" Value="Transparent" />
+                                                <Setter Property="Cursor" Value="Hand" />
+                                                <Setter Property="Foreground" Value="{StaticResource BorderBrush}" />
+                                                <Setter Property="Height" Value="80" />
+                                                <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+                                                <Setter Property="Width" Value="40" />
+                                                <Setter Property="FontSize" Value="28" />
+                                                <Setter Property="BorderThickness" Value="0" />
+                                                <Setter Property="SnapsToDevicePixels" Value="true" />
+                                                <Setter Property="Template">
+                                                    <Setter.Value>
+                                                        <ControlTemplate TargetType="RadioButton">
+                                                            <hc:SimplePanel Width="{TemplateBinding Width}" Height="{TemplateBinding Height}">
+                                                                <hc:SimplePanel VerticalAlignment="Center">
+                                                                    <Border
+                                                                        Width="40"
+                                                                        Height="40"
+                                                                        Background="{TemplateBinding Background}"
+                                                                        BorderBrush="{TemplateBinding BorderBrush}"
+                                                                        BorderThickness="{TemplateBinding BorderThickness}"
+                                                                        CornerRadius="10">
+                                                                        <TextBlock
+                                                                            Margin="{TemplateBinding Padding}"
+                                                                            HorizontalAlignment="Center"
+                                                                            VerticalAlignment="Center"
+                                                                            Focusable="False"
+                                                                            FontFamily="{StaticResource MenuIconFontFamily}"
+                                                                            FontSize="{TemplateBinding FontSize}"
+                                                                            Foreground="{TemplateBinding Foreground}"
+                                                                            Text="{TemplateBinding attach:IconFontElement.Geometry}" />
+                                                                    </Border>
+                                                                    <hc:Badge
+                                                                        x:Name="badge"
+                                                                        BadgeMargin="0,-5,-5,0"
+                                                                        BorderThickness="0"
+                                                                        FontSize="10"
+                                                                        Style="{StaticResource BadgeDanger}"
+                                                                        Value="{TemplateBinding attach:ValueAttach.Integer}" />
+                                                                </hc:SimplePanel>
+                                                            </hc:SimplePanel>
+                                                            <ControlTemplate.Triggers>
+                                                                <Trigger SourceName="badge" Property="Value" Value="0">
+                                                                    <Setter TargetName="badge" Property="Visibility" Value="Collapsed" />
+                                                                </Trigger>
+                                                                <Trigger Property="IsMouseOver" Value="true">
+                                                                    <Setter Property="Background" Value="#CC63BCFB" />
+                                                                    <Setter Property="Foreground" Value="White" />
+                                                                </Trigger>
+                                                                <Trigger Property="IsChecked" Value="true">
+                                                                    <Setter Property="Background" Value="#63BCFB" />
+                                                                    <Setter Property="Foreground" Value="White" />
+                                                                </Trigger>
+                                                            </ControlTemplate.Triggers>
+                                                        </ControlTemplate>
+                                                    </Setter.Value>
+                                                </Setter>
+                                            </Style>
+                                            <Style BasedOn="{StaticResource PoptipBaseStyle}" TargetType="{x:Type hc:Poptip}">
+                                                <Setter Property="Background" Value="#dd111111" />
+                                                <Setter Property="Focusable" Value="False" />
+                                                <Setter Property="IsHitTestVisible" Value="False" />
+                                                <Setter Property="PlacementType" Value="Right" />
+                                                <Setter Property="BorderThickness" Value="0" />
+                                                <Setter Property="Foreground" Value="White" />
+                                                <Setter Property="FontSize" Value="13" />
+                                                <Setter Property="Offset" Value="7" />
+                                            </Style>
+                                        </hc:SimplePanel.Resources>
+                                        <ListBox
+                                            x:Name="menuListBox"
+                                            ItemsSource="{Binding MenuList}"
+                                            SelectedIndex="0"
+                                            SelectedValue="{Binding NowSelectedMenuItem, Mode=TwoWay}"
+                                            Style="{StaticResource Genm_ListBoxCustom}">
+                                            <ListBox.ItemTemplate>
+                                                <DataTemplate>
+                                                    <RadioButton
+                                                        Padding="{Binding ShowFix}"
+                                                        attach:IconFontElement.Geometry="{Binding Geometry}"
+                                                        attach:ValueAttach.Integer="{Binding UnreadMsgNumber}"
+                                                        hc:Poptip.Content="{Binding Tip}"
+                                                        hc:Poptip.Placement="Right"
+                                                        Cursor="Hand"
+                                                        IsChecked="{Binding Path=IsSelected, RelativeSource={RelativeSource AncestorType=ListBoxItem, Mode=FindAncestor}}" />
+                                                </DataTemplate>
+                                            </ListBox.ItemTemplate>
+                                        </ListBox>
+                                    </hc:SimplePanel>
+                                </Grid>
+                                <!--#endregion-->
                             </Grid>
+                            <!--#region-->
+                            <hc:SimplePanel>
+                                <ContentControl Grid.Column="1" prism:RegionManager.RegionName="{x:Static Member=token:RegionToken.MainContent}" />
+                            </hc:SimplePanel>
                             <!--#endregion-->
-                        </Grid>
-                        <!--#region-->
-                        <hc:SimplePanel>
-                            <ContentControl Grid.Column="1" prism:RegionManager.RegionName="{x:Static Member=token:RegionToken.MainContent}" />
-                        </hc:SimplePanel>
-                        <!--#endregion-->
-                    </DockPanel>
-                    <hc:SimplePanel Grid.Row="0" Grid.ColumnSpan="2">
-                        <hc:SimplePanel
-                            Height="24"
-                            VerticalAlignment="Top"
-                            Panel.ZIndex="0"
-                            hc:WindowAttach.IsDragElement="True"
-                            helper:WindowHelper.IsTopBarMouseDown="True"
-                            Background="Transparent" />
-                        <hc:SimplePanel
-                            Height="24"
-                            HorizontalAlignment="Right"
-                            VerticalAlignment="Top"
-                            Panel.ZIndex="0"
-                            hc:WindowAttach.IsDragElement="True"
-                            helper:WindowHelper.IsTopBarMouseDown="True"
-                            Background="Transparent">
-                            <StackPanel
-                                Grid.Column="1"
+                        </DockPanel>
+
+                        <hc:SimplePanel Grid.Row="0" Grid.ColumnSpan="2">
+                            <hc:SimplePanel
+                                Height="24"
+                                VerticalAlignment="Top"
+                                Panel.ZIndex="0"
+                                hc:WindowAttach.IsDragElement="True"
+                                helper:WindowHelper.IsTopBarMouseDown="True"
+                                Background="Transparent" />
+                            <hc:SimplePanel
+                                Height="24"
                                 HorizontalAlignment="Right"
-                                VerticalAlignment="Center"
-                                Orientation="Horizontal"
-                                Style="{x:Null}">
-                                <Button
-                                    Click="MinimizedDialog"
-                                    Content="&#xe618;"
-                                    Style="{StaticResource WindowMinBtnStyle}" />
-                                <Button
-                                    Click="MaximizedDialog"
-                                    Content="&#xe621;"
-                                    Style="{StaticResource WindowMaxBtnStyle}" />
-                                <Button
-                                    hc:BackgroundSwitchElement.MouseDownBackground="Red"
-                                    Click="CloseDialog"
-                                    Content="&#xe60c;"
-                                    FontSize="16"
-                                    Style="{StaticResource WindowCloseBtnStyle}" />
-                            </StackPanel>
+                                VerticalAlignment="Top"
+                                Panel.ZIndex="0"
+                                hc:WindowAttach.IsDragElement="True"
+                                helper:WindowHelper.IsTopBarMouseDown="True"
+                                Background="Transparent">
+                                <StackPanel
+                                    Grid.Column="1"
+                                    HorizontalAlignment="Right"
+                                    VerticalAlignment="Center"
+                                    Orientation="Horizontal"
+                                    Style="{x:Null}">
+                                    <Button
+                                        Click="MinimizedDialog"
+                                        Content="&#xe618;"
+                                        Style="{StaticResource WindowMinBtnStyle}" />
+                                    <Button
+                                        Click="MaximizedDialog"
+                                        Content="&#xe621;"
+                                        Style="{StaticResource WindowMaxBtnStyle}" />
+                                    <Button
+                                        hc:BackgroundSwitchElement.MouseDownBackground="Red"
+                                        Click="CloseDialog"
+                                        Content="&#xe60c;"
+                                        FontSize="16"
+                                        Style="{StaticResource WindowCloseBtnStyle}" />
+                                </StackPanel>
+                            </hc:SimplePanel>
                         </hc:SimplePanel>
-                    </hc:SimplePanel>
-                </Grid>
+
+                        <ScrollViewer HorizontalAlignment="Right" VerticalScrollBarVisibility="Hidden">
+                            <StackPanel
+                                Margin="0,10,10,10"
+                                VerticalAlignment="Top"
+                                hc:Growl.GrowlParent="True" />
+                        </ScrollViewer>
+                    </Grid>
+                    <genm:Popup
+                        AllowsTransparency="True"
+                        HorizontalOffset="24"
+                        IsOpen="{Binding IsNameCardOpen}"
+                        Placement="Mouse"
+                        StaysOpen="False"
+                        VerticalOffset="-40">
+                        <Border Margin="8" Effect="{StaticResource DialogShadow}">
+                            <uc:NameCardView />
+                        </Border>
+                    </genm:Popup>
+                </hc:SimplePanel>
             </materialDesign:DialogHost>
         </Border>
     </Border>

@@ -20,6 +20,7 @@
     <ProjectReference Include="..\Genm.WPF\Genm.WPF.csproj" />
     <ProjectReference Include="..\GenmCloud.ApiService\GenmCloud.ApiService.csproj" />
     <ProjectReference Include="..\GenmCloud.Chat\GenmCloud.Chat.csproj" />
+    <ProjectReference Include="..\GenmCloud.Contact\GenmCloud.Contact.csproj" />
     <ProjectReference Include="..\GenmCloud.Core\GenmCloud.Core.csproj" />
     <ProjectReference Include="..\GenmCloud.Storage\GenmCloud.Storage.csproj" />
   </ItemGroup>

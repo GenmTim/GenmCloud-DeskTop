@@ -11,7 +11,7 @@ namespace GenmCloud.Core.Data.VO
 
     public class ChatObjectVO : BindableBase
     {
-        public long Id { get; set; }
+        public uint Id { get; set; }
         public string Name { get; set; }
         public string LastMsg { get; set; }
         public long LastMsgTimestamp { get; set; }

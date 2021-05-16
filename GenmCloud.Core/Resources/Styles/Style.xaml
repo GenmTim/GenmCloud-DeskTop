@@ -300,6 +300,85 @@
         x:Key="EditorLinkTextBackgroundBrush"
         o:Freeze="True"
         Color="{DynamicResource EditorLinkTextBackgroundColor}" />
-
     <!--  endregion  -->
+
+
+    <!--#region Dialog Style-->
+    <DropShadowEffect
+        x:Key="DialogShadow"
+        BlurRadius="10"
+        Direction="270"
+        Opacity=".1"
+        RenderingBias="Performance"
+        ShadowDepth="1"
+        Color="{StaticResource EffectShadowColor}" />
+    <Style TargetType="genm:DataDialog">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="genm:DataDialog">
+                    <hc:SimplePanel Width="400" Margin="5">
+                        <Border Background="White" CornerRadius="5" />
+                        <Grid Margin="20,10">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <TextBlock
+                                VerticalAlignment="Center"
+                                FontSize="18"
+                                Text="{TemplateBinding Title}" />
+                            <Button
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Center"
+                                Command="{TemplateBinding CloseCmd}"
+                                Content="&#xe60c;"
+                                FontFamily="{StaticResource FIconFontFamily}">
+                                <Button.Style>
+                                    <Style BasedOn="{StaticResource TextBtnStyle}" TargetType="Button">
+                                        <Setter Property="Foreground" Value="#c3c3c3" />
+                                        <Style.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter Property="Foreground" Value="{StaticResource PrimaryBrush}" />
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Button.Style>
+                            </Button>
+                            <StackPanel
+                                Grid.Row="1"
+                                Margin="0,30"
+                                VerticalAlignment="Center">
+                                <ContentPresenter />
+                            </StackPanel>
+                            <StackPanel
+                                Grid.Row="2"
+                                HorizontalAlignment="Right"
+                                Orientation="Horizontal">
+                                <Button
+                                    Width="55"
+                                    Height="30"
+                                    Margin="0,0,10,0"
+                                    Command="{TemplateBinding NegativeCmd}"
+                                    Cursor="Hand"
+                                    FontSize="14">
+                                    <TextBlock Text="{TemplateBinding NegativeText}" />
+                                </Button>
+                                <Button
+                                    Width="55"
+                                    Height="30"
+                                    Command="{TemplateBinding PositiveCmd}"
+                                    Cursor="Hand"
+                                    FontSize="14"
+                                    Style="{DynamicResource ButtonPrimary}">
+                                    <TextBlock Text="{TemplateBinding PositiveText}" />
+                                </Button>
+                            </StackPanel>
+                        </Grid>
+                    </hc:SimplePanel>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <!--#endregion-->
 </ResourceDictionary>

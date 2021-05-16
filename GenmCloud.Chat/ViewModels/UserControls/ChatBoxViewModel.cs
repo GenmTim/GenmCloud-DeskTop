@@ -1,6 +1,8 @@
 ﻿using GenmCloud.Core.Data.VO;
 using GenmCloud.Core.Event;
 using GenmCloud.Core.Manager;
+using GenmCloud.Shared.Common.Session;
+using GenmCloud.Shared.Dto;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Ioc;
@@ -44,21 +46,7 @@ namespace GenmCloud.Chat.ViewModels.UserControls
             this.SendCmd = new DelegateCommand(SendMsg);
             ChatMsgList = new ObservableCollection<ChatMsgVO>();
             this.chatMsgManager = containerProvider.Resolve<ChatMessageManager>();
-            Simulation();
-        }
-
-        private void Simulation()
-        {
-            Context = new ChatObjectVO
-            {
-                Name = "测试",
-                Id = 1,
-            };
-
-            var chatList = chatMsgManager.GetChatMsgList(Context);
-
-            chatList.Add(new ChatMsgVO { Content = "测试消息", Role = Core.Data.Type.ChatRoleType.Me, Type = Core.Data.Type.ChatMessageType.String, Id = 0 });
-            chatList.Add(new ChatMsgVO { Content = "测试消息", Role = Core.Data.Type.ChatRoleType.Other, Type = Core.Data.Type.ChatMessageType.String, Id = 1 });
+            //Simulation();
         }
 
         private void SendMsg()
@@ -69,11 +57,35 @@ namespace GenmCloud.Chat.ViewModels.UserControls
             }
             string newMsg = Context.ChatString;
 
-            ChatMsgList.Add(new ChatMsgVO { Content = "测试消息", Role = Core.Data.Type.ChatRoleType.Me, Type = Core.Data.Type.ChatMessageType.String, Id = 0 });
-            ChatMsgList.Add(new ChatMsgVO { Content = "测试消息", Role = Core.Data.Type.ChatRoleType.Other, Type = Core.Data.Type.ChatMessageType.String, Id = 1 });
+            ChatDto chatDto = new ChatDto { Type = "CHAT", SubType = "SEND", SenderId = SessionService.User.Id, ReceiverId = Context.Id, Token = ChatMessageManager.GetChatToken(), Data = newMsg };
 
-            eventAggregator.GetEvent<SendChatMsgEvent>().Publish(newMsg);
+            eventAggregator.GetEvent<SendChatMsgEvent>().Publish(chatDto);
             Context.ChatString = "";
+
+            //[JsonProperty("id")]
+            //public uint Id;
+
+            //[JsonProperty("type")]
+            //public string Type;
+
+            //[JsonProperty("subType")]
+            //public string SubType;
+
+            //[JsonProperty("senderId")]
+            //public uint SenderId;
+
+            //[JsonProperty("receiverId")]
+            //public uint ReceiverId;
+
+            //[JsonProperty("isRead")]
+            //public uint IsRead;
+
+            //[JsonProperty("data")]
+            //public string Data;
+
+            //[JsonProperty("token")]
+            //public uint Token;
+            // 封装消息包
         }
 
         public void OnNavigatedTo(NavigationContext navigationContext)
@@ -90,8 +102,21 @@ namespace GenmCloud.Chat.ViewModels.UserControls
             return true;
         }
 
-        public void OnNavigatedFrom(NavigationContext navigationContext)
+        public void OnNavigatedFrom(NavigationContext navigationContext) { }
+
+
+        private void Simulation()
         {
+            Context = new ChatObjectVO
+            {
+                Name = "测试",
+                Id = 1,
+            };
+
+            var chatList = chatMsgManager.GetChatMsgList(Context);
+
+            chatList.Add(new ChatMsgVO { Content = "测试消息", Role = Core.Data.Type.ChatRoleType.Me, Type = Core.Data.Type.ChatMessageType.String, Id = 0 });
+            chatList.Add(new ChatMsgVO { Content = "测试消息", Role = Core.Data.Type.ChatRoleType.Other, Type = Core.Data.Type.ChatMessageType.String, Id = 1 });
         }
     }
 }

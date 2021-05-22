@@ -2,7 +2,6 @@
 using GenmCloud.Core.Tools.Helper;
 using GenmCloud.Shared.Dto;
 using Prism.Events;
-using Prism.Regions;
 using System.Windows.Controls;
 
 namespace GenmCloud.Views.Login

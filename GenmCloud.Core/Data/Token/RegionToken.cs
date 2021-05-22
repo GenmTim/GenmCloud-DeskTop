@@ -7,5 +7,7 @@
         public static readonly string MainContent = nameof(MainContent);
 
         public static readonly string ChatContent = nameof(ChatContent);
+
+        public static readonly string ContactInfoContent = nameof(ContactInfoContent);
     }
 }

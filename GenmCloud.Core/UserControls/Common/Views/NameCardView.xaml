@@ -1,17 +1,24 @@
-﻿<UserControl
+﻿<genm:Popup
     x:Class="GenmCloud.Core.UserControls.Common.Views.NameCardView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:genm="clr-namespace:Genm.WPF.Controls;assembly=Genm.WPF"
     xmlns:hc="https://handyorg.github.io/handycontrol"
-    xmlns:local="clr-namespace:GenmCloud.Core.UserControls.Common"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:prism="http://prismlibrary.com/"
-    Width="320"
-    Height="500"
     prism:ViewModelLocator.AutoWireViewModel="True"
+    AllowsTransparency="True"
+    HorizontalOffset="24"
+    Placement="Mouse"
+    StaysOpen="False"
+    VerticalOffset="-140"
     mc:Ignorable="d">
-    <hc:SimplePanel>
+    <hc:SimplePanel
+        Width="320"
+        Height="500"
+        Margin="8"
+        Effect="{StaticResource GenmShadow}">
         <Border
             Background="{StaticResource RegionBrush}"
             CornerRadius="4"
@@ -36,7 +43,7 @@
                                 VerticalAlignment="Center"
                                 FontSize="100"
                                 Foreground="White"
-                                Text="承龙" />
+                                Text="{Binding User.NickName, Converter={StaticResource FetchFirstCharConverter}}" />
                             <Border>
                                 <Border.Background>
                                     <LinearGradientBrush Opacity="0.5" StartPoint="0,0" EndPoint="0,1">
@@ -85,7 +92,7 @@
                                 FontSize="24"
                                 FontWeight="SemiBold"
                                 Foreground="White"
-                                Text="蔡承龙" />
+                                Text="{Binding User.NickName}" />
                             <hc:UniformSpacingPanel>
                                 <Button
                                     VerticalAlignment="Center"
@@ -106,17 +113,79 @@
                             <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
                         <hc:SimplePanel Grid.Row="1" VerticalAlignment="Center">
-                            <Button
-                                Height="32"
-                                HorizontalAlignment="Stretch"
-                                Content="添加联系人"
-                                Cursor="Hand"
-                                FontSize="14"
-                                Style="{StaticResource ButtonPrimary}" />
+                            <ContentControl>
+                                <ContentControl.Style>
+                                    <Style TargetType="ContentControl">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding ContactState}" Value="2">
+                                                <Setter Property="Content">
+                                                    <Setter.Value>
+                                                        <Grid>
+                                                            <Grid.ColumnDefinitions>
+                                                                <ColumnDefinition />
+                                                                <ColumnDefinition />
+                                                            </Grid.ColumnDefinitions>
+                                                            <Button
+                                                                Height="32"
+                                                                Margin="0,0,8,0"
+                                                                HorizontalAlignment="Stretch"
+                                                                Content="分享"
+                                                                Cursor="Hand"
+                                                                FontSize="14"
+                                                                IsEnabled="{Binding BtnIsEnable}"
+                                                                Style="{StaticResource ButtonDefault}" />
+                                                            <Button
+                                                                Grid.Column="1"
+                                                                Height="32"
+                                                                Margin="8,0,0,0"
+                                                                HorizontalAlignment="Stretch"
+                                                                Content="发送消息"
+                                                                Cursor="Hand"
+                                                                FontSize="14"
+                                                                IsEnabled="{Binding BtnIsEnable}"
+                                                                Style="{StaticResource ButtonPrimary}" />
+                                                        </Grid>
+                                                    </Setter.Value>
+                                                </Setter>
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding ContactState}" Value="0">
+                                                <Setter Property="Content">
+                                                    <Setter.Value>
+                                                        <Button
+                                                            Height="32"
+                                                            HorizontalAlignment="Stretch"
+                                                            Command="{Binding RequestContactCmd}"
+                                                            Content="添加联系人"
+                                                            Cursor="Hand"
+                                                            FontSize="14"
+                                                            IsEnabled="{Binding BtnIsEnable}"
+                                                            Style="{StaticResource ButtonPrimary}" />
+                                                    </Setter.Value>
+                                                </Setter>
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding ContactState}" Value="1">
+                                                <Setter Property="Content">
+                                                    <Setter.Value>
+                                                        <Button
+                                                            Height="32"
+                                                            HorizontalAlignment="Stretch"
+                                                            Command="{Binding AssentContactRequestCmd}"
+                                                            Content="同意联系人申请"
+                                                            Cursor="Hand"
+                                                            FontSize="14"
+                                                            IsEnabled="{Binding BtnIsEnable}"
+                                                            Style="{StaticResource ButtonPrimary}" />
+                                                    </Setter.Value>
+                                                </Setter>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </ContentControl.Style>
+                            </ContentControl>
                         </hc:SimplePanel>
                     </Grid>
                 </hc:SimplePanel>
             </Grid>
         </Border>
     </hc:SimplePanel>
-</UserControl>
+</genm:Popup>

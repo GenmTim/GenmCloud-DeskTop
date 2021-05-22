@@ -1,14 +1,19 @@
 ﻿using Genm.WPF.Tools.Helper;
 using GenmCloud.ApiService;
+using GenmCloud.ApiService.Service;
+using GenmCloud.ApiService.Service.Impl;
+using GenmCloud.Chat.Manager;
 using GenmCloud.Chat.Views;
 using GenmCloud.Common;
 using GenmCloud.Contact.Views;
 using GenmCloud.Core.Data.Token;
+using GenmCloud.Core.Event;
 using GenmCloud.Core.Manager;
 using GenmCloud.Core.Service.Dialog;
 using GenmCloud.Core.Tools.Helper;
 using GenmCloud.Core.UserControls.Dialog.Views;
 using GenmCloud.Shared.Common;
+using GenmCloud.Shared.Common.Session;
 using GenmCloud.Shared.DataInterfaces;
 using GenmCloud.Storage.Views;
 using GenmCloud.Views;
@@ -52,7 +57,10 @@ namespace GenmCloud
             containerRegistry.RegisterSingleton<CacheManager>(() => { return CacheManager.GetInstance(); });
 
             // 注册通信消息管理
-            containerRegistry.RegisterSingleton<ChatMessageManager>(() => { return ChatMessageManager.GetInstance(); });
+            containerRegistry.RegisterSingleton<ChatMsgManager>(() => { return ChatMsgManager.GetInstance(); });
+
+            // 注册头像管理
+            containerRegistry.RegisterSingleton<AvatarManager>(() => { return AvatarManager.GetInstance();  });
 
             // 注册日志服务
             containerRegistry.RegisterSingleton<ILog, GenmCloudNLog>();
@@ -88,9 +96,12 @@ namespace GenmCloud
 
             if (loginResult.Value)
             {
+                // 初始化基本信息
+                InitApplicationInfo();
+
                 // 开启管理者和服务
                 StartHandler();
- 
+
                 base.OnInitialized();
             }
             else
@@ -120,8 +131,11 @@ namespace GenmCloud
 
         private void StartHandler()
         {
+            // 头像管理者
+            Container.Resolve<AvatarManager>();
+
             // 通信消息管理者
-            Container.Resolve<ChatMessageManager>();
+            Container.Resolve<ChatMsgManager>();
 
             // WebSocket通信服务
             Container.Resolve<WebSocketService>();
@@ -130,7 +144,9 @@ namespace GenmCloud
         // 注册相关API服务
         private void ConfigureServices(IContainerRegistry containerRegistry)
         {
-            containerRegistry.Register<IUserRepository, UserService>();
+            containerRegistry.Register<IUserService, UserService>();
+            containerRegistry.Register<IContactService, ContactService>();
+            containerRegistry.Register<IChatService, ChatService>();
         }
 
         // 注册视图路由
@@ -163,6 +179,21 @@ namespace GenmCloud
 
             // 值输入对话框
             containerRegistry.RegisterForNavigation<InputValueDialog>();
+
+            // 寻找联系人和群组对话框
+            containerRegistry.RegisterForNavigation<QueryContactDialog>();
+        }
+
+        private async void InitApplicationInfo()
+        {
+            var userService = Container.Resolve<IUserService>();
+            var result = await userService.GetUserInfo(0);
+            if (result.StatusCode == ServiceHelper.RequestOk)
+            {
+                SessionService.User = result.Result;
+                AvatarManager.GetInstance().Store(SessionService.User.Id, SessionService.User.Avatar);
+                Container.Resolve<IEventAggregator>().GetEvent<UserInfoUpdateEvent>().Publish();
+            }
         }
     }
 }

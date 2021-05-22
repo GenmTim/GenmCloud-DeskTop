@@ -2,8 +2,6 @@
 using Genm.WPF.Data.Interface;
 using Genm.WPF.Data.VO;
 using GenmCloud.Core.Data.Token;
-using GenmCloud.Core.Event;
-using HandyControl.Controls;
 using Prism.Events;
 using Prism.Regions;
 using System.Windows;
@@ -35,7 +33,6 @@ namespace GenmCloud.Views
 
         private void EliminateFocusEvent(object sender, MouseButtonEventArgs e)
         {
-            this.eventAggregator.GetEvent<ShowNameCardEvent>().Publish();
             this.panel.Focus();
         }
 

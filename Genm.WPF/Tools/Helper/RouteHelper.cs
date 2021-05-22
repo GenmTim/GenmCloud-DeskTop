@@ -13,6 +13,11 @@ namespace TMS.DeskTop.Tools.Helper
             Goto(regionManager, nowView, targetView, null);
         }
 
+        public static void Goto(IRegionManager regionManager, Type nowView, string targetName)
+        {
+            Goto(regionManager, nowView, GetView(targetName), null);
+        }
+
         public static void Goto(IRegionManager regionManager, Type nowView, Type targetView, NavigationParameters param)
         {
             // 寻找公共视图
@@ -30,7 +35,7 @@ namespace TMS.DeskTop.Tools.Helper
                 }
                 param.Add(RouteTag, targetView);
 
-                RegionHelper.RequestNavigate(regionManager, GetParentRegionName(common_view), next_route, param);
+                RegionHelper.RequestNavigate(regionManager, GetParentRegionName(GetView(next_route)), next_route, param);
             }
         }
 

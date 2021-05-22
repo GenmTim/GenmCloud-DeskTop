@@ -1,11 +1,7 @@
-﻿using GenmCloud.Core.Event;
-using GenmCloud.Shared.Common;
-using GenmCloud.Shared.Common.Aop;
+﻿using GenmCloud.Shared.Common.Aop;
 using GenmCloud.Shared.Common.Session;
 using Prism.Events;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using WebSocket4Net;
 
 namespace GenmCloud.ApiService
@@ -51,7 +47,7 @@ namespace GenmCloud.ApiService
         [GlobalLoger]
         private void OnError(object sender, SuperSocket.ClientEngine.ErrorEventArgs e)
         {
-            lock(mutex)
+            lock (mutex)
             {
                 isConnected = false;
                 this.eventAggregator.GetEvent<WebSocketErrorEvent>().Publish();
@@ -67,7 +63,7 @@ namespace GenmCloud.ApiService
         [GlobalLoger]
         private void OnOpened(object sender, EventArgs e)
         {
-            lock(mutex)
+            lock (mutex)
             {
                 isConnected = true;
                 this.eventAggregator.GetEvent<WebSocketConnectedEvent>().Publish();
@@ -77,7 +73,7 @@ namespace GenmCloud.ApiService
         [GlobalLoger]
         public void Send(string message)
         {
-            lock(mutex)
+            lock (mutex)
             {
                 // 断线重连的触发点之一
                 if (!isConnected)
@@ -93,7 +89,7 @@ namespace GenmCloud.ApiService
 
         private void TryRun()
         {
-            lock(mutex)
+            lock (mutex)
             {
                 if (!isConnected)
                 {
@@ -107,6 +103,6 @@ namespace GenmCloud.ApiService
         {
             serverUrl += "?token=" + token;
         }
-        
+
     }
 }

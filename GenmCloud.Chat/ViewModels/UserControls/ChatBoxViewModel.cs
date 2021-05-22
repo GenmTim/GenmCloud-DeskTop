@@ -1,27 +1,31 @@
-﻿using GenmCloud.Core.Data.VO;
+﻿using GenmCloud.ApiService.Service;
+using GenmCloud.Chat.Manager;
+using GenmCloud.Chat.Tools;
+using GenmCloud.Core.Data.VO;
 using GenmCloud.Core.Event;
-using GenmCloud.Core.Manager;
-using GenmCloud.Shared.Common.Session;
-using GenmCloud.Shared.Dto;
+using GenmCloud.Shared.Common;
 using Prism.Commands;
 using Prism.Events;
-using Prism.Ioc;
 using Prism.Mvvm;
 using Prism.Regions;
 using System.Collections.ObjectModel;
+using static GenmCloud.Chat.Manager.ChatMsgManager;
 
 namespace GenmCloud.Chat.ViewModels.UserControls
 {
     public class ChatBoxViewModel : BindableBase, INavigationAware
     {
-        private ChatObjectVO context;
-        public ChatObjectVO Context
+        private ChatObjVO context;
+        public ChatObjVO Context
         {
             get => context;
             set
             {
                 context = value;
+                if (context == null) return;
                 RaisePropertyChanged();
+
+                eventAggregator.GetEvent<InitChatMsgListBySingleObjEvent>().Publish(context.Id);
             }
         }
 
@@ -36,17 +40,17 @@ namespace GenmCloud.Chat.ViewModels.UserControls
             }
         }
 
-        private readonly ChatMessageManager chatMsgManager;
+        private readonly ChatMsgManager chatMsgManager;
+        private readonly IChatService chatService;
         private readonly IEventAggregator eventAggregator;
         public DelegateCommand SendCmd { get; private set; }
 
-        public ChatBoxViewModel(IEventAggregator eventAggregator, IContainerProvider containerProvider)
+        public ChatBoxViewModel()
         {
-            this.eventAggregator = eventAggregator;
+            this.chatService = NetCoreProvider.Resolve<IChatService>();
+            this.eventAggregator = NetCoreProvider.Resolve<IEventAggregator>();
+            this.chatMsgManager = NetCoreProvider.Resolve<ChatMsgManager>();
             this.SendCmd = new DelegateCommand(SendMsg);
-            ChatMsgList = new ObservableCollection<ChatMsgVO>();
-            this.chatMsgManager = containerProvider.Resolve<ChatMessageManager>();
-            //Simulation();
         }
 
         private void SendMsg()
@@ -55,46 +59,24 @@ namespace GenmCloud.Chat.ViewModels.UserControls
             {
                 return;
             }
+
+            // 获取输入对象，并清空输入框
             string newMsg = Context.ChatString;
-
-            ChatDto chatDto = new ChatDto { Type = "CHAT", SubType = "SEND", SenderId = SessionService.User.Id, ReceiverId = Context.Id, Token = ChatMessageManager.GetChatToken(), Data = newMsg };
-
-            eventAggregator.GetEvent<SendChatMsgEvent>().Publish(chatDto);
             Context.ChatString = "";
 
-            //[JsonProperty("id")]
-            //public uint Id;
-
-            //[JsonProperty("type")]
-            //public string Type;
-
-            //[JsonProperty("subType")]
-            //public string SubType;
-
-            //[JsonProperty("senderId")]
-            //public uint SenderId;
-
-            //[JsonProperty("receiverId")]
-            //public uint ReceiverId;
-
-            //[JsonProperty("isRead")]
-            //public uint IsRead;
-
-            //[JsonProperty("data")]
-            //public string Data;
-
-            //[JsonProperty("token")]
-            //public uint Token;
-            // 封装消息包
+            // 构建对象，并进行事件责任的转移
+            var chatMsgDto = ChatMsgDtoBuilder.BuilderStringMsg(Context.Id, newMsg);
+            ChatMsgList.Add(ChatMsgDto2VOConvert.Convert(chatMsgDto));
+            eventAggregator.GetEvent<SendChatMsgEvent>().Publish(chatMsgDto);
         }
 
         public void OnNavigatedTo(NavigationContext navigationContext)
         {
             // 更新上下文
-            Context = navigationContext.Parameters.GetValue<ChatObjectVO>("context");
+            Context = navigationContext.Parameters.GetValue<ChatObjVO>("context");
 
             // 更新历史消息队列
-            ChatMsgList = chatMsgManager.GetChatMsgList(Context);
+            ChatMsgList = chatMsgManager.GetChatMsgListByObj(Context);
         }
 
         public bool IsNavigationTarget(NavigationContext navigationContext)
@@ -103,20 +85,5 @@ namespace GenmCloud.Chat.ViewModels.UserControls
         }
 
         public void OnNavigatedFrom(NavigationContext navigationContext) { }
-
-
-        private void Simulation()
-        {
-            Context = new ChatObjectVO
-            {
-                Name = "测试",
-                Id = 1,
-            };
-
-            var chatList = chatMsgManager.GetChatMsgList(Context);
-
-            chatList.Add(new ChatMsgVO { Content = "测试消息", Role = Core.Data.Type.ChatRoleType.Me, Type = Core.Data.Type.ChatMessageType.String, Id = 0 });
-            chatList.Add(new ChatMsgVO { Content = "测试消息", Role = Core.Data.Type.ChatRoleType.Other, Type = Core.Data.Type.ChatMessageType.String, Id = 1 });
-        }
     }
 }

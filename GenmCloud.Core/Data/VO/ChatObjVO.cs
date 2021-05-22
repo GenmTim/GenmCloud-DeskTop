@@ -2,20 +2,30 @@
 
 namespace GenmCloud.Core.Data.VO
 {
-    public enum ChatObjectType
+    public enum ChatObjType
     {
         User,
         Group,
         Application
     }
 
-    public class ChatObjectVO : BindableBase
+    public class ChatObjVO : BindableBase
     {
         public uint Id { get; set; }
         public string Name { get; set; }
-        public string LastMsg { get; set; }
+
+        private string lastMsg;
+        public string LastMsg
+        {
+            get => lastMsg;
+            set
+            {
+                lastMsg = value;
+                RaisePropertyChanged();
+            }
+        }
         public long LastMsgTimestamp { get; set; }
-        public ChatObjectType ObjectType { get; set; }
+        public ChatObjType ObjectType { get; set; }
 
         private int unreadMsgNumber;
         public int UnreadMsgNumber
@@ -39,9 +49,11 @@ namespace GenmCloud.Core.Data.VO
             }
         }
 
+        public string Avatar { get; set; }
+
         public override bool Equals(object obj)
         {
-            if (obj is ChatObjectVO other)
+            if (obj is ChatObjVO other)
             {
                 return other.Id == Id;
             }

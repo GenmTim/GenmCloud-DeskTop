@@ -1,7 +1,8 @@
-﻿using Genm.WPF.Tools.Helper;
+﻿using GenmCloud.Chat.Manager;
 using GenmCloud.Chat.Views.UserControls;
 using GenmCloud.Core.Data.Token;
 using GenmCloud.Core.Data.VO;
+using GenmCloud.Shared.Common;
 using Prism.Mvvm;
 using Prism.Regions;
 using System.Collections.ObjectModel;
@@ -9,38 +10,33 @@ using TMS.DeskTop.Tools.Helper;
 
 namespace GenmCloud.Chat.ViewModels
 {
-    public class ChatViewModel : BindableBase
+    public class ChatViewModel : BindableBase, INavigationAware
     {
-        private string _message;
-        public string Message
+        private object selectedChatObject;
+        public object SelectedChatObject
         {
-            get { return _message; }
-            set { SetProperty(ref _message, value); }
-        }
-
-        private object chatObject;
-        public object ChatObject
-        {
-            get => chatObject;
+            get => selectedChatObject;
             set
             {
-                chatObject = value;
-                UpdateChatBoxContext(chatObject);
+                selectedChatObject = value;
+                if (selectedChatObject == null) return;
+                UpdateChatBoxContext(selectedChatObject);
                 RaisePropertyChanged();
             }
         }
 
         private readonly IRegionManager regionManager;
+        private readonly ChatMsgManager chatMsgManager;
 
         public ChatViewModel(IRegionManager regionManager)
         {
             this.regionManager = regionManager;
-            Message = "View A from your Prism Module";
-            //Simulation();
+            this.chatMsgManager = NetCoreProvider.Resolve<ChatMsgManager>();
+            ChatObjectVOList = chatMsgManager.GetChatObjList();
         }
 
-        private ObservableCollection<ChatObjectVO> chatObjectVOList;
-        public ObservableCollection<ChatObjectVO> ChatObjectVOList
+        private ObservableCollection<ChatObjVO> chatObjectVOList;
+        public ObservableCollection<ChatObjVO> ChatObjectVOList
         {
             get => chatObjectVOList;
             set
@@ -59,12 +55,31 @@ namespace GenmCloud.Chat.ViewModels
             RegionHelper.RequestNavigate(regionManager, RegionToken.ChatContent, typeof(ChatBox), param);
         }
 
-        public void Simulation()
+        public void OnNavigatedTo(NavigationContext navigationContext)
         {
-            ChatObjectVOList = new ObservableCollection<ChatObjectVO>();
-            ChatObjectVOList.Add(new ChatObjectVO { Id = 1, LastMsg = "你好，我是蔡承龙！", LastMsgTimestamp = TimeHelper.GetNowTimeStamp(), Name = "蔡承龙", ObjectType = ChatObjectType.User, UnreadMsgNumber = 2 });
-            ChatObjectVOList.Add(new ChatObjectVO { Id = 2, LastMsg = "你好，我是金泽权！Long，Long，Long，Long", LastMsgTimestamp = TimeHelper.GetNowTimeStamp(), Name = "金泽权", ObjectType = ChatObjectType.User, UnreadMsgNumber = 7 });
+            var isOk = navigationContext.Parameters.TryGetValue<uint>("chatObjId", out uint chatObjId);
+            if (isOk)
+            {
+                foreach (var chatObj in ChatObjectVOList)
+                {
+                    if (chatObj.Id == chatObjId)
+                    {
+                        SelectedChatObject = chatObj;
+                        return;
+                    }
+                }
+                chatMsgManager.AsyncGetChatObj(chatObjId);
+            }
         }
 
+        public bool IsNavigationTarget(NavigationContext navigationContext)
+        {
+            return true;
+        }
+
+        public void OnNavigatedFrom(NavigationContext navigationContext)
+        {
+
+        }
     }
 }

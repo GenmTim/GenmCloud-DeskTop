@@ -9,7 +9,6 @@ namespace GenmCloud.Shared.DataInterfaces
 {
     using GenmCloud.Shared.Common.Collections;
     using GenmCloud.Shared.Common.Query;
-    using GenmCloud.Shared.Dto;
     using GenmCloud.Shared.HttpContact;
     using System.Threading.Tasks;
 
@@ -28,17 +27,17 @@ namespace GenmCloud.Shared.DataInterfaces
         Task<BaseResponse> UpdateAsync(T model);
     }
 
-    public interface IUserRepository : IRepository<UserDto>
-    {
-        Task<BaseResponse<TokenDto>> LoginAsync(string username, string passWord);
+    //public interface IUserRepository : IRepository<UserDto>
+    //{
+    //    Task<BaseResponse<TokenDto>> LoginAsync(string username, string passWord);
 
 
-        Task<BaseResponse<TokenDto>> RegisterAsync(string username, string passWord);
-    }
+    //    Task<BaseResponse<TokenDto>> RegisterAsync(string username, string passWord);
+    //}
 
-    public interface IFileRepository : IRepository<ChatDto>
-    { 
-    
-    }
+    //public interface IFileRepository : IRepository<ChatDto>
+    //{ 
+
+    //}
 
 }

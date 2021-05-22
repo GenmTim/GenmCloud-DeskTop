@@ -1,7 +1,7 @@
 ﻿using Genm.WPF.Data.Event;
+using GenmCloud.ApiService.Service;
 using GenmCloud.Core.Event;
 using GenmCloud.Core.Tools.Helper;
-using GenmCloud.Shared.DataInterfaces;
 using GenmCloud.Shared.Dto;
 using Prism.Commands;
 using Prism.Events;
@@ -14,12 +14,12 @@ namespace GenmCloud.ViewModels.Login
     {
         private IRegionNavigationJournal journal;
         private readonly IEventAggregator eventAggregator;
-        private readonly IUserRepository userRepository;
+        private readonly IUserService userRepository;
 
         public SignUpViewModel(IEventAggregator eventAggregator, IContainerProvider containerProvider)
         {
             this.eventAggregator = eventAggregator;
-            this.userRepository = containerProvider.Resolve<IUserRepository>();
+            this.userRepository = containerProvider.Resolve<IUserService>();
             eventAggregator.GetEvent<SignUpEvent>().Subscribe(SignUp);
             this.GoBackCmd = new DelegateCommand(GoBack);
         }

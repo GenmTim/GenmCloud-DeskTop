@@ -1,6 +1,7 @@
 ﻿using Genm.WPF.Tools.Helper;
 using GenmCloud.Chat.Views;
 using GenmCloud.Chat.Views.UserControls;
+using GenmCloud.Chat.Views.UserControls.Bubble;
 using GenmCloud.Core.Data;
 using GenmCloud.Core.Data.Token;
 using Prism.Ioc;
@@ -30,6 +31,8 @@ namespace GenmCloud.Chat
             if (router[typeof(ChatView)] == null) throw new System.Exception("意料之外的错误");
 
             router[typeof(ChatBox)] = RouteHelper.MakeRouteInfo(typeof(ChatView), "chatbox", RegionToken.ChatContent);
+
+            containerRegistry.Register<ContactRequestBubble>();
         }
     }
 }

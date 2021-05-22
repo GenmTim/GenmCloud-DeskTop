@@ -1,10 +1,6 @@
 ﻿using GenmCloud.Core.Service.Dialog;
 using GenmCloud.Core.UserControls.Dialog.Views;
 using Prism.Services.Dialogs;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace GenmCloud.Core.Tools.Helper

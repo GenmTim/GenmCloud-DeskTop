@@ -1,0 +1,14 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:converter="clr-namespace:GenmCloud.Core.Resources.Converters">
+    <converter:FetchFirstCharConverter x:Key="FetchFirstCharConverter" />
+    <converter:LinearGradientConverter x:Key="LinearGradientConverter" />
+    <converter:String2FileName x:Key="String2FileName" />
+    <converter:String2FileType x:Key="String2FileType" />
+    <converter:String2FileTypeIconPath x:Key="String2FileTypeIconPath" />
+    <converter:FileSize2String x:Key="FileSize2String" />
+    <converter:Timestamp2String x:Key="Timestamp2String" />
+    <converter:Number2PercentageConverter x:Key="Number2PercentageConverter" />
+    <converter:String2UriConverter x:Key="String2UriConverter" />
+</ResourceDictionary>

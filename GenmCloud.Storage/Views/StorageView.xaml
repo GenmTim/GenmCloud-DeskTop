@@ -8,6 +8,7 @@
     xmlns:local="clr-namespace:GenmCloud.Storage.Views"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:prism="http://prismlibrary.com/"
+    xmlns:system="clr-namespace:System;assembly=System.Runtime"
     prism:ViewModelLocator.AutoWireViewModel="True"
     mc:Ignorable="d">
     <UserControl.Resources>
@@ -41,6 +42,19 @@
                 x:Name="openPopupBtn"
                 Command="{Binding OpenPopupCmd}"
                 Content="打开Popup" />
+            <Button Content="测试" Tag="1">
+                <hc:Poptip.Instance>
+                    <hc:Poptip PlacementType="Top">
+                        <hc:Poptip.Content>
+                            <StackPanel>
+                                <Button />
+                                <Button />
+                                <Button />
+                            </StackPanel>
+                        </hc:Poptip.Content>
+                    </hc:Poptip>
+                </hc:Poptip.Instance>
+            </Button>
             <genm:Popup
                 AllowsTransparency="True"
                 HorizontalOffset="-16"
@@ -59,7 +73,6 @@
                         </hc:SimplePanel>
                     </Border>
                 </hc:SimplePanel>
-
             </genm:Popup>
         </hc:UniformSpacingPanel>
         <hc:Drawer Name="DrawerCode" Opened="DrawerCode_OnOpened">
@@ -71,5 +84,6 @@
                 CornerRadius="10,0,0,10"
                 Style="{StaticResource BorderClip}" />
         </hc:Drawer>
+    
     </Grid>
 </UserControl>

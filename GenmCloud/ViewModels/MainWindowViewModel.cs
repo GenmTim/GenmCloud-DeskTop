@@ -1,6 +1,13 @@
 ﻿using Genm.WPF.Data.VO;
+using GenmCloud.ApiService.Service;
+using GenmCloud.Chat.Views;
+using GenmCloud.Chat.Views.UserControls;
 using GenmCloud.Core.Data;
+using GenmCloud.Core.Data.Token;
 using GenmCloud.Core.Event;
+using GenmCloud.Core.Tools.Helper;
+using GenmCloud.Shared.Common;
+using GenmCloud.Shared.Common.Session;
 using GenmCloud.Views;
 using Newtonsoft.Json;
 using Prism.Events;
@@ -36,9 +43,22 @@ namespace GenmCloud.ViewModels
             }
         }
 
+        private string avatar;
+        public string Avatar
+        {
+            get => avatar;
+            set
+            {
+                avatar = value;
+                RaisePropertyChanged();
+            }
+        }
+
         private readonly IRegionManager regionManager;
         private readonly IModuleCatalog moduleCatalog;
         private readonly IEventAggregator eventAggregator;
+
+        private readonly IUserService userService;
 
         private RouteMenuVO nowSelectedMenuItem;
         public RouteMenuVO NowSelectedMenuItem
@@ -63,18 +83,26 @@ namespace GenmCloud.ViewModels
             }
         }
 
-        public MainWindowViewModel(IRegionManager regionManager, IEventAggregator eventAggregator, IModuleCatalog moduleCatalog)
+        public MainWindowViewModel()
         {
-            this.regionManager = regionManager;
-            this.eventAggregator = eventAggregator;
-            this.moduleCatalog = moduleCatalog;
-            this.eventAggregator.GetEvent<ShowNameCardEvent>().Subscribe(ShowNameCard);
+            this.regionManager = NetCoreProvider.Resolve<IRegionManager>();
+            this.eventAggregator = NetCoreProvider.Resolve<IEventAggregator>();
+            this.moduleCatalog = NetCoreProvider.Resolve<IModuleCatalog>();
+            this.userService = NetCoreProvider.Resolve<IUserService>();
+            this.eventAggregator.GetEvent<UserInfoUpdateEvent>().Subscribe(() =>
+            {
+                Avatar = SessionService.User.Avatar;
+            });
+            this.eventAggregator.GetEvent<GoChatEvent>().Subscribe((id) =>
+            {
+                NowSelectedMenuItem = MenuList[0];
+                var param = new NavigationParameters
+                {
+                    { "chatObjId", id }
+                };
+                RegionHelper.RequestNavigate(regionManager, RegionToken.MainContent, typeof(ChatView), param);
+            });
             InitRouteMenuList();
-        }
-
-        private void ShowNameCard()
-        {
-            IsNameCardOpen = true;
         }
 
         private void InitRouteMenuList()

@@ -4,10 +4,10 @@ namespace GenmCloud.Shared.Dto
 {
     public class LoginDto
     {
-        [JsonProperty("username")]
+        [JsonProperty("Username")]
         public string Username { get; set; }
 
-        [JsonProperty("password")]
+        [JsonProperty("Password")]
         public string Password { get; set; }
     }
 }

@@ -1,5 +1,4 @@
-﻿using HandyControl.Tools;
-using System.Windows.Controls;
+﻿using System.Windows.Controls;
 
 namespace GenmCloud.Chat.Views.UserControls
 {
@@ -23,6 +22,12 @@ namespace GenmCloud.Chat.Views.UserControls
                 _scrollViewer = contentScrollViewer;
             }
             _scrollViewer?.ScrollToBottom();
+        }
+
+        private void ChatBubble_Loaded(object sender, System.Windows.RoutedEventArgs e)
+        {
+            // 加载出来，则说明此消息已读
+
         }
     }
 }

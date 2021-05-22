@@ -1,19 +1,8 @@
-﻿using GenmCloud.Core.Service.Dialog;
-using GenmCloud.Core.Tools.Helper;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using GenmCloud.Core.Event;
+using GenmCloud.Core.Service.Dialog;
+using GenmCloud.Core.UserControls.Dialog.Views;
+using Prism.Events;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace GenmCloud.Contact.Views
 {
@@ -23,11 +12,17 @@ namespace GenmCloud.Contact.Views
     public partial class ContactView : UserControl
     {
         private readonly IDialogHostService dialogHost;
+        private readonly IEventAggregator eventAggregator;
 
-        public ContactView(IDialogHostService dialogHost)
+        public ContactView(IDialogHostService dialogHost, IEventAggregator eventAggregator)
         {
             InitializeComponent();
             this.dialogHost = dialogHost;
+            this.eventAggregator = eventAggregator;
+            Loaded += (s, o) =>
+            {
+                this.eventAggregator.GetEvent<ContactListUpdateEvent>().Publish();
+            };
         }
 
         private void MenuItem_Click(object sender, System.Windows.RoutedEventArgs e)
@@ -36,7 +31,7 @@ namespace GenmCloud.Contact.Views
             {
                 if ((menuItem.Tag != null) && menuItem.Tag.Equals("AddNewContact"))
                 {
-                    DialogHelper.ShowInputValueDialog(dialogHost, "ContactDialogRoot", "申请联系人", "邀请", "取消", "请输入联系人的邮箱");
+                    dialogHost.ShowDialog(nameof(QueryContactDialog), null, "ContactDialogRoot");
                 }
             }
             menuPopup.IsOpen = false;

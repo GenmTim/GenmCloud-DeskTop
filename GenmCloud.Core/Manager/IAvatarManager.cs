@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 
 namespace GenmCloud.Core.Manager
 {
-    public static class AvatarManager
+    interface IAvatarManager
     {
-        public static Dictionary<uint, Uri> AvatarMap = new Dictionary<uint, Uri>();
+        void Store(uint id, string avatar);
+
+        string Get(uint id);
     }
 }

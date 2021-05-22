@@ -8,6 +8,7 @@
     xmlns:helper="clr-namespace:Genm.WPF.Tools.Helper;assembly=Genm.WPF"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:prism="http://prismlibrary.com/"
+    xmlns:session="clr-namespace:GenmCloud.Shared.Common.Session;assembly=GenmCloud.Shared"
     xmlns:system="clr-namespace:System;assembly=mscorlib"
     xmlns:token="clr-namespace:GenmCloud.Core.Data.Token;assembly=GenmCloud.Core"
     xmlns:uc="clr-namespace:GenmCloud.Core.UserControls.Common.Views;assembly=GenmCloud.Core"
@@ -66,7 +67,7 @@
                                         Width="40"
                                         Height="40"
                                         RenderOptions.BitmapScalingMode="HighQuality"
-                                        Source="/h_aid.ico"
+                                        Source="{Binding Avatar, TargetNullValue=http://localhost:1026/static/avatar/1.jpg}"
                                         Style="{StaticResource GravatarCircleImg}" />
                                 </hc:SimplePanel>
                                 <!--#region Left Grid - Menu-->
@@ -225,17 +226,18 @@
                                 hc:Growl.GrowlParent="True" />
                         </ScrollViewer>
                     </Grid>
-                    <genm:Popup
+                    <uc:NameCardView />
+                    <!--<genm:Popup
                         AllowsTransparency="True"
                         HorizontalOffset="24"
                         IsOpen="{Binding IsNameCardOpen}"
                         Placement="Mouse"
                         StaysOpen="False"
-                        VerticalOffset="-40">
+                        VerticalOffset="-140">
                         <Border Margin="8" Effect="{StaticResource DialogShadow}">
                             <uc:NameCardView />
                         </Border>
-                    </genm:Popup>
+                    </genm:Popup>-->
                 </hc:SimplePanel>
             </materialDesign:DialogHost>
         </Border>

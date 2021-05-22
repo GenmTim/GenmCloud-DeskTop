@@ -106,6 +106,7 @@
                                         Margin="12,12"
                                         attach:UriElement.Uri="{Binding Avatar}"
                                         Content="{Binding Content}"
+                                        Loaded="ChatBubble_Loaded"
                                         Role="{Binding Role}"
                                         Style="{StaticResource ChatBubbleBaseStyle}"
                                         Tag="{Binding .}"

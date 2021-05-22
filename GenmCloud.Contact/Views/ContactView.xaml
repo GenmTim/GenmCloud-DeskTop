@@ -9,6 +9,9 @@
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:prism="http://prismlibrary.com/"
+    xmlns:subitem="clr-namespace:GenmCloud.Contact.Views.SubItem"
+    xmlns:system="clr-namespace:System;assembly=System.Runtime"
+    xmlns:token="clr-namespace:GenmCloud.Core.Data.Token;assembly=GenmCloud.Core"
     xmlns:uc="clr-namespace:GenmCloud.Core.UserControls.Common.Views;assembly=GenmCloud.Core"
     d:DesignHeight="650"
     d:DesignWidth="1060"
@@ -118,6 +121,7 @@
                                     <RadioButton
                                         HorizontalAlignment="Center"
                                         Content="联系人"
+                                        IsChecked="True"
                                         Style="{StaticResource NavRadioBtnStyle}" />
                                     <RadioButton
                                         Grid.Column="1"
@@ -127,13 +131,91 @@
                                 </UniformGrid>
                             </hc:SimplePanel>
                         </Grid>
+                        <Grid Grid.Row="1">
+                            <ListBox
+                                BorderThickness="0"
+                                ItemsSource="{Binding ContactList}"
+                                SelectedValue="{Binding SelectContact, Mode=TwoWay}"
+                                Style="{StaticResource Genm_ListBoxCustom}">
+                                <ListBox.ItemContainerStyle>
+                                    <Style TargetType="ListBoxItem">
+                                        <Setter Property="BorderThickness" Value="0" />
+                                        <Setter Property="HorizontalContentAlignment" Value="Left" />
+                                        <Setter Property="Template">
+                                            <Setter.Value>
+                                                <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                                                    <Border
+                                                        Name="Bd"
+                                                        Padding="{TemplateBinding Padding}"
+                                                        Background="{TemplateBinding Background}"
+                                                        BorderBrush="{TemplateBinding BorderBrush}"
+                                                        BorderThickness="{TemplateBinding BorderThickness}"
+                                                        SnapsToDevicePixels="true">
+                                                        <StackPanel Orientation="Horizontal">
+                                                            <ContentPresenter
+                                                                HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                                VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                                                SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                                                        </StackPanel>
+                                                    </Border>
+                                                </ControlTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                        <Style.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter Property="Background" Value="#f2f2f2" />
+                                            </Trigger>
+                                            <Trigger Property="IsSelected" Value="True">
+                                                <Setter Property="Background" Value="#ebebeb" />
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </ListBox.ItemContainerStyle>
+                                <!--<ListBox.ItemsSource>
+                                    <x:Array Type="system:String">
+                                        <system:String>1</system:String>
+                                        <system:String>1</system:String>
+                                        <system:String>1</system:String>
+                                        <system:String>1</system:String>
+                                    </x:Array>
+                                </ListBox.ItemsSource>-->
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <hc:SimplePanel Height="48">
+                                            <StackPanel
+                                                Margin="12,0,0,0"
+                                                HorizontalAlignment="Left"
+                                                Orientation="Horizontal">
+                                                <hc:Gravatar
+                                                    Width="36"
+                                                    Height="36"
+                                                    Source="{Binding Avatar}"
+                                                    Style="{StaticResource GravatarCircleImg}" />
+                                                <TextBlock
+                                                    Margin="8,0,0,0"
+                                                    HorizontalAlignment="Center"
+                                                    VerticalAlignment="Center"
+                                                    FontSize="14"
+                                                    Text="{Binding Name}" />
+                                            </StackPanel>
+                                        </hc:SimplePanel>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                        </Grid>
                         <Border BorderBrush="{StaticResource TMS_BorderBrush}" BorderThickness="0,0,0,1" />
                     </Grid>
                     <!--<Border BorderBrush="{StaticResource TMS_BorderBrush}" BorderThickness="0,0,1,0" />-->
                 </hc:SimplePanel>
-                <hc:SimplePanel Grid.Column="1">
+                <hc:SimplePanel Grid.Column="1" Margin="0,-30,0,0">
                     <Border Background="#f5f6f7" CornerRadius="8,0,0,0" />
-                    <TextBlock />
+                    <ContentControl prism:RegionManager.RegionName="{x:Static Member=token:RegionToken.ContactInfoContent}" Visibility="{Binding SelectContact, Converter={StaticResource Object2VisibilityConverter}}" />
+                    <Image
+                        Width="{Binding Source.PixelWidth, Mode=OneWay, RelativeSource={RelativeSource Self}}"
+                        Height="{Binding Source.PixelHeight, Mode=OneWay, RelativeSource={RelativeSource Self}}"
+                        Source="pack://application:,,,/GenmCloud.Core;component/Resources/Images/office.png"
+                        Stretch="Fill"
+                        Visibility="{Binding SelectContact, Converter={StaticResource Object2VisibilityReConverter}}" />
                 </hc:SimplePanel>
                 <genm:Popup
                     x:Name="menuPopup"
@@ -239,7 +321,7 @@
                     </hc:SimplePanel>
                 </genm:Popup>
             </Grid>
-            <uc:NameCardView Effect="{StaticResource DialogShadow}" />
+            <!--<uc:NameCardView Effect="{StaticResource DialogShadow}" />-->
         </hc:SimplePanel>
     </materialDesign:DialogHost>
 </UserControl>

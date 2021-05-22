@@ -1,7 +1,7 @@
 ﻿using Genm.WPF.Data.Event;
+using GenmCloud.ApiService.Service;
 using GenmCloud.Core.Event;
 using GenmCloud.Core.Tools.Helper;
-using GenmCloud.Shared.DataInterfaces;
 using GenmCloud.Shared.Dto;
 using Prism.Events;
 using Prism.Ioc;
@@ -11,12 +11,12 @@ namespace GenmCloud.ViewModels.Login
     class SignInViewModel
     {
         private readonly IEventAggregator eventAggregator;
-        private readonly IUserRepository userRepository;
+        private readonly IUserService userRepository;
 
         public SignInViewModel(IEventAggregator eventAggregator, IContainerProvider containerProvider)
         {
             this.eventAggregator = eventAggregator;
-            this.userRepository = containerProvider.Resolve<IUserRepository>();
+            this.userRepository = containerProvider.Resolve<IUserService>();
             eventAggregator.GetEvent<SignInEvent>().Subscribe(SignIn);
         }
 
@@ -26,7 +26,7 @@ namespace GenmCloud.ViewModels.Login
             var r = await userRepository.LoginAsync(loginDto.Username, loginDto.Password);
             eventAggregator.GetEvent<RunGlobalProgressEvent>().Publish(false);
             ToastHelper.JudgeErrorAndShow(eventAggregator, r);
-            if (r != null && r.StatusCode ==ServiceHelper.RequestOk)
+            if (r != null && r.StatusCode == ServiceHelper.RequestOk)
             {
                 eventAggregator.GetEvent<SignedInEvent>().Publish();
             }

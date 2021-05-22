@@ -26,15 +26,17 @@
             <hc:Gravatar
                 x:Name="Gravatar"
                 Grid.Column="1"
-                Width="35"
-                Height="35"
-                Margin="12,0"
+                Width="36"
+                Height="36"
+                Margin="4,0"
                 VerticalAlignment="Top"
-                Id="{Binding Id}"
                 RenderOptions.BitmapScalingMode="HighQuality"
-                Source="{TemplateBinding attach:UriElement.Uri}"
+                Source="{Binding Avatar}"
                 Style="{StaticResource GravatarCircleImg}" />
-            <hc:SimplePanel x:Name="MessageCarrier" Grid.Column="0">
+            <hc:SimplePanel
+                x:Name="MessageCarrier"
+                Grid.Column="0"
+                Margin="4,0">
                 <Border
                     Name="Body"
                     Margin="0,0,3,0"
@@ -59,7 +61,7 @@
         </ControlTemplate.Triggers>
     </ControlTemplate>
 
-    <!--<ControlTemplate x:Key="ChatBubbleCustomBaseTemplate" TargetType="uc:ChatBubble">
+    <ControlTemplate x:Key="ChatBubbleCustomBaseTemplate" TargetType="uc:ChatBubble">
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
@@ -68,24 +70,18 @@
             <hc:Gravatar
                 x:Name="Gravatar"
                 Grid.Column="1"
-                Width="35"
-                Height="35"
-                Margin="10,0"
+                Width="36"
+                Height="36"
+                Margin="4,0"
                 VerticalAlignment="Top"
                 RenderOptions.BitmapScalingMode="HighQuality"
                 Source="{Binding Avatar}"
                 Style="{StaticResource GravatarCircleImg}" />
-            <hc:SimplePanel x:Name="MessageCarrier" Grid.Column="0">
-                <Border
-                    Name="Body"
-                    Margin="0,0,3,0"
-                    Background="{TemplateBinding Background}"
-                    CornerRadius="8">
-                    <ContentControl
-                        Margin="{TemplateBinding Padding}"
-                        VerticalAlignment="Center"
-                        Content="{Binding Message}" />
-                </Border>
+            <hc:SimplePanel
+                x:Name="MessageCarrier"
+                Grid.Column="0"
+                Margin="4,0">
+                <ContentControl VerticalAlignment="Center" Content="{Binding Content}" />
             </hc:SimplePanel>
         </Grid>
         <ControlTemplate.Triggers>
@@ -94,7 +90,7 @@
                 <Setter TargetName="MessageCarrier" Property="Grid.Column" Value="1" />
             </Trigger>
         </ControlTemplate.Triggers>
-    </ControlTemplate>-->
+    </ControlTemplate>
 
     <Style x:Key="ChatBubbleBaseStyle" TargetType="uc:ChatBubble">
         <Setter Property="Focusable" Value="False" />
@@ -112,9 +108,9 @@
                 <Setter Property="Foreground" Value="{DynamicResource PrimaryTextBrush}" />
                 <Setter Property="HorizontalAlignment" Value="Left" />
             </Trigger>
-            <!--<Trigger Property="Type" Value="Custom">
+            <Trigger Property="Type" Value="Custom">
                 <Setter Property="Template" Value="{StaticResource ChatBubbleCustomBaseTemplate}" />
-            </Trigger>-->
+            </Trigger>
         </Style.Triggers>
     </Style>
 </ResourceDictionary>

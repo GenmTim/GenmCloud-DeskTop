@@ -10,6 +10,7 @@
         <ResourceDictionary Source="pack://application:,,,/HandyControl;component/Themes/SkinDefault.xaml" />
         <ResourceDictionary Source="pack://application:,,,/HandyControl;component/Themes/Theme.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Genm.WPF;component/Styles/Converter/Converter.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/GenmCloud.Core;component/Resources/Converters/Converter.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
     <SolidColorBrush x:Key="OverlayBackground" Color="#3F000000" />
@@ -34,6 +35,15 @@
         x:Key="TMS_TransparencyRegionBrush"
         o:Freeze="True"
         Color="#01FFFFFF" />
+
+    <DropShadowEffect
+        x:Key="GenmShadow"
+        BlurRadius="12"
+        Direction="270"
+        Opacity=".3"
+        RenderingBias="Performance"
+        ShadowDepth="1"
+        Color="{StaticResource EffectShadowColor}" />
 
     <LinearGradientBrush x:Key="PrimaryGradualBrush" o:Freeze="true" StartPoint="0, 0.5" EndPoint="8, 0.5">
         <GradientStop Offset="0" Color="{DynamicResource PrimaryColor}" />

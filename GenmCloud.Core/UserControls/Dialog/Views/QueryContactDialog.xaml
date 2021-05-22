@@ -1,0 +1,272 @@
+﻿<UserControl
+    x:Class="GenmCloud.Core.UserControls.Dialog.Views.QueryContactDialog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:hc="https://handyorg.github.io/handycontrol"
+    xmlns:local="clr-namespace:GenmCloud.Core.UserControls.Dialog.Views"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:prism="http://prismlibrary.com/"
+    xmlns:sys="clr-namespace:System;assembly=System.Runtime"
+    x:Name="queryContactDialog"
+    prism:ViewModelLocator.AutoWireViewModel="True"
+    mc:Ignorable="d">
+    <hc:SimplePanel
+        Width="620"
+        Margin="8"
+        HorizontalAlignment="Center"
+        VerticalAlignment="Center"
+        Effect="{StaticResource GenmShadow}">
+        <Border
+            Background="{StaticResource RegionBrush}"
+            CornerRadius="4"
+            Style="{StaticResource BorderClip}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="176" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <!--#region Top Region-->
+                <hc:SimplePanel>
+                    <hc:SimplePanel.Resources>
+                        <Style x:Key="NavRadioBtnStyle" TargetType="{x:Type RadioButton}">
+                            <Setter Property="Background" Value="Transparent" />
+                            <Setter Property="Cursor" Value="Hand" />
+                            <Setter Property="Foreground" Value="{StaticResource SecondaryTextBrush}" />
+                            <Setter Property="BorderThickness" Value="0" />
+                            <Setter Property="SnapsToDevicePixels" Value="true" />
+                            <Setter Property="BorderBrush" Value="{StaticResource TMS_TransparencyRegionBrush}" />
+                            <Setter Property="BorderThickness" Value="0,0,0,2" />
+                            <Setter Property="Height" Value="40" />
+                            <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="{x:Type RadioButton}">
+                                        <Grid VerticalAlignment="Center">
+                                            <Border
+                                                Width="{TemplateBinding Width}"
+                                                Height="{TemplateBinding Height}"
+                                                Background="{TemplateBinding Background}"
+                                                BorderBrush="{TemplateBinding BorderBrush}"
+                                                BorderThickness="{TemplateBinding BorderThickness}">
+                                                <ContentPresenter
+                                                    Margin="{TemplateBinding Padding}"
+                                                    HorizontalAlignment="Center"
+                                                    VerticalAlignment="Center"
+                                                    Focusable="False"
+                                                    SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                                            </Border>
+                                        </Grid>
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsChecked" Value="true">
+                                                <Setter Property="BorderBrush" Value="{StaticResource PrimaryBrush}" />
+                                                <Setter Property="Foreground" Value="{StaticResource PrimaryBrush}" />
+                                            </Trigger>
+                                            <Trigger Property="IsMouseOver" Value="true">
+                                                <Setter Property="Foreground" Value="{StaticResource PrimaryBrush}" />
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </hc:SimplePanel.Resources>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+                        <StackPanel Margin="8,4">
+                            <hc:SimplePanel Height="18">
+                                <hc:UniformSpacingPanel
+                                    HorizontalAlignment="Right"
+                                    VerticalAlignment="Center"
+                                    Orientation="Horizontal"
+                                    Spacing="20">
+                                    <Button
+                                        Command="{Binding CancelCmd}"
+                                        Content="&#xe60c;"
+                                        FontFamily="{StaticResource FIconFontFamily}"
+                                        Style="{StaticResource TextBtnStyle}" />
+                                </hc:UniformSpacingPanel>
+                            </hc:SimplePanel>
+                            <hc:SimplePanel>
+                                <hc:UniformSpacingPanel
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Top"
+                                    Spacing="72">
+                                    <RadioButton
+                                        Height="28"
+                                        Content="寻联系人"
+                                        FontSize="14"
+                                        IsChecked="True"
+                                        Style="{StaticResource NavRadioBtnStyle}" />
+                                    <RadioButton
+                                        Height="28"
+                                        Content="寻群组"
+                                        FontSize="14"
+                                        Style="{StaticResource NavRadioBtnStyle}" />
+                                </hc:UniformSpacingPanel>
+                            </hc:SimplePanel>
+                        </StackPanel>
+                        <hc:SimplePanel Grid.Row="1">
+                            <hc:SimplePanel
+                                Height="28"
+                                Margin="20,4"
+                                VerticalAlignment="Top">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition />
+                                        <ColumnDefinition Width="84" />
+                                    </Grid.ColumnDefinitions>
+                                    <hc:SimplePanel>
+                                        <Border Background="#f3f5f7" CornerRadius="4" />
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto" />
+                                                <ColumnDefinition />
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock
+                                                Grid.Column="0"
+                                                Width="40"
+                                                VerticalAlignment="Center"
+                                                FontFamily="{StaticResource FIconFontFamily}"
+                                                Text="&#xe620;"
+                                                TextAlignment="Center" />
+                                            <hc:TextBox
+                                                Grid.Column="1"
+                                                Padding="0"
+                                                HorizontalAlignment="Stretch"
+                                                VerticalAlignment="Center"
+                                                hc:InfoElement.Placeholder="请输入对方的邮箱或昵称"
+                                                Background="Transparent"
+                                                BorderThickness="0"
+                                                ShowClearButton="True"
+                                                Text="{Binding QueryString}" />
+                                        </Grid>
+                                    </hc:SimplePanel>
+                                    <hc:SimplePanel Grid.Column="1">
+                                        <Button
+                                            Width="72"
+                                            Height="28"
+                                            Padding="0"
+                                            HorizontalAlignment="Right"
+                                            Command="{Binding QueryUserCmd}"
+                                            Content="查找"
+                                            Style="{StaticResource ButtonPrimary}" />
+                                    </hc:SimplePanel>
+                                </Grid>
+                            </hc:SimplePanel>
+                        </hc:SimplePanel>
+                    </Grid>
+                </hc:SimplePanel>
+                <!--#endregion-->
+                <!--#region Bottom Region-->
+                <hc:SimplePanel
+                    Grid.Row="1"
+                    Height="264"
+                    Background="#f7f7f7"
+                    Visibility="{Binding QueryResultList, Converter={StaticResource Object2VisibilityConverter}}">
+                    <Border BorderBrush="{StaticResource TMS_BorderBrush}" BorderThickness="0,1,0,0" />
+                    <hc:SimplePanel Margin="12">
+                        <ListBox
+                            VerticalAlignment="Top"
+                            Background="Transparent"
+                            BorderThickness="0"
+                            ItemsSource="{Binding QueryResultList}"
+                            Style="{StaticResource ListBoxCustom}">
+                            <ListBox.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <UniformGrid Columns="3" />
+                                </ItemsPanelTemplate>
+                            </ListBox.ItemsPanel>
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <hc:SimplePanel
+                                        Width="188"
+                                        Height="80"
+                                        Margin="4,0,0,12"
+                                        HorizontalAlignment="Left"
+                                        VerticalAlignment="Top">
+                                        <Border
+                                            Margin="4"
+                                            Background="{StaticResource RegionBrush}"
+                                            CornerRadius="4"
+                                            Effect="{StaticResource DialogShadow}" />
+                                        <StackPanel
+                                            Margin="16,0"
+                                            VerticalAlignment="Center"
+                                            Orientation="Horizontal">
+                                            <hc:Gravatar
+                                                Width="48"
+                                                Height="48"
+                                                HorizontalAlignment="Left"
+                                                Source="{Binding Avatar}" />
+                                            <StackPanel Margin="16,0,0,0" VerticalAlignment="Center">
+                                                <TextBlock FontSize="14" Text="{Binding Name}" />
+                                                <hc:SimplePanel>
+                                                    <hc:SimplePanel.Resources>
+                                                        <Style BasedOn="{StaticResource ButtonCustom}" TargetType="Button">
+                                                            <Setter Property="Height" Value="20" />
+                                                            <Setter Property="Margin" Value="0,8,0,0" />
+                                                            <Setter Property="Padding" Value="8,0" />
+                                                            <Setter Property="hc:BorderElement.CornerRadius" Value="2" />
+                                                            <Setter Property="Background" Value="#1e6fff" />
+                                                            <Setter Property="Cursor" Value="Hand" />
+                                                            <Setter Property="Foreground" Value="White" />
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding State}" Value="0">
+                                                                    <Setter Property="Content">
+                                                                        <Setter.Value>
+                                                                            <TextBlock>
+                                                                                <Run FontFamily="{StaticResource FIconFontFamily}" Text="&#xe61d;" />
+                                                                                <Run Text="添加联系人" />
+                                                                            </TextBlock>
+                                                                        </Setter.Value>
+                                                                    </Setter>
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding State}" Value="1">
+                                                                    <Setter Property="IsEnabled" Value="False" />
+                                                                    <Setter Property="Content">
+                                                                        <Setter.Value>
+                                                                            <TextBlock>
+                                                                                <Run FontFamily="{StaticResource FIconFontFamily}" Text="&#xe64b;" />
+                                                                                <Run Text="已申请" />
+                                                                            </TextBlock>
+                                                                        </Setter.Value>
+                                                                    </Setter>
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding State}" Value="2">
+                                                                    <Setter Property="IsEnabled" Value="False" />
+                                                                    <Setter Property="Content">
+                                                                        <Setter.Value>
+                                                                            <TextBlock>
+                                                                                <Run FontFamily="{StaticResource FIconFontFamily}" Text="&#xe60a;" />
+                                                                                <Run Text="已添加" />
+                                                                            </TextBlock>
+                                                                        </Setter.Value>
+                                                                    </Setter>
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </hc:SimplePanel.Resources>
+                                                    <Button
+                                                        hc:BackgroundSwitchElement.MouseDownBackground="#1e6fff"
+                                                        hc:BackgroundSwitchElement.MouseHoverBackground="#1e6fff"
+                                                        Background="#1e6fff"
+                                                        Command="{Binding ElementName=queryContactDialog, Path=DataContext.RequestContactCmd}"
+                                                        CommandParameter="{Binding Id}" />
+                                                </hc:SimplePanel>
+                                            </StackPanel>
+                                        </StackPanel>
+                                    </hc:SimplePanel>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </hc:SimplePanel>
+                </hc:SimplePanel>
+                <!--#endregion-->
+            </Grid>
+        </Border>
+    </hc:SimplePanel>
+</UserControl>

@@ -1,11 +1,9 @@
 ﻿using Genm.WPF.Data.VO;
 using GenmCloud.ApiService.Service;
 using GenmCloud.Chat.Views;
-using GenmCloud.Chat.Views.UserControls;
 using GenmCloud.Core.Data;
 using GenmCloud.Core.Data.Token;
 using GenmCloud.Core.Event;
-using GenmCloud.Core.Tools.Helper;
 using GenmCloud.Shared.Common;
 using GenmCloud.Shared.Common.Session;
 using GenmCloud.Views;

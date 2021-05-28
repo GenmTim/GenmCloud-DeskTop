@@ -2,88 +2,934 @@
     x:Class="GenmCloud.Storage.Views.StorageView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:attach="clr-namespace:Genm.WPF.Attach;assembly=Genm.WPF"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:genm="clr-namespace:Genm.WPF.Controls;assembly=Genm.WPF"
     xmlns:hc="https://handyorg.github.io/handycontrol"
     xmlns:local="clr-namespace:GenmCloud.Storage.Views"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:prism="http://prismlibrary.com/"
     xmlns:system="clr-namespace:System;assembly=System.Runtime"
+    xmlns:token="clr-namespace:GenmCloud.Core.Data.Token;assembly=GenmCloud.Core"
+    xmlns:uc="clr-namespace:GenmCloud.Core.UserControls.Common.Views;assembly=GenmCloud.Core"
+    xmlns:wpftk="clr-namespace:WpfToolkit.Controls;assembly=VirtualizingWrapPanel"
     prism:ViewModelLocator.AutoWireViewModel="True"
     mc:Ignorable="d">
     <UserControl.Resources>
-        <DropShadowEffect
-            x:Key="EffectShadowPopup"
-            BlurRadius="12"
-            Direction="270"
-            Opacity="0.3"
-            RenderingBias="Performance"
-            ShadowDepth="1"
-            Color="{StaticResource EffectShadowColor}" />
-    </UserControl.Resources>
-    <Grid>
-        <TextBlock
-            HorizontalAlignment="Center"
-            VerticalAlignment="Top"
-            Text="{Binding Message}" />
-        <hc:UniformSpacingPanel
-            HorizontalAlignment="Center"
-            VerticalAlignment="Center"
-            ChildWrapping="Wrap"
-            Spacing="20">
-            <ToggleButton
-                Padding="5"
-                Content="打开代码块"
-                Foreground="{DynamicResource PrimaryBrush}"
-                IsChecked="{Binding IsOpen, ElementName=DrawerCode}"
-                Style="{StaticResource ToggleButtonCustom}" />
-            <Button Command="{Binding PopupWindowCmd}" Content="打开窗口" />
-            <Button
-                x:Name="openPopupBtn"
-                Command="{Binding OpenPopupCmd}"
-                Content="打开Popup" />
-            <Button Content="测试" Tag="1">
-                <hc:Poptip.Instance>
-                    <hc:Poptip PlacementType="Top">
-                        <hc:Poptip.Content>
-                            <StackPanel>
-                                <Button />
-                                <Button />
-                                <Button />
-                            </StackPanel>
-                        </hc:Poptip.Content>
-                    </hc:Poptip>
-                </hc:Poptip.Instance>
-            </Button>
-            <genm:Popup
-                AllowsTransparency="True"
-                HorizontalOffset="-16"
-                IsOpen="{Binding IsPopupOpen, Mode=TwoWay}"
-                Placement="Bottom"
-                PlacementTarget="{Binding ElementName=openPopupBtn}"
-                StaysOpen="False">
-                <hc:SimplePanel>
-                    <Border
-                        Margin="16"
-                        Background="{StaticResource RegionBrush}"
-                        CornerRadius="8"
-                        Effect="{StaticResource EffectShadowPopup}">
-                        <hc:SimplePanel Margin="10">
-                            <local:ViewA Width="200" Height="200" />
+        <Style x:Key="cloudTreeViewItemStyle" TargetType="{x:Type TreeViewItem}">
+            <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Foreground" Value="#333f87" />
+            <Setter Property="attach:IconFontElement.Color" Value="#aaafcd" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type TreeViewItem}">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition MinHeight="20" />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <Border
+                                x:Name="Bd"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="{Binding (hc:BorderElement.CornerRadius), RelativeSource={RelativeSource TemplatedParent}}"
+                                SnapsToDevicePixels="True">
+                                <DockPanel LastChildFill="True">
+                                    <DockPanel.Margin>
+                                        <Binding RelativeSource="{RelativeSource TemplatedParent}">
+                                            <Binding.Converter>
+                                                <hc:TreeViewItemMarginConverter />
+                                            </Binding.Converter>
+                                        </Binding>
+                                    </DockPanel.Margin>
+                                    <ToggleButton
+                                        x:Name="Expander"
+                                        Margin="20,0,0,0"
+                                        ClickMode="Press"
+                                        IsChecked="{Binding IsExpanded, RelativeSource={RelativeSource TemplatedParent}}">
+                                        <ToggleButton.Style>
+                                            <Style TargetType="{x:Type ToggleButton}">
+                                                <Setter Property="Focusable" Value="False" />
+                                                <Setter Property="Width" Value="16" />
+                                                <Setter Property="Height" Value="16" />
+                                                <Setter Property="Template">
+                                                    <Setter.Value>
+                                                        <ControlTemplate TargetType="{x:Type ToggleButton}">
+                                                            <Border
+                                                                Width="16"
+                                                                Height="16"
+                                                                Background="Transparent">
+                                                                <TextBlock
+                                                                    x:Name="arrowText"
+                                                                    VerticalAlignment="Center"
+                                                                    Cursor="Hand"
+                                                                    FontFamily="{StaticResource MenuIconFontFamily}"
+                                                                    FontSize="14"
+                                                                    Foreground="#7780af"
+                                                                    Text="&#xe645;" />
+                                                            </Border>
+                                                            <ControlTemplate.Triggers>
+                                                                <Trigger Property="IsChecked" Value="True">
+                                                                    <Setter TargetName="arrowText" Property="Text" Value="&#xe646;" />
+                                                                </Trigger>
+                                                            </ControlTemplate.Triggers>
+                                                        </ControlTemplate>
+                                                    </Setter.Value>
+                                                </Setter>
+                                            </Style>
+                                        </ToggleButton.Style>
+                                    </ToggleButton>
+                                    <ContentPresenter
+                                        x:Name="PART_Header"
+                                        VerticalAlignment="Center"
+                                        Content="{TemplateBinding Header}"
+                                        ContentSource="Header"
+                                        ContentStringFormat="{TemplateBinding HeaderStringFormat}"
+                                        ContentTemplate="{TemplateBinding HeaderTemplate}"
+                                        SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                                </DockPanel>
+                            </Border>
+                            <ItemsPresenter x:Name="ItemsHost" Grid.Row="1" />
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger SourceName="Bd" Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Bd" Property="Background" Value="#FFEFF0F1" />
+                                <Setter Property="Cursor" Value="Hand" />
+                            </Trigger>
+                            <Trigger Property="IsExpanded" Value="False">
+                                <Setter TargetName="ItemsHost" Property="Visibility" Value="Collapsed" />
+                            </Trigger>
+                            <Trigger Property="HasItems" Value="False">
+                                <Setter TargetName="Expander" Property="Visibility" Value="Hidden" />
+                            </Trigger>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter Property="Foreground" Value="{StaticResource PrimaryBrush}" />
+                                <Setter Property="attach:IconFontElement.Color" Value="{StaticResource PrimaryBrush}" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <!--#region-->
+        <Style x:Key="BackgroundBtnStyle" TargetType="Button">
+            <Setter Property="Foreground" Value="#646a73" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Padding" Value="2,4" />
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="HorizontalAlignment" Value="Center" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="hc:BorderElement.CornerRadius" Value="4" />
+            <Setter Property="Background" Value="{StaticResource TMS_TransparencyRegionBrush}" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <hc:SimplePanel>
+                            <Border
+                                x:Name="Btnborder"
+                                Padding="{TemplateBinding Padding}"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="{Binding Path=(hc:BorderElement.CornerRadius), RelativeSource={RelativeSource TemplatedParent}}">
+                                <ContentPresenter
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    RecognizesAccessKey="True"
+                                    SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                            </Border>
                         </hc:SimplePanel>
-                    </Border>
+
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#e4e5e5" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+
+        <DataTemplate x:Key="blockDisplayFileItemTemplate">
+            <hc:SimplePanel
+                Height="200"
+                MinWidth="264"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch"
+                Background="Aqua">
+                <TextBlock Foreground="Black" Text="测试" />
+            </hc:SimplePanel>
+        </DataTemplate>
+
+        <Style TargetType="GridViewColumnHeader">
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="HorizontalContentAlignment" Value="Left" />
+            <Setter Property="Foreground" Value="{DynamicResource PrimaryTextBrush}" />
+            <Setter Property="Padding" Value="12,0,12,0" />
+            <Setter Property="MinHeight" Value="44" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="GridViewColumnHeader">
+                        <hc:SimplePanel SnapsToDevicePixels="true">
+                            <Border
+                                x:Name="HeaderBorder"
+                                Background="Transparent"
+                                BorderBrush="{TemplateBinding BorderBrush}">
+                                <ContentPresenter
+                                    x:Name="HeaderContent"
+                                    Margin="{TemplateBinding Padding}"
+                                    HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                    VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                    RecognizesAccessKey="True"
+                                    SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                            </Border>
+                        </hc:SimplePanel>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="ListViewBaseStyle" TargetType="ListView">
+            <Setter Property="Background" Value="{DynamicResource SecondaryRegionBrush}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="Foreground" Value="{DynamicResource PrimaryTextBrush}" />
+            <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto" />
+            <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto" />
+            <Setter Property="ScrollViewer.CanContentScroll" Value="true" />
+            <Setter Property="ScrollViewer.PanningMode" Value="Both" />
+            <Setter Property="Stylus.IsFlicksEnabled" Value="False" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="ItemContainerStyle" Value="{StaticResource ListViewItemBaseStyle}" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ListView">
+                        <Border
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            SnapsToDevicePixels="True">
+                            <hc:ToggleBlock
+                                HorizontalContentAlignment="Stretch"
+                                VerticalContentAlignment="Stretch"
+                                IsChecked="{Binding HasItems, RelativeSource={RelativeSource TemplatedParent}, Mode=OneWay}">
+                                <hc:ToggleBlock.CheckedContent>
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition />
+                                        </Grid.RowDefinitions>
+                                        <GridViewHeaderRowPresenter
+                                            Margin="0,0"
+                                            AllowsColumnReorder="{Binding View.AllowsColumnReorder, RelativeSource={RelativeSource TemplatedParent}}"
+                                            ColumnHeaderContainerStyle="{Binding View.ColumnHeaderContainerStyle, RelativeSource={RelativeSource TemplatedParent}}"
+                                            ColumnHeaderContextMenu="{Binding View.ColumnHeaderContextMenu, RelativeSource={RelativeSource TemplatedParent}}"
+                                            ColumnHeaderTemplate="{Binding View.ColumnHeaderTemplate, RelativeSource={RelativeSource TemplatedParent}}"
+                                            ColumnHeaderToolTip="{Binding View.ColumnHeaderToolTip, RelativeSource={RelativeSource TemplatedParent}}"
+                                            Columns="{Binding View.Columns, RelativeSource={RelativeSource TemplatedParent}}"
+                                            SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                                        <Border
+                                            Margin="0,0,12,0"
+                                            BorderBrush="#dee0e3"
+                                            BorderThickness="0,0,0,1" />
+                                        <ScrollViewer Grid.Row="1">
+                                            <hc:SimplePanel Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
+                                                <ItemsPresenter
+                                                    Grid.Row="1"
+                                                    Margin="{TemplateBinding Padding}"
+                                                    SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                                            </hc:SimplePanel>
+                                        </ScrollViewer>
+                                    </Grid>
+                                </hc:ToggleBlock.CheckedContent>
+                                <hc:ToggleBlock.UnCheckedContent>
+                                    <hc:Empty />
+                                </hc:ToggleBlock.UnCheckedContent>
+                            </hc:ToggleBlock>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <MultiTrigger>
+                    <MultiTrigger.Conditions>
+                        <Condition Property="IsGrouping" Value="true" />
+                        <Condition Property="VirtualizingPanel.IsVirtualizingWhenGrouping" Value="false" />
+                    </MultiTrigger.Conditions>
+                    <Setter Property="ScrollViewer.CanContentScroll" Value="false" />
+                </MultiTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="Genm_ListViewItemBaseStyle" TargetType="{x:Type ListViewItem}">
+            <Setter Property="Background" Value="{DynamicResource RegionBrush}" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Foreground" Value="{DynamicResource PrimaryTextBrush}" />
+            <Setter Property="SnapsToDevicePixels" Value="True" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="HorizontalAlignment" Value="Stretch" />
+            <Setter Property="VerticalAlignment" Value="Stretch" />
+            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+            <Setter Property="VerticalContentAlignment" Value="Stretch" />
+            <Setter Property="hc:BorderElement.CornerRadius" Value="0" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ListViewItem}">
+                        <hc:SimplePanel>
+                            <Border
+                                x:Name="Bd"
+                                Padding="{TemplateBinding Padding}"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="{TemplateBinding hc:BorderElement.CornerRadius}"
+                                SnapsToDevicePixels="True">
+                                <GridViewRowPresenter Columns="{TemplateBinding GridView.ColumnCollection}" Content="{TemplateBinding Content}" />
+                            </Border>
+                        </hc:SimplePanel>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style
+            x:Key="GridViewModelViewer"
+            BasedOn="{StaticResource ListViewBaseStyle}"
+            TargetType="ListView">
+            <Setter Property="ItemContainerStyle">
+                <Setter.Value>
+                    <Style BasedOn="{StaticResource Genm_ListViewItemBaseStyle}" TargetType="ListViewItem">
+                        <Setter Property="Padding" Value="4,11" />
+                        <Setter Property="BorderThickness" Value="0,0,0,1" />
+                        <Setter Property="BorderBrush" Value="#dee0e3" />
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#eff0f1" />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Padding" Value="0,0,12,0" />
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="View">
+                <Setter.Value>
+                    <GridView>
+                        <GridView.Columns>
+                            <GridViewColumn>
+                                <GridViewColumn.Header>
+                                    <Button Style="{StaticResource BackgroundBtnStyle}">
+                                        <WrapPanel>
+                                            <TextBlock Text="名称" />
+                                            <TextBlock
+                                                Margin="2,0,0,0"
+                                                VerticalAlignment="Center"
+                                                FontFamily="{StaticResource FIconFontFamily}"
+                                                FontSize="8"
+                                                Text="&#xe6bb;" />
+                                        </WrapPanel>
+                                    </Button>
+                                </GridViewColumn.Header>
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto" />
+                                                <ColumnDefinition />
+                                            </Grid.ColumnDefinitions>
+                                            <Image Width="36" Source="https://blog-image-1259552158.cos.ap-shanghai.myqcloud.com/assets/PDF.png" />
+                                            <TextBlock
+                                                Grid.Column="1"
+                                                Margin="16,0,0,0"
+                                                VerticalAlignment="Center"
+                                                Foreground="#1f2329"
+                                                Text="{Binding FileName}"
+                                                TextTrimming="CharacterEllipsis" />
+                                        </Grid>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Width="100">
+                                <GridViewColumn.Header>
+                                    <Button Style="{StaticResource BackgroundBtnStyle}">
+                                        <WrapPanel>
+                                            <TextBlock Text="所有者" />
+                                            <TextBlock
+                                                Margin="2,0,0,0"
+                                                VerticalAlignment="Center"
+                                                FontFamily="{StaticResource FIconFontFamily}"
+                                                FontSize="8"
+                                                Text="&#xe6bb;" />
+                                        </WrapPanel>
+                                    </Button>
+                                </GridViewColumn.Header>
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <hc:SimplePanel>
+                                            <TextBlock
+                                                Margin="4,0,0,0"
+                                                VerticalAlignment="Center"
+                                                Foreground="#646a73"
+                                                Text="{Binding OwnerName}"
+                                                TextTrimming="CharacterEllipsis" />
+                                        </hc:SimplePanel>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Width="160">
+                                <GridViewColumn.Header>
+                                    <Button Style="{StaticResource BackgroundBtnStyle}">
+                                        <WrapPanel>
+                                            <TextBlock Text="创建时间" />
+                                            <TextBlock
+                                                Margin="2,0,0,0"
+                                                VerticalAlignment="Center"
+                                                FontFamily="{StaticResource FIconFontFamily}"
+                                                FontSize="8"
+                                                Text="&#xe6bb;" />
+                                        </WrapPanel>
+                                    </Button>
+                                </GridViewColumn.Header>
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock
+                                            Margin="4,0,0,0"
+                                            VerticalAlignment="Center"
+                                            Foreground="#646a73"
+                                            Text="{Binding CreatedAt}" />
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Width="160">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button
+                                            Margin="4,0,0,0"
+                                            Padding="1,0"
+                                            HorizontalAlignment="Right"
+                                            VerticalAlignment="Center"
+                                            Content="&#xe61a;"
+                                            FontFamily="{StaticResource FIconFontFamily}"
+                                            FontSize="18"
+                                            Foreground="#646a73">
+                                            <Button.Style>
+                                                <Style BasedOn="{StaticResource BackgroundBtnStyle}" TargetType="Button">
+                                                    <Style.Triggers>
+                                                        <Trigger Property="IsMouseOver" Value="True">
+                                                            <Setter Property="Background" Value="#dadcdc" />
+                                                        </Trigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Button.Style>
+                                        </Button>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                        </GridView.Columns>
+                    </GridView>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style
+            x:Key="WrapModelViewer"
+            BasedOn="{StaticResource ListViewBaseStyle}"
+            TargetType="ListView">
+            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Padding" Value="0,12,0,12" />
+            <Setter Property="ItemContainerStyle">
+                <Setter.Value>
+                    <Style BasedOn="{StaticResource ListViewItemCustom}" TargetType="ListViewItem">
+                        <Setter Property="Margin" Value="0,0,12,12" />
+                    </Style>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled" />
+            <Setter Property="ItemTemplate">
+                <Setter.Value>
+                    <DataTemplate>
+                        <hc:SimplePanel
+                            Height="200"
+                            MinWidth="240"
+                            Background="{StaticResource TMS_TransparencyRegionBrush}">
+                            <Border
+                                BorderThickness="1"
+                                CornerRadius="4"
+                                Cursor="Hand"
+                                Style="{StaticResource BorderClip}">
+                                <hc:SimplePanel>
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="145" />
+                                            <RowDefinition />
+                                        </Grid.RowDefinitions>
+                                        <hc:SimplePanel>
+                                            <Border Background="#f8f9fa" CornerRadius="4" />
+                                            <Image Source="https://blog-image-1259552158.cos.ap-shanghai.myqcloud.com/xblog/leetcode/632.png" Stretch="UniformToFill" />
+                                            <CheckBox
+                                                x:Name="checkBox"
+                                                Margin="12"
+                                                HorizontalAlignment="Right"
+                                                VerticalAlignment="Top">
+                                                <CheckBox.Style>
+                                                    <Style BasedOn="{StaticResource CheckBoxBaseStyle}" TargetType="CheckBox">
+                                                        <Setter Property="BorderBrush" Value="#8f959e" />
+                                                        <Style.Triggers>
+                                                            <Trigger Property="IsMouseOver" Value="True">
+                                                                <Setter Property="BorderBrush" Value="{StaticResource PrimaryBrush}" />
+                                                            </Trigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </CheckBox.Style>
+                                            </CheckBox>
+                                        </hc:SimplePanel>
+                                        <Border BorderBrush="#dee0e3" BorderThickness="0,0,0,1" />
+                                        <hc:SimplePanel Grid.Row="1" Background="{StaticResource TMS_TransparencyRegionBrush}">
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="58" />
+                                                    <ColumnDefinition Width="*" />
+                                                    <ColumnDefinition Width="50" />
+                                                </Grid.ColumnDefinitions>
+                                                <Image Height="32" Source="https://blog-image-1259552158.cos.ap-shanghai.myqcloud.com/assets/PDF.png" />
+                                                <hc:SimplePanel x:Name="_content" Grid.Column="1">
+                                                    <Canvas HorizontalAlignment="Left" VerticalAlignment="Center">
+                                                        <hc:SimplePanel Canvas.Left="0" Canvas.Top="-18">
+                                                            <StackPanel>
+                                                                <TextBlock
+                                                                    Width="{Binding ElementName=_content, Path=ActualWidth}"
+                                                                    HorizontalAlignment="Left"
+                                                                    FontSize="14"
+                                                                    Text="asfsasfsasfsasfsasfsasfsasfsasfsasfsasfsasfsasfsasfsasfsasfs"
+                                                                    TextTrimming="CharacterEllipsis" />
+                                                                <TextBlock
+                                                                    Grid.Row="1"
+                                                                    Width="{Binding ElementName=_content, Path=ActualWidth}"
+                                                                    Margin="0,2,0,0"
+                                                                    HorizontalAlignment="Left"
+                                                                    Foreground="#646a73"
+                                                                    Text="余浩臻 最后更新于 3月22日 23:15"
+                                                                    TextTrimming="CharacterEllipsis" />
+                                                            </StackPanel>
+                                                        </hc:SimplePanel>
+                                                    </Canvas>
+                                                </hc:SimplePanel>
+                                                <hc:SimplePanel Grid.Column="2">
+                                                    <Border Background="White" />
+                                                    <Button
+                                                        Padding="1,0"
+                                                        Content="&#xe61a;"
+                                                        FontFamily="{StaticResource FIconFontFamily}"
+                                                        FontSize="24"
+                                                        Foreground="#6d737b"
+                                                        Style="{StaticResource BackgroundBtnStyle}" />
+                                                </hc:SimplePanel>
+                                            </Grid>
+                                        </hc:SimplePanel>
+                                    </Grid>
+                                    <Border
+                                        x:Name="Bd"
+                                        BorderThickness="1"
+                                        CornerRadius="4" />
+                                </hc:SimplePanel>
+                            </Border>
+                        </hc:SimplePanel>
+                        <DataTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Bd" Property="BorderBrush" Value="{StaticResource PrimaryBrush}" />
+                                <Setter TargetName="checkBox" Property="Visibility" Value="Visible" />
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="False">
+                                <Setter TargetName="Bd" Property="BorderBrush" Value="#dee0e3" />
+                                <Setter TargetName="checkBox" Property="Visibility" Value="Collapsed" />
+                            </Trigger>
+                            <Trigger SourceName="checkBox" Property="IsChecked" Value="True">
+                                <Setter TargetName="Bd" Property="BorderBrush" Value="{StaticResource PrimaryBrush}" />
+                                <Setter TargetName="checkBox" Property="Visibility" Value="Visible" />
+                            </Trigger>
+                        </DataTemplate.Triggers>
+                    </DataTemplate>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="ItemsPanel">
+                <Setter.Value>
+                    <ItemsPanelTemplate>
+                        <wpftk:VirtualizingWrapPanel
+                            Orientation="Vertical"
+                            SpacingMode="BetweenItemsOnly"
+                            StretchItems="True" />
+                    </ItemsPanelTemplate>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="View">
+                <Setter.Value>
+                    <GridView>
+                        <GridViewColumn Width="100">
+                            <GridViewColumn.Header>
+                                <Button Style="{StaticResource BackgroundBtnStyle}">
+                                    <WrapPanel>
+                                        <TextBlock Text="名称" />
+                                        <TextBlock
+                                            Margin="2,0,0,0"
+                                            VerticalAlignment="Center"
+                                            FontFamily="{StaticResource FIconFontFamily}"
+                                            FontSize="8"
+                                            Text="&#xe6bb;" />
+                                    </WrapPanel>
+                                </Button>
+                            </GridViewColumn.Header>
+                        </GridViewColumn>
+                    </GridView>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <!--#endregion-->
+    </UserControl.Resources>
+    <materialDesign:DialogHost
+        Margin="0,-30,0,0"
+        CloseOnClickAway="True"
+        Identifier="StorageRoot"
+        OverlayBackground="{StaticResource TMS_TransparencyRegionBrush}">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="200" />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <Grid Grid.Column="0" Background="#f8f9fa">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="24" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <Border
+                    Grid.RowSpan="3"
+                    BorderBrush="{StaticResource TMS_BorderBrush}"
+                    BorderThickness="0,0,1,0" />
+                <StackPanel Grid.Row="1">
+                    <TextBlock
+                        Margin="20,15,0,0"
+                        FontSize="20"
+                        FontWeight="Bold"
+                        Foreground="#030852"
+                        Text="云存储" />
+                    <TextBlock
+                        Margin="20,15,0,0"
+                        FontSize="16"
+                        FontWeight="Bold"
+                        Foreground="{StaticResource PrimaryBrush}"
+                        Text="我的文件" />
+                </StackPanel>
+                <hc:SimplePanel Grid.Row="2" Background="{StaticResource TMS_TransparencyRegionBrush}">
+                    <hc:SimplePanel.ContextMenu>
+                        <ContextMenu Width="150">
+                            <MenuItem Command="{Binding AddNewFolderCmd}" Header="新建文件夹" />
+                        </ContextMenu>
+                    </hc:SimplePanel.ContextMenu>
+                    <TreeView
+                        Margin="0,15,0,0"
+                        hc:BorderElement.CornerRadius="0"
+                        Background="Transparent"
+                        BorderThickness="0"
+                        Foreground="#333f87"
+                        ItemsSource="{Binding FileTreeNodeItemList}"
+                        Style="{StaticResource TreeViewBaseStyle}">
+                        <TreeView.ItemContainerStyle>
+                            <Style BasedOn="{StaticResource cloudTreeViewItemStyle}" TargetType="TreeViewItem">
+                                <Setter Property="ContextMenu">
+                                    <Setter.Value>
+                                        <ContextMenu Width="188" Style="{StaticResource ContextMenuBaseStyle}">
+                                            <MenuItem
+                                                Command="{Binding DataContext.AddNewFolderCmd, RelativeSource={RelativeSource AncestorType=TreeView, Mode=FindAncestor}}"
+                                                CommandParameter="{Binding Id}"
+                                                FontSize="14"
+                                                Header="新建文件夹"
+                                                Style="{StaticResource MenuItemBaseStyle}" />
+                                        </ContextMenu>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </TreeView.ItemContainerStyle>
+                        <TreeView.ItemTemplate>
+                            <HierarchicalDataTemplate ItemsSource="{Binding Children}">
+                                <StackPanel Height="40" Orientation="Horizontal">
+                                    <TextBlock
+                                        Margin="5,0,0,0"
+                                        VerticalAlignment="Center"
+                                        FontFamily="{StaticResource MenuIconFontFamily}"
+                                        FontSize="18"
+                                        Foreground="{Binding Path=(attach:IconFontElement.Color), RelativeSource={RelativeSource AncestorType=TreeViewItem, Mode=FindAncestor}}"
+                                        Text="&#xe638;" />
+                                    <TextBlock
+                                        Margin="10,0,0,0"
+                                        VerticalAlignment="Center"
+                                        FontSize="14"
+                                        Foreground="{Binding Path=Foreground, RelativeSource={RelativeSource AncestorType=TreeViewItem, Mode=FindAncestor}}"
+                                        Text="{Binding Name}" />
+                                </StackPanel>
+                            </HierarchicalDataTemplate>
+                        </TreeView.ItemTemplate>
+                    </TreeView>
                 </hc:SimplePanel>
-            </genm:Popup>
-        </hc:UniformSpacingPanel>
-        <hc:Drawer Name="DrawerCode" Opened="DrawerCode_OnOpened">
-            <Border
-                Name="BorderCode"
-                Width="800"
-                Margin="32,32,0,32"
-                Background="{DynamicResource RegionBrush}"
-                CornerRadius="10,0,0,10"
-                Style="{StaticResource BorderClip}" />
-        </hc:Drawer>
-    
-    </Grid>
+            </Grid>
+            <!--#region 右边区域-->
+            <hc:SimplePanel
+                Grid.Column="1"
+                AllowDrop="True"
+                Background="White"
+                DragEnter="OnDragEnter"
+                DragLeave="OnDragLeave"
+                DragOver="OnDragOver"
+                Drop="OnDrop">
+                <hc:SimplePanel Margin="24,30,24,0">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="40" />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+                        <hc:SimplePanel VerticalAlignment="Center">
+                            <StackPanel Orientation="Horizontal">
+                                <Button Padding="4,0" Style="{StaticResource BackgroundBtnStyle}">
+                                    <TextBlock
+                                        FontSize="20"
+                                        Foreground="#646a73"
+                                        Text="共享空间" />
+                                </Button>
+                                <TextBlock
+                                    Margin="12,0"
+                                    VerticalAlignment="Center"
+                                    FontSize="20"
+                                    Foreground="#646a73"
+                                    Text="&gt;" />
+                                <TextBlock
+                                    VerticalAlignment="Center"
+                                    FontSize="20"
+                                    Foreground="#1f2329"
+                                    Text="idea" />
+                            </StackPanel>
+                            <hc:UniformSpacingPanel
+                                HorizontalAlignment="Right"
+                                Orientation="Horizontal"
+                                Spacing="20">
+                                <Button
+                                    Width="90"
+                                    Content="添加"
+                                    Cursor="Hand"
+                                    FontSize="14">
+                                    <Button.Style>
+                                        <Style BasedOn="{StaticResource ButtonDashedPrimary}" TargetType="Button">
+                                            <Style.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter Property="Background" Value="#e1eaff" />
+                                                </Trigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Button.Style>
+                                </Button>
+                                <Button
+                                    Width="90"
+                                    Cursor="Hand"
+                                    FontSize="14"
+                                    Style="{StaticResource ButtonPrimary}">
+                                    <WrapPanel>
+                                        <TextBlock VerticalAlignment="Center" Text="上传" />
+                                        <TextBlock
+                                            Margin="4,0,0,0"
+                                            VerticalAlignment="Center"
+                                            FontFamily="{StaticResource FIconFontFamily}"
+                                            FontSize="8"
+                                            Text="&#xe6bb;" />
+                                    </WrapPanel>
+                                </Button>
+                            </hc:UniformSpacingPanel>
+                        </hc:SimplePanel>
+                        <hc:SimplePanel Grid.Row="1">
+                            <Grid x:Name="mainGrid">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition />
+                                    <ColumnDefinition Width="220" />
+                                </Grid.ColumnDefinitions>
+                                <!--#region 文件列表视图-->
+                                <hc:SimplePanel>
+                                    <ListView
+                                        x:Name="listView"
+                                        Margin="0,0,0,0"
+                                        ItemsSource="{Binding FileItemVOList}"
+                                        Style="{StaticResource WrapModelViewer}" />
+                                    <StackPanel
+                                        Height="42"
+                                        Margin="0,1,20,0"
+                                        HorizontalAlignment="Right"
+                                        VerticalAlignment="Top"
+                                        Orientation="Horizontal">
+                                        <ToggleButton
+                                            Padding="4"
+                                            hc:StatusSwitchElement.HideUncheckedElement="True"
+                                            Checked="CheckToListView"
+                                            Content="&#xe815;"
+                                            Cursor="Hand"
+                                            FontFamily="{StaticResource FIconFontFamily}"
+                                            FontSize="16"
+                                            Style="{StaticResource ToggleButtonCustom}"
+                                            Unchecked="CheckToGridView">
+                                            <hc:StatusSwitchElement.CheckedElement>
+                                                <TextBlock Text="&#xe814;" />
+                                            </hc:StatusSwitchElement.CheckedElement>
+                                        </ToggleButton>
+                                        <ToggleButton
+                                            Margin="2,0,0,0"
+                                            Padding="0,0"
+                                            hc:StatusSwitchElement.HideUncheckedElement="True"
+                                            Checked="ShrinkGrid"
+                                            Content="&#xe7c9;"
+                                            Cursor="Hand"
+                                            FontFamily="{StaticResource FIconFontFamily}"
+                                            FontSize="24"
+                                            Style="{StaticResource ToggleButtonCustom}"
+                                            Unchecked="OpenGrid">
+                                            <hc:StatusSwitchElement.CheckedElement>
+                                                <TextBlock Text="&#xe7ca;" />
+                                            </hc:StatusSwitchElement.CheckedElement>
+                                        </ToggleButton>
+                                    </StackPanel>
+                                </hc:SimplePanel>
+                                <!--#endregion-->
+                                <hc:SimplePanel Grid.Column="1" Margin="20,0,0,0">
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="42" />
+                                            <RowDefinition Height="132" />
+                                            <RowDefinition Height="60" />
+                                        </Grid.RowDefinitions>
+                                        <hc:SimplePanel>
+                                            <TextBlock
+                                                VerticalAlignment="Center"
+                                                FontSize="16"
+                                                Text="idea" />
+                                            <Button
+                                                HorizontalAlignment="Right"
+                                                VerticalAlignment="Center"
+                                                Content="&#xe622;"
+                                                FontFamily="{StaticResource FIconFontFamily}"
+                                                Foreground="#8f959e"
+                                                Style="{StaticResource TextBtnStyle}" />
+                                        </hc:SimplePanel>
+                                        <hc:SimplePanel Grid.Row="1">
+                                            <Border
+                                                Background="#f8f9fa"
+                                                BorderBrush="#dee0e3"
+                                                BorderThickness="1"
+                                                CornerRadius="4">
+                                                <Image Source="https://blog-image-1259552158.cos.ap-shanghai.myqcloud.com/xblog/leetcode/632.png" Stretch="UniformToFill" />
+                                            </Border>
+                                        </hc:SimplePanel>
+                                        <hc:SimplePanel Grid.Row="2">
+                                            <Button
+                                                HorizontalAlignment="Stretch"
+                                                Content="分享"
+                                                Cursor="Hand"
+                                                FontSize="14"
+                                                Style="{StaticResource ButtonDashedPrimary}" />
+                                        </hc:SimplePanel>
+                                    </Grid>
+                                </hc:SimplePanel>
+                            </Grid>
+                        </hc:SimplePanel>
+                    </Grid>
+                </hc:SimplePanel>
+                <!--#region 上传列表Popup-->
+                <uc:UploadInfoPopup
+                    Margin="0,0,20,20"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Bottom" />
+                <!--#endregion-->
+                <!--#region 上传蒙版区域-->
+                <hc:SimplePanel
+                    x:Name="fileDragMask"
+                    Opacity="0"
+                    Visibility="Collapsed">
+                    <hc:SimplePanel.Style>
+                        <Style TargetType="hc:SimplePanel">
+                            <Style.Triggers>
+                                <Trigger Property="Visibility" Value="Visible">
+                                    <Trigger.EnterActions>
+                                        <BeginStoryboard>
+                                            <Storyboard>
+                                                <DoubleAnimation
+                                                    Storyboard.TargetProperty="Opacity"
+                                                    To="1"
+                                                    Duration="0:0:0.1" />
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </Trigger.EnterActions>
+                                    <Trigger.ExitActions>
+                                        <BeginStoryboard>
+                                            <Storyboard>
+                                                <DoubleAnimation
+                                                    Storyboard.TargetProperty="Opacity"
+                                                    To="0"
+                                                    Duration="0:0:0.2" />
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </Trigger.ExitActions>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </hc:SimplePanel.Style>
+                    <hc:DashedBorder
+                        Margin="20,30"
+                        hc:BorderElement.CornerRadius="8"
+                        Background="#CFFFFFFF"
+                        BorderBrush="{StaticResource PrimaryBrush}"
+                        BorderDashArray="3,2"
+                        BorderThickness="1"
+                        CornerRadius="8" />
+                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <Image
+                            Width="300"
+                            Height="300"
+                            Margin="0,0,23,0"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            RenderOptions.BitmapScalingMode="HighQuality"
+                            Source="pack://application:,,,/GenmCloud.Core;component/Resources/Images/recruitment.png" />
+                        <TextBlock
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            FontSize="18"
+                            FontWeight="Bold"
+                            Text="上传您的文件" />
+                        <StackPanel
+                            Margin="0,10,0,0"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Orientation="Horizontal">
+                            <TextBlock
+                                VerticalAlignment="Center"
+                                Foreground="{StaticResource SecondaryTextBrush}"
+                                Text="将会上传到 " />
+                            <TextBlock
+                                VerticalAlignment="Center"
+                                Foreground="#1890ff"
+                                Text="测试" />
+                            <TextBlock Foreground="{StaticResource SecondaryTextBrush}" Text=" 中" />
+                        </StackPanel>
+                    </StackPanel>
+                </hc:SimplePanel>
+                <!--#endregion-->
+            </hc:SimplePanel>
+            <!--#endregion-->
+
+        </Grid>
+    </materialDesign:DialogHost>
 </UserControl>

@@ -16,6 +16,7 @@ using GenmCloud.Shared.Common;
 using GenmCloud.Shared.Common.Session;
 using GenmCloud.Shared.DataInterfaces;
 using GenmCloud.Storage.Views;
+using GenmCloud.Test.Views;
 using GenmCloud.Views;
 using GenmCloud.Views.Login;
 using Newtonsoft.Json;
@@ -60,7 +61,7 @@ namespace GenmCloud
             containerRegistry.RegisterSingleton<ChatMsgManager>(() => { return ChatMsgManager.GetInstance(); });
 
             // 注册头像管理
-            containerRegistry.RegisterSingleton<AvatarManager>(() => { return AvatarManager.GetInstance();  });
+            containerRegistry.RegisterSingleton<AvatarManager>(() => { return AvatarManager.GetInstance(); });
 
             // 注册日志服务
             containerRegistry.RegisterSingleton<ILog, GenmCloudNLog>();
@@ -86,6 +87,9 @@ namespace GenmCloud
 
             // 云存储模块
             moduleCatalog.AddModule<Storage.StorageModule>(JsonConvert.SerializeObject(Storage.StorageModule.ModuleInfo));
+
+            // 测试模块
+            moduleCatalog.AddModule<Test.TestModule>(JsonConvert.SerializeObject(Test.TestModule.ModuleInfo));
         }
 
         protected override void OnInitialized()
@@ -147,6 +151,7 @@ namespace GenmCloud
             containerRegistry.Register<IUserService, UserService>();
             containerRegistry.Register<IContactService, ContactService>();
             containerRegistry.Register<IChatService, ChatService>();
+            containerRegistry.Register<IFileService, FileService>();
         }
 
         // 注册视图路由
@@ -165,11 +170,13 @@ namespace GenmCloud
                 router[typeof(ChatView)] = RouteHelper.MakeRouteInfo(typeof(MainWindow), "chat/", RegionToken.MainContent);
                 router[typeof(StorageView)] = RouteHelper.MakeRouteInfo(typeof(MainWindow), "storage/", RegionToken.MainContent);
                 router[typeof(ContactView)] = RouteHelper.MakeRouteInfo(typeof(MainWindow), "contact/", RegionToken.MainContent);
+                router[typeof(TestView)] = RouteHelper.MakeRouteInfo(typeof(MainWindow), "test/", RegionToken.MainContent);
             }
 
             Chat.ChatModule.ModuleInfo.Path = router[typeof(ChatView)].Path;
             Storage.StorageModule.ModuleInfo.Path = router[typeof(StorageView)].Path;
             Contact.ContactModule.ModuleInfo.Path = router[typeof(ContactView)].Path;
+            Test.TestModule.ModuleInfo.Path = router[typeof(TestView)].Path;
         }
 
         private void RegisterDialog(IContainerRegistry containerRegistry)

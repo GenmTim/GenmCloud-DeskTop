@@ -6,8 +6,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Resources\Icon\FileType\Excel.png" />
+    <None Remove="Resources\Icon\FileType\Exe.png" />
+    <None Remove="Resources\Icon\FileType\Other.png" />
+    <None Remove="Resources\Icon\FileType\PDF.png" />
+    <None Remove="Resources\Icon\FileType\PPT.png" />
+    <None Remove="Resources\Icon\FileType\Word.png" />
     <None Remove="Resources\Icon\iconfont.ttf" />
     <None Remove="Resources\Images\office.png" />
+    <None Remove="Resources\Images\recruitment.png" />
     <None Remove="Resources\Styles\Go.xshd" />
     <None Remove="Resources\Styles\Lua.xshd" />
   </ItemGroup>
@@ -17,6 +24,7 @@
     <PackageReference Include="HandyControl" Version="3.1.0" />
     <PackageReference Include="MaterialDesignThemes" Version="4.0.0" />
     <PackageReference Include="Prism.Core" Version="8.0.0.1909" />
+    <PackageReference Include="VirtualizingWrapPanel" Version="1.5.4" />
   </ItemGroup>
 
   <ItemGroup>
@@ -26,10 +34,29 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Resources\Icon\FileType\Excel.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Icon\FileType\Exe.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Icon\FileType\Other.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Icon\FileType\PDF.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Icon\FileType\PPT.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Icon\FileType\Word.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Resources\Icon\iconfont.ttf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Resources\Images\office.png" />
+    <Resource Include="Resources\Images\recruitment.png" />
     <Resource Include="Resources\Styles\Go.xshd">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>

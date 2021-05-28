@@ -9,5 +9,7 @@
         public static readonly string ChatContent = nameof(ChatContent);
 
         public static readonly string ContactInfoContent = nameof(ContactInfoContent);
+
+        public static readonly string StorageContent = nameof(StorageContent);
     }
 }

@@ -21,7 +21,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GenmCloud.Core", "GenmCloud
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GenmCloud.Storage", "GenmCloud.Storage\GenmCloud.Storage.csproj", "{AECF8F3C-EE0C-431C-B7F5-A95A74E0A75D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GenmCloud.Contact", "GenmCloud.Contact\GenmCloud.Contact.csproj", "{8780F012-E384-474E-8203-D95CFFDB72AC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GenmCloud.Contact", "GenmCloud.Contact\GenmCloud.Contact.csproj", "{8780F012-E384-474E-8203-D95CFFDB72AC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GenmCloud.Test", "GenmCloud.Test\GenmCloud.Test.csproj", "{D5CF7ED3-9FA8-4C21-BE3B-3DCE2736E539}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -61,6 +63,10 @@ Global
 		{8780F012-E384-474E-8203-D95CFFDB72AC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8780F012-E384-474E-8203-D95CFFDB72AC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8780F012-E384-474E-8203-D95CFFDB72AC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D5CF7ED3-9FA8-4C21-BE3B-3DCE2736E539}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D5CF7ED3-9FA8-4C21-BE3B-3DCE2736E539}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D5CF7ED3-9FA8-4C21-BE3B-3DCE2736E539}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D5CF7ED3-9FA8-4C21-BE3B-3DCE2736E539}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -70,6 +76,7 @@ Global
 		{82CDAC5F-0993-42FA-86BF-05EA7A718CD2} = {125A03CF-FAE7-44EF-B147-C1DB0E4A5789}
 		{AECF8F3C-EE0C-431C-B7F5-A95A74E0A75D} = {5B5A9D7F-6E84-41CE-92B2-F133392586AD}
 		{8780F012-E384-474E-8203-D95CFFDB72AC} = {5B5A9D7F-6E84-41CE-92B2-F133392586AD}
+		{D5CF7ED3-9FA8-4C21-BE3B-3DCE2736E539} = {5B5A9D7F-6E84-41CE-92B2-F133392586AD}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {CB502FFB-66F1-4BA8-BB38-E754156FF50F}

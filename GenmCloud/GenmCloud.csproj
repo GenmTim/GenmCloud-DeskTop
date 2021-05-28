@@ -23,6 +23,7 @@
     <ProjectReference Include="..\GenmCloud.Contact\GenmCloud.Contact.csproj" />
     <ProjectReference Include="..\GenmCloud.Core\GenmCloud.Core.csproj" />
     <ProjectReference Include="..\GenmCloud.Storage\GenmCloud.Storage.csproj" />
+    <ProjectReference Include="..\GenmCloud.Test\GenmCloud.Test.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="h_aid.ico" />

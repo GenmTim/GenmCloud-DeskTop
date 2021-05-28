@@ -1,5 +1,4 @@
 ﻿using GenmCloud.ApiService.Service;
-using GenmCloud.Core.Data.VO;
 using GenmCloud.Core.Event;
 using GenmCloud.Core.Tools.Helper;
 using GenmCloud.Shared.Common;
@@ -7,11 +6,6 @@ using GenmCloud.Shared.Dto;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GenmCloud.Chat.ViewModels.UserControls.Bubble
 {
@@ -46,7 +40,8 @@ namespace GenmCloud.Chat.ViewModels.UserControls.Bubble
         {
             this.eventAggregator = NetCoreProvider.Resolve<IEventAggregator>();
             userService = NetCoreProvider.Resolve<IUserService>();
-            ShowContactRequestDetailCmd = new DelegateCommand(() => {
+            ShowContactRequestDetailCmd = new DelegateCommand(() =>
+            {
                 eventAggregator.GetEvent<ShowNameCardEvent>().Publish(Contact.Id);
             });
         }

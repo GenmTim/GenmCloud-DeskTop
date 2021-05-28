@@ -1,0 +1,30 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+  <PropertyGroup>
+    <TargetFrameworks>net48;net5.0-windows</TargetFrameworks>
+    <UseWPF>true</UseWPF>
+    <AssemblyName>GenmCloud.Test</AssemblyName>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Prism.Wpf" Version="8.0.0.1909" />
+    <PackageReference Include="VirtualizingWrapPanel" Version="1.5.4" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Genm.WPF\Genm.WPF.csproj" />
+    <ProjectReference Include="..\GenmCloud.Core\GenmCloud.Core.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="Views\ViewA.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Properties\DesignTimeResources.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\ViewA.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+</Project>

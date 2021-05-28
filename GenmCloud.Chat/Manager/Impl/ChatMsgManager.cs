@@ -72,7 +72,7 @@ namespace GenmCloud.Chat.Manager
                 chatObjMap[chatObjVO.Id] = chatObjVO;
                 chatMsgMap[chatObjVO] = new ObservableCollection<ChatMsgVO>();
                 chatObjList.Add(chatObjVO);
-            } 
+            }
         }
     }
 

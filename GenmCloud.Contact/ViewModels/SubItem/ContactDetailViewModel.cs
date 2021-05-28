@@ -1,5 +1,4 @@
 ﻿using GenmCloud.ApiService.Service;
-using GenmCloud.Contact.Views.SubItem;
 using GenmCloud.Core.Event;
 using GenmCloud.Core.Tools.Helper;
 using GenmCloud.Shared.Common;
@@ -8,7 +7,6 @@ using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
 using Prism.Regions;
-using TMS.DeskTop.Tools.Helper;
 
 namespace GenmCloud.Contact.ViewModels.SubItem
 {

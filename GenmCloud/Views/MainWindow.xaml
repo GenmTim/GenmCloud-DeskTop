@@ -13,10 +13,10 @@
     xmlns:token="clr-namespace:GenmCloud.Core.Data.Token;assembly=GenmCloud.Core"
     xmlns:uc="clr-namespace:GenmCloud.Core.UserControls.Common.Views;assembly=GenmCloud.Core"
     Title="{Binding Title}"
-    Width="1224"
-    Height="720"
-    MinWidth="1224"
-    MinHeight="720"
+    Width="960"
+    Height="640"
+    MinWidth="960"
+    MinHeight="640"
     prism:ViewModelLocator.AutoWireViewModel="True"
     Background="White"
     MouseDown="EliminateFocusEvent"
@@ -26,16 +26,15 @@
         <WindowChrome
             CaptionHeight="0"
             CornerRadius="0"
-            GlassFrameThickness="1"
+            GlassFrameThickness="4"
             NonClientFrameEdges="None"
-            ResizeBorderThickness="1"
+            ResizeBorderThickness="4"
             UseAeroCaptionButtons="False" />
     </WindowChrome.WindowChrome>
     <Border Background="Transparent">
         <Border BorderThickness="0" CornerRadius="0">
             <materialDesign:DialogHost Grid.Row="1" Identifier="WindowRoot">
                 <hc:SimplePanel>
-
                     <Grid
                         x:Name="panel"
                         FocusVisualStyle="{x:Null}"

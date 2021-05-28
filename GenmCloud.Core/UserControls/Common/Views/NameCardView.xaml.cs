@@ -2,7 +2,6 @@
 using GenmCloud.Core.Event;
 using GenmCloud.Shared.Common;
 using Prism.Events;
-using System.Windows.Controls;
 
 namespace GenmCloud.Core.UserControls.Common.Views
 {

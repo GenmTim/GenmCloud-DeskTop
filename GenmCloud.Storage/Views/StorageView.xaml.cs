@@ -1,9 +1,12 @@
-﻿using HandyControl.Tools;
-using ICSharpCode.AvalonEdit;
-using ICSharpCode.AvalonEdit.Highlighting;
-using System.Collections.Generic;
+﻿using GenmCloud.Core.Event;
+using GenmCloud.Core.UserControls.Common.Views;
+using Prism.Events;
+using Prism.Regions;
+using System;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media.Animation;
 
 namespace GenmCloud.Storage.Views
 {
@@ -12,83 +15,95 @@ namespace GenmCloud.Storage.Views
     /// </summary>
     public partial class StorageView : UserControl
     {
-        public StorageView()
+        public StorageView(IRegionManager regionManager, IEventAggregator eventAggregator)
         {
             InitializeComponent();
+            this.eventAggregator = eventAggregator;
         }
 
-        private Dictionary<string, TextEditor> _textEditor;
-        private bool _drawerCodeUsed;
+        private readonly IEventAggregator eventAggregator;
 
-        private void DrawerCode_OnOpened(object sender, RoutedEventArgs e)
+        private void OnDrop(object sender, DragEventArgs e)
         {
-            if (!_drawerCodeUsed)
+            fileDragMask.Visibility = Visibility.Collapsed;
+            var files = e.Data.GetData(DataFormats.FileDrop) as Array;
+            foreach (string fileFullName in files)
             {
-                var textEditorCustomStyle = ResourceHelper.GetResource<Style>("TextEditorCustom");
-                _textEditor = new Dictionary<string, TextEditor>
+                FileInfo info = new FileInfo(fileFullName);
+
+                var uploadFileTask = new UploadFileTask
                 {
-                    ["XAML"] = new TextEditor
-                    {
-                        Style = textEditorCustomStyle,
-                        SyntaxHighlighting = HighlightingManager.Instance.GetDefinition("XML")
-                    },
-                    ["C#"] = new TextEditor
-                    {
-                        Style = textEditorCustomStyle,
-                        SyntaxHighlighting = HighlightingManager.Instance.GetDefinition("C++")
-                    },
-                    ["VM"] = new TextEditor
-                    {
-                        Style = textEditorCustomStyle,
-                        SyntaxHighlighting = HighlightingManager.Instance.GetDefinition("C#")
-                    },
-                    ["Golang"] = new TextEditor
-                    {
-                        Style = textEditorCustomStyle,
-                        SyntaxHighlighting = HighlightingManager.Instance.GetDefinition("Go")
-                    },
-                };
-                BorderCode.Child = new TabControl
-                {
-                    Style = ResourceHelper.GetResource<Style>("TabControlInLine"),
-                    Items =
-                    {
-                        new TabItem
-                        {
-                            Header = "C#",
-                            Content = _textEditor["C#"]
-                        },
-                        new TabItem
-                        {
-                            Header = "VM",
-                            Content = _textEditor["VM"]
-                        },
-                        new TabItem
-                        {
-                            Header = "Golang",
-                            Content = _textEditor["Golang"]
-                        }
-                    }
+                    FilePath = fileFullName,
+                    FileSize = info.Length,
+                    FileName = info.Name
                 };
 
-                _drawerCodeUsed = true;
+                // 发布上传任务
+                eventAggregator.GetEvent<UploadFileEvent>().Publish(uploadFileTask);
             }
+            e.Handled = true;
+        }
 
+        private void OnDragOver(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+                e.Effects = DragDropEffects.Copy;
+            else
+                e.Effects = DragDropEffects.None;
 
-            ////网络文件地址
-            //string file_url = @"http://localhost:8000/static/download.go";
-            ////实例化唯一文件标识
-            //Uri file_uri = new Uri(file_url);
-            ////返回文件流
-            //Stream stream = WebRequest.Create(file_uri).GetResponse().GetResponseStream();
-            ////实例化文件内容
-            //StreamReader file_content = new StreamReader(stream);
-            ////读取文件内容
-            //string file_content_str = file_content.ReadToEnd();
+            fileDragMask.Visibility = Visibility.Visible;
+            e.Handled = true;
+        }
 
-            _textEditor["C#"].Text = "#include <iostream>";
-            _textEditor["VM"].Text = "using System.Collections.Generic;";
-            //_textEditor["Golang"].Text = file_content_str;
+        private void OnDragLeave(object sender, DragEventArgs e)
+        {
+            fileDragMask.Visibility = Visibility.Collapsed;
+            e.Handled = true;
+        }
+
+        private void OnDragEnter(object sender, DragEventArgs e)
+        {
+            fileDragMask.Visibility = Visibility.Visible;
+            e.Handled = false;
+        }
+
+        private void CheckToGridView(object sender, RoutedEventArgs e)
+        {
+            listView.Style = listView.FindResource("WrapModelViewer") as Style;
+        }
+
+        private void CheckToListView(object sender, RoutedEventArgs e)
+        {
+            listView.Style = listView.FindResource("GridViewModelViewer") as Style;
+        }
+
+        private void ShrinkGrid(object sender, RoutedEventArgs e)
+        {
+            GridLengthAnimation d = new GridLengthAnimation
+            {
+                From = new GridLength(220, GridUnitType.Pixel),
+                To = new GridLength(0, GridUnitType.Pixel),
+                Duration = TimeSpan.FromSeconds(1.5),
+                EasingFunction = new PowerEase() { Power = 20, EasingMode = EasingMode.EaseOut }
+            };
+            mainGrid.ColumnDefinitions[1].BeginAnimation(ColumnDefinition.WidthProperty, d);
+        }
+
+        private void OpenGrid(object sender, RoutedEventArgs e)
+        {
+            GridLengthAnimation d = new GridLengthAnimation
+            {
+                From = new GridLength(0, GridUnitType.Pixel),
+                To = new GridLength(220, GridUnitType.Pixel),
+                Duration = TimeSpan.FromSeconds(1.5),
+                EasingFunction = new PowerEase() { Power = 20, EasingMode = EasingMode.EaseOut }
+            };
+            mainGrid.ColumnDefinitions[1].BeginAnimation(ColumnDefinition.WidthProperty, d);
+        }
+
+        private void _content_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using System.Windows.Controls;
 
-namespace GenmCloud.Storage.Views
+namespace GenmCloud.Test.Views
 {
     /// <summary>
     /// ViewA.xaml 的交互逻辑

@@ -27,7 +27,7 @@ namespace GenmCloud.Core.UserControls.Common.ViewModels
 
         private int contactState;
         public int ContactState
-        { 
+        {
             get => contactState;
             set
             {
@@ -37,8 +37,8 @@ namespace GenmCloud.Core.UserControls.Common.ViewModels
         }
 
         private bool btnIsEnable = true;
-        public bool BtnIsEnable 
-        { 
+        public bool BtnIsEnable
+        {
             get => btnIsEnable;
             set
             {

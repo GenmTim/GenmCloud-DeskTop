@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace GenmCloud.Core.Manager
 {
@@ -19,7 +18,7 @@ namespace GenmCloud.Core.Manager
 
         // TODO 多几个默认的头像选择
         private string DefaultAvatar = "http://localhost:1026/static/avatar/3.jpg";
-        
+
         private AvatarManager()
         {
             avatarMap = new Dictionary<uint, string>();

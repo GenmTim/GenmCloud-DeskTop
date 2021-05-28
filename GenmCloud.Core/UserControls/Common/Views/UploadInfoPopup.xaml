@@ -76,10 +76,10 @@
                         FontWeight="SemiBold"
                         Foreground="#3b5663">
                         <Run
-                            FontFamily="{StaticResource MenuIconFontFamily}"
+                            FontFamily="{StaticResource FIconFontFamily}"
                             FontWeight="Normal"
                             Foreground="{StaticResource SuccessBrush}"
-                            Text="&#xe628;" />
+                            Text="&#xe718;" />
                         <Run Text="全部上传完成" />
                     </TextBlock>
                 </hc:SimplePanel>

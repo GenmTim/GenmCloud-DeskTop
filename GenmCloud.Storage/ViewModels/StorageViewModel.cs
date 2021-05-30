@@ -4,13 +4,14 @@ using Prism.Commands;
 using Prism.Mvvm;
 using Prism.Services.Dialogs;
 using System.Collections.ObjectModel;
+using System.Windows.Controls;
 
 namespace GenmCloud.Storage.ViewModels
 {
     public class FolderTreeNodeItemVO : BindableBase
     {
-        private long id;
-        public long Id
+        private uint id;
+        public uint Id
         {
             get => id;
             set
@@ -41,10 +42,22 @@ namespace GenmCloud.Storage.ViewModels
                 RaisePropertyChanged();
             }
         }
+
+        private ObservableCollection<MenuItem> optCmdList;
+        public ObservableCollection<MenuItem> OptCmdList
+        {
+            get => optCmdList;
+            set
+            {
+                optCmdList = value;
+                RaisePropertyChanged();
+            }
+        }
     }
 
     public class FileItemVO
     {
+        public uint Id { get; set; }
         public string FileName { get; set; }
         public string OwnerName { get; set; }
         public string CreatedAt { get; set; }
@@ -99,10 +112,13 @@ namespace GenmCloud.Storage.ViewModels
 
         public void Simulation()
         {
+            var optList = new ObservableCollection<MenuItem> { new MenuItem { Header = "新建文件夹", Command = AddNewFolderCmd } };
+
             var child1 = new FolderTreeNodeItemVO
             {
                 Id = 11,
                 Name = "测试1",
+                OptCmdList = optList,
                 Children = null,
             };
 

@@ -1,11 +1,16 @@
 ﻿using GenmCloud.Core.Event;
+using GenmCloud.Core.Service.Dialog;
+using GenmCloud.Core.Tools.Helper;
 using GenmCloud.Core.UserControls.Common.Views;
+using GenmCloud.Storage.Cmd;
 using Prism.Events;
 using Prism.Regions;
+using Prism.Services.Dialogs;
 using System;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media.Animation;
 
 namespace GenmCloud.Storage.Views
@@ -15,10 +20,13 @@ namespace GenmCloud.Storage.Views
     /// </summary>
     public partial class StorageView : UserControl
     {
-        public StorageView(IRegionManager regionManager, IEventAggregator eventAggregator)
+        private readonly IDialogHostService dialogHost;
+
+        public StorageView(IRegionManager regionManager, IEventAggregator eventAggregator, IDialogHostService dialogHost)
         {
             InitializeComponent();
             this.eventAggregator = eventAggregator;
+            this.dialogHost = dialogHost;
         }
 
         private readonly IEventAggregator eventAggregator;

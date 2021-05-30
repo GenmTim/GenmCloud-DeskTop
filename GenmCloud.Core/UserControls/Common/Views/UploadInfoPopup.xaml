@@ -9,11 +9,12 @@
     xmlns:vo="clr-namespace:GenmCloud.Core.Data.VO"
     Width="460"
     prism:ViewModelLocator.AutoWireViewModel="True"
+    Visibility="{Binding IsShowPopup, Converter={StaticResource Boolean2VisibilityConverter}}"
     mc:Ignorable="d">
     <Grid x:Name="grid">
         <Grid.RowDefinitions>
             <RowDefinition Height="50" />
-            <RowDefinition />
+            <RowDefinition Height="0" />
         </Grid.RowDefinitions>
         <Border
             Grid.RowSpan="2"
@@ -103,13 +104,37 @@
                             </Trigger>
                         </Style.Triggers>
                     </Style>
+                    <Style BasedOn="{StaticResource ToggleButtonCustom}" TargetType="ToggleButton">
+                        <Setter Property="hc:BorderElement.CornerRadius" Value="6" />
+                        <Setter Property="Background" Value="{StaticResource TMS_TransparencyRegionBrush}" />
+                        <Setter Property="Height" Value="24" />
+                        <Setter Property="Width" Value="24" />
+                        <Setter Property="Padding" Value="0" />
+                        <Setter Property="FontSize" Value="18" />
+                        <Setter Property="Foreground" Value="#7b8591" />
+                        <Setter Property="Margin" Value="0,0,15,0" />
+                        <Setter Property="Cursor" Value="Hand" />
+                        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#e8e9e9" />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
                 </StackPanel.Resources>
-                <Button
-                    Content="&#xe7c7;"
+                <ToggleButton
+                    hc:StatusSwitchElement.HideUncheckedElement="True"
+                    Checked="OpenPopup"
                     FontFamily="{StaticResource FIconFontFamily}"
-                    FontSize="18" />
+                    IsChecked="{Binding IsOpenPopup}"
+                    Unchecked="ShrinkPopop">
+                    <hc:StatusSwitchElement.CheckedElement>
+                        <TextBlock Text="&#xe7c7;" />
+                    </hc:StatusSwitchElement.CheckedElement>
+                    <TextBlock Text="&#xe7c8;" />
+                </ToggleButton>
                 <Button
-                    Click="FlodClick"
+                    Command="{Binding ClosePopupCmd}"
                     Content="&#xe60c;"
                     Cursor="Hand"
                     FontFamily="{StaticResource FIconFontFamily}"

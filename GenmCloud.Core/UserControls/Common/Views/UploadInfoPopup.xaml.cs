@@ -103,32 +103,27 @@ namespace GenmCloud.Core.UserControls.Common.Views
             scrollViewer?.ScrollToBottom();
         }
 
-        private void FlodClick(object sender, System.Windows.RoutedEventArgs e)
+        private void OpenPopup(object sender, System.Windows.RoutedEventArgs e)
         {
-            isFold = !isFold;
-            if (isFold)
+            GridLengthAnimation d = new GridLengthAnimation
             {
-                Storyboard st = new Storyboard();
-                GridLengthAnimation d = new GridLengthAnimation
-                {
-                    From = new GridLength(260, GridUnitType.Pixel),
-                    To = new GridLength(0, GridUnitType.Pixel),
-                    Duration = TimeSpan.FromSeconds(0.2)
-                };
-                grid.RowDefinitions[1].BeginAnimation(RowDefinition.HeightProperty, d);
-            }
-            else
+                From = new GridLength(0, GridUnitType.Pixel),
+                To = new GridLength(260, GridUnitType.Pixel),
+                Duration = TimeSpan.FromSeconds(0.2),
+            };
+            grid.RowDefinitions[1].BeginAnimation(RowDefinition.HeightProperty, d);
+
+        }
+
+        private void ShrinkPopop(object sender, RoutedEventArgs e)
+        {
+            GridLengthAnimation d = new GridLengthAnimation
             {
-                Storyboard st = new Storyboard();
-                GridLengthAnimation d = new GridLengthAnimation
-                {
-                    From = new GridLength(0, GridUnitType.Pixel),
-                    To = new GridLength(260, GridUnitType.Pixel),
-                    Duration = TimeSpan.FromSeconds(0.2)
-                };
-                grid.RowDefinitions[1].BeginAnimation(RowDefinition.HeightProperty, d);
-            }
-            e.Handled = true;
+                From = new GridLength(260, GridUnitType.Pixel),
+                To = new GridLength(0, GridUnitType.Pixel),
+                Duration = TimeSpan.FromSeconds(0.2),
+            };
+            grid.RowDefinitions[1].BeginAnimation(RowDefinition.HeightProperty, d);
         }
     }
 }

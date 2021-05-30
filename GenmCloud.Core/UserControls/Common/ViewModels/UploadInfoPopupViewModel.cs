@@ -2,6 +2,7 @@
 using GenmCloud.Core.Data.VO;
 using GenmCloud.Core.Event;
 using GenmCloud.Shared.Common;
+using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
 using System;
@@ -22,6 +23,9 @@ namespace GenmCloud.Core.UserControls.Common.ViewModels
             this.eventAggregator = eventAggregator;
             this.fileService = NetCoreProvider.Resolve<IFileService>();
             eventAggregator.GetEvent<UploadFileEvent>().Subscribe(UploadFile);
+            ClosePopupCmd = new DelegateCommand(() => {
+                IsShowPopup = false;
+            });
         }
 
         #region Property
@@ -59,6 +63,29 @@ namespace GenmCloud.Core.UserControls.Common.ViewModels
             }
         }
 
+        private bool isOpenPopup;
+        public bool IsOpenPopup
+        {
+            get => isOpenPopup;
+            set
+            { 
+                isOpenPopup = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private bool isShowPopup;
+        public bool IsShowPopup
+        {
+            get => isShowPopup;
+            set
+            {
+                isShowPopup = value;
+                RaisePropertyChanged();
+            }
+        }
+
+
 
 
         private ObservableCollection<UploadFileItemVO> uploadFileItemList = new ObservableCollection<UploadFileItemVO>();
@@ -71,6 +98,9 @@ namespace GenmCloud.Core.UserControls.Common.ViewModels
                 RaisePropertyChanged();
             }
         }
+
+        public DelegateCommand ClosePopupCmd { get; private set; }
+
         #endregion
 
         private void UploadFile(UploadFileTask fileTask)
@@ -87,10 +117,14 @@ namespace GenmCloud.Core.UserControls.Common.ViewModels
             UploadFileItemList.Add(uploadFileItemVO);
             UploadFileSumSize += uploadFileItemVO.Size;
             UploadFileItemNumber += 1;
+
             Task.Run(async () =>
             {
                 var result = await fileService.Upload(fileTask.FilePath);
-
+                Application.Current.Dispatcher.Invoke(new Action(() =>
+                {
+                    IsShowPopup = true;
+                }));
                 //FileStream fs = File.OpenRead(fileItem.FullName);
                 //long readedSize = 0;
                 //byte[] buffer = new byte[1024 * 1024];

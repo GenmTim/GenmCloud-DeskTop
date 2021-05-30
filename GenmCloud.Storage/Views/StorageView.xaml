@@ -10,10 +10,12 @@
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:prism="http://prismlibrary.com/"
+    xmlns:storageCmd="clr-namespace:GenmCloud.Storage.Cmd"
     xmlns:system="clr-namespace:System;assembly=System.Runtime"
     xmlns:token="clr-namespace:GenmCloud.Core.Data.Token;assembly=GenmCloud.Core"
     xmlns:uc="clr-namespace:GenmCloud.Core.UserControls.Common.Views;assembly=GenmCloud.Core"
     xmlns:wpftk="clr-namespace:WpfToolkit.Controls;assembly=VirtualizingWrapPanel"
+    x:Name="storageView"
     prism:ViewModelLocator.AutoWireViewModel="True"
     mc:Ignorable="d">
     <UserControl.Resources>
@@ -644,18 +646,26 @@
                         Foreground="#333f87"
                         ItemsSource="{Binding FileTreeNodeItemList}"
                         Style="{StaticResource TreeViewBaseStyle}">
+                        <!--<TreeView.ContextMenu>
+                            <ContextMenu Width="188" Style="{StaticResource ContextMenuBaseStyle}">
+                                <MenuItem
+                                    Command="{Binding DataContext.AddNewFolderCmd, RelativeSource={RelativeSource AncestorType=TreeView, Mode=FindAncestor}}"
+                                    CommandParameter="{Binding Id}"
+                                    FontSize="14"
+                                    Header="新建文件夹"
+                                    Style="{StaticResource MenuItemBaseStyle}" />
+                            </ContextMenu>
+                        </TreeView.ContextMenu>-->
                         <TreeView.ItemContainerStyle>
                             <Style BasedOn="{StaticResource cloudTreeViewItemStyle}" TargetType="TreeViewItem">
                                 <Setter Property="ContextMenu">
                                     <Setter.Value>
-                                        <ContextMenu Width="188" Style="{StaticResource ContextMenuBaseStyle}">
-                                            <MenuItem
-                                                Command="{Binding DataContext.AddNewFolderCmd, RelativeSource={RelativeSource AncestorType=TreeView, Mode=FindAncestor}}"
-                                                CommandParameter="{Binding Id}"
-                                                FontSize="14"
-                                                Header="新建文件夹"
-                                                Style="{StaticResource MenuItemBaseStyle}" />
-                                        </ContextMenu>
+                                        <ContextMenu
+                                            Width="188"
+                                            ItemContainerStyle="{StaticResource MenuItemBaseStyle}"
+                                            ItemsSource="{Binding OptCmdList}"
+                                            Style="{StaticResource ContextMenuBaseStyle}"
+                                            Visibility="{Binding OptCmdList, Converter={StaticResource Object2VisibilityConverter}}" />
                                     </Setter.Value>
                                 </Setter>
                             </Style>

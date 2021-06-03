@@ -67,7 +67,7 @@ namespace GenmCloud.Core.UserControls.Common.ViewModels
         private async void AssentContactRequest()
         {
             BtnIsEnable = false;
-            var result = await contactService.AssentRequestContact(User.Id);
+            var result = await contactService.AssentRequestContact(User.ID);
             if (!ServiceHelper.IsNullOrFail(result))
             {
                 ContactState = 2;
@@ -78,7 +78,7 @@ namespace GenmCloud.Core.UserControls.Common.ViewModels
         private async void RequestContact()
         {
             BtnIsEnable = false;
-            var result = await contactService.RequestContact(User.Id);
+            var result = await contactService.RequestContact(User.ID);
             if (!ServiceHelper.IsNullOrFail(result))
             {
                 ContactState = 1;

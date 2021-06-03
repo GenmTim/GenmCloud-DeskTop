@@ -37,7 +37,7 @@ namespace GenmCloud.Contact.ViewModels.SubItem
             this.regionManager = regionManager;
             this.GoChatCmd = new DelegateCommand(() =>
             {
-                eventAggregator.GetEvent<GoChatEvent>().Publish(Context.Id);
+                eventAggregator.GetEvent<GoChatEvent>().Publish(Context.ID);
             });
         }
 

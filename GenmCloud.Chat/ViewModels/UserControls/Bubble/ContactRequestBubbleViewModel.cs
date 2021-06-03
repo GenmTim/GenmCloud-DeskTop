@@ -42,7 +42,7 @@ namespace GenmCloud.Chat.ViewModels.UserControls.Bubble
             userService = NetCoreProvider.Resolve<IUserService>();
             ShowContactRequestDetailCmd = new DelegateCommand(() =>
             {
-                eventAggregator.GetEvent<ShowNameCardEvent>().Publish(Contact.Id);
+                eventAggregator.GetEvent<ShowNameCardEvent>().Publish(Contact.ID);
             });
         }
     }

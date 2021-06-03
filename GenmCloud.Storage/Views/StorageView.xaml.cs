@@ -27,6 +27,12 @@ namespace GenmCloud.Storage.Views
             InitializeComponent();
             this.eventAggregator = eventAggregator;
             this.dialogHost = dialogHost;
+            Loaded += StorageView_Loaded;
+        }
+
+        private void StorageView_Loaded(object sender, RoutedEventArgs e)
+        {
+            eventAggregator.GetEvent<UpdateFolderListEvent>().Publish();
         }
 
         private readonly IEventAggregator eventAggregator;

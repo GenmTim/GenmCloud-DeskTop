@@ -177,7 +177,7 @@ namespace GenmCloud.Chat.Manager
                         var chatMsgVO = ChatMsgDto2VOConvert.Convert(chatMsgDto);
                         if (chatMsgVO.Role == Core.Data.Type.ChatRoleType.Me)
                         {
-                            chatMsgVO.Avatar = new Uri(AvatarManager.GetInstance().Get(SessionService.User.Id));
+                            chatMsgVO.Avatar = new Uri(AvatarManager.GetInstance().Get(SessionService.User.ID));
                         }
                         else
                         {

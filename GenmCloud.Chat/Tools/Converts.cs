@@ -42,7 +42,7 @@ namespace GenmCloud.Chat.Tools
             var chatMsgVO = new ChatMsgVO
             {
                 Id = chatMsgDto.Id,
-                Role = (chatMsgDto.SenderId == SessionService.User.Id ? Core.Data.Type.ChatRoleType.Me : Core.Data.Type.ChatRoleType.Other),
+                Role = (chatMsgDto.SenderId == SessionService.User.ID ? Core.Data.Type.ChatRoleType.Me : Core.Data.Type.ChatRoleType.Other),
             };
             switch (chatMsgDto.Type)
             {

@@ -22,7 +22,7 @@ namespace GenmCloud.Chat.Tools
             {
                 Type = 1,
                 SubType = 0,
-                SenderId = SessionService.User.Id,
+                SenderId = SessionService.User.ID,
                 ReceiverId = otherId,
                 Timestamp = TimeHelper.GetNowTimeStamp(),
                 Token = ChatTokenGenerator.GetNewToken(),

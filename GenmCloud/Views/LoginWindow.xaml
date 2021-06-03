@@ -38,9 +38,13 @@
                 <Style BasedOn="{StaticResource ButtonBaseStyle}" TargetType="Button">
                     <Setter Property="Height" Value="28" />
                     <Setter Property="Width" Value="36" />
+                    <Setter Property="FontFamily" Value="{StaticResource FIconFontFamily}" />
                     <Setter Property="Foreground" Value="{StaticResource ToolBarBtnForeground}" />
                     <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+                    <Setter Property="Padding" Value="0" />
                     <Setter Property="Cursor" Value="Hand" />
+                    <Setter Property="FontSize" Value="16" />
+                    <Setter Property="hc:BorderElement.CornerRadius" Value="4" />
                     <Style.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter Property="Background" Value="#e1e3e5" />
@@ -51,8 +55,8 @@
                     </Style.Triggers>
                 </Style>
             </hc:UniformSpacingPanel.Resources>
-            <Button hc:IconElement.Geometry="{StaticResource WindowMinGeometry}" Click="MinimizedDialog" />
-            <Button hc:IconElement.Geometry="{StaticResource CloseGeometry}" Click="CloseDialog" />
+            <Button Click="MinimizedDialog" Content="&#xe618;" />
+            <Button Click="CloseDialog" Content="&#xe60c;" />
         </hc:UniformSpacingPanel>
         <hc:SimplePanel
             Margin="0,40,0,0"

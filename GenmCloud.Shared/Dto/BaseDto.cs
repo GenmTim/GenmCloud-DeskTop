@@ -5,7 +5,8 @@ namespace GenmCloud.Shared.Dto
 {
     public class BaseDto : ViewModelBase
     {
-        public uint Id { get; set; }
+        [JsonProperty("id")]
+        public uint ID { get; set; }
     }
 
     public class TokenDto

@@ -25,7 +25,7 @@ namespace GenmCloud.ApiService.Service.Impl
 
         public async Task<BaseResponse> RequestContact(uint id)
         {
-            if (id == SessionService.User.Id) return new BaseResponse { StatusCode = -1 };
+            if (id == SessionService.User.ID) return new BaseResponse { StatusCode = -1 };
             return await new BaseServiceRequest()
                 .GetRequest<BaseResponse>
                 (string.Format("contact/request?contact_id={0}&token={1}", id, SessionService.Token), null, Method.PUT);

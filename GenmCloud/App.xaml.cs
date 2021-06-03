@@ -152,6 +152,7 @@ namespace GenmCloud
             containerRegistry.Register<IContactService, ContactService>();
             containerRegistry.Register<IChatService, ChatService>();
             containerRegistry.Register<IFileService, FileService>();
+            containerRegistry.Register<IFolderService, FolderService>();
         }
 
         // 注册视图路由
@@ -198,7 +199,7 @@ namespace GenmCloud
             if (result.StatusCode == ServiceHelper.RequestOk)
             {
                 SessionService.User = result.Result;
-                AvatarManager.GetInstance().Store(SessionService.User.Id, SessionService.User.Avatar);
+                AvatarManager.GetInstance().Store(SessionService.User.ID, SessionService.User.Avatar);
                 Container.Resolve<IEventAggregator>().GetEvent<UserInfoUpdateEvent>().Publish();
             }
         }

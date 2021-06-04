@@ -17,5 +17,12 @@ namespace GenmCloud.ApiService.Service.Impl
             .GetRequest<BaseResponse<List<FolderListDto>>>
             (string.Format("folder/list?token={0}", SessionService.Token), null, Method.GET);
         }
+
+        public async Task<BaseResponse<List<FileDto>>> GetFileListByFolder(uint id)
+        {
+            return await new BaseServiceRequest()
+            .GetRequest<BaseResponse<List<FileDto>>>
+            (string.Format("folder/{0}/list?token={1}", id, SessionService.Token), null, Method.GET);
+        }
     }
 }

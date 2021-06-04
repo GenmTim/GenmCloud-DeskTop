@@ -5,6 +5,6 @@ namespace GenmCloud.ApiService.Service
 {
     public interface IFileService
     {
-        Task<BaseResponse> Upload(string filePath);
+        Task<BaseResponse> Upload(uint folderId, string filePath);
     }
 }

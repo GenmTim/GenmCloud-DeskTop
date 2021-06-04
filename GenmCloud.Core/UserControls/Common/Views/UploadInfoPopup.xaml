@@ -52,7 +52,7 @@
                         <TextBlock Margin="20,0,0,0" Foreground="#1890ff">
                             <TextBlock.Text>
                                 <MultiBinding Converter="{StaticResource Number2PercentageConverter}" StringFormat="{}{0} %">
-                                    <Binding Path="UploadedFileSumSize " />
+                                    <Binding Path="UploadedFileSumSize" />
                                     <Binding Path="UploadFileSumSize" />
                                 </MultiBinding>
                             </TextBlock.Text>

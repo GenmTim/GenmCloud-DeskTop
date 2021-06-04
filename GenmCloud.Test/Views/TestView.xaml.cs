@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Media.Animation;
 
 namespace GenmCloud.Test.Views
@@ -109,6 +110,7 @@ namespace GenmCloud.Test.Views
         private void CheckToListView(object sender, RoutedEventArgs e)
         {
             listView.Style = listView.FindResource("GridViewModelViewer") as Style;
+
         }
 
         private void ShrinkGrid(object sender, RoutedEventArgs e)
@@ -133,6 +135,17 @@ namespace GenmCloud.Test.Views
                 EasingFunction = new PowerEase() { Power = 20, EasingMode = EasingMode.EaseOut }
             };
             mainGrid.ColumnDefinitions[2].BeginAnimation(ColumnDefinition.WidthProperty, d);
+        }
+
+        private void SimplePanel_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            if (listView.View is GridView gridView)
+            {
+                for (int i = 0; i < Math.Min(gridView.Columns.Count, referenceGrid.ColumnDefinitions.Count); i++)
+                {
+                    gridView.Columns[i].Width = referenceGrid.ColumnDefinitions[i].ActualWidth;
+                }
+            }
         }
     }
 }

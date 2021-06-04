@@ -12,7 +12,7 @@ namespace GenmCloud.Core.Data.VO
 
     public class UploadFileItemVO : BindableBase
     {
-        public string Id { get; set; }
+        public uint Id { get; set; }
         public string FullName { get; set; }
         public string Name { get; set; }
         public long Size { get; set; }

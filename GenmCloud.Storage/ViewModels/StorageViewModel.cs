@@ -17,7 +17,7 @@ namespace GenmCloud.Storage.ViewModels
 {
     public static class UpdateDataHelper
     {
-        public static void UpdateFolderListVO(ObservableCollection<FolderTreeNodeItemVO> folderTreeList, List<FolderListDto> newTreeFolderList)
+        public static void UpdateFolderListVO(ObservableCollection<FolderTreeNodeVO> folderTreeList, List<FolderListDto> newTreeFolderList)
         {
             //var optList = new ObservableCollection<MenuItem> { new MenuItem { Header = "新建文件夹", Command = AddNewFolderCmd } };
 
@@ -27,15 +27,13 @@ namespace GenmCloud.Storage.ViewModels
             {
                 if (i <= folderTreeList.Count - 1)
                 {
-                    folderTreeList[i].Id = newTreeFolderList[i].Folder.ID;
-                    folderTreeList[i].Name = newTreeFolderList[i].Folder.Name;
+                    folderTreeList[i].Folder = newTreeFolderList[i].Folder;
                 }
                 else
                 {
-                    folderTreeList.Add(new FolderTreeNodeItemVO
+                    folderTreeList.Add(new FolderTreeNodeVO
                     {
-                        Name = newTreeFolders[i].Folder.Name,
-                        Id = newTreeFolders[i].Folder.ID,
+                        Folder = newTreeFolders[i].Folder,
                         //OptCmdList =
                     });
                 }
@@ -44,7 +42,7 @@ namespace GenmCloud.Storage.ViewModels
                 {
                     if (folderTreeList[i].Children == null)
                     {
-                        folderTreeList[i].Children = new ObservableCollection<FolderTreeNodeItemVO>();
+                        folderTreeList[i].Children = new ObservableCollection<FolderTreeNodeVO>();
                     }
                     UpdateFolderListVO(folderTreeList[i].Children, newTreeFolderList[i].Children);
                 }
@@ -64,32 +62,21 @@ namespace GenmCloud.Storage.ViewModels
         }
     }
 
-    public class FolderTreeNodeItemVO : BindableBase
+    public class FolderTreeNodeVO : BindableBase
     {
-        private uint id;
-        public uint Id
-        {
-            get => id;
+        private FolderDto folder;
+        public FolderDto Folder 
+        { 
+            get => folder;
             set
             {
-                id = value;
+                folder = value;
                 RaisePropertyChanged();
             }
         }
 
-        private string name;
-        public string Name
-        {
-            get => name;
-            set
-            {
-                name = value;
-                RaisePropertyChanged();
-            }
-        }
-
-        private ObservableCollection<FolderTreeNodeItemVO> children;
-        public ObservableCollection<FolderTreeNodeItemVO> Children
+        private ObservableCollection<FolderTreeNodeVO> children;
+        public ObservableCollection<FolderTreeNodeVO> Children
         {
             get => children;
             set
@@ -109,6 +96,7 @@ namespace GenmCloud.Storage.ViewModels
                 RaisePropertyChanged();
             }
         }
+
     }
 
     public class FileItemVO
@@ -122,10 +110,19 @@ namespace GenmCloud.Storage.ViewModels
 
     public class StorageViewModel : BindableBase
     {
-        public DelegateCommand<object> AddNewFolderCmd { get; private set; }
+        private FolderDto selectedFolder;
+        public FolderDto SelectedFolder
+        {
+            get => selectedFolder;
+            set
+            {
+                selectedFolder = value;
+                RaisePropertyChanged();
+            }
+        }
 
-        private ObservableCollection<FolderTreeNodeItemVO> fileTreeNodeItemList = new ObservableCollection<FolderTreeNodeItemVO>();
-        public ObservableCollection<FolderTreeNodeItemVO> FileTreeNodeItemList
+        private ObservableCollection<FolderTreeNodeVO> fileTreeNodeItemList = new ObservableCollection<FolderTreeNodeVO>();
+        public ObservableCollection<FolderTreeNodeVO> FileTreeNodeItemList
         {
             get => fileTreeNodeItemList;
             set
@@ -146,11 +143,10 @@ namespace GenmCloud.Storage.ViewModels
             this.dialogHost = dialogHost;
             this.eventAggregator = NetCoreProvider.Resolve<IEventAggregator>();
             this.folderService = NetCoreProvider.Resolve<IFolderService>();
-            this.AddNewFolderCmd = new DelegateCommand<object>(AddNewFolder);
             this.eventAggregator.GetEvent<UpdateFolderListEvent>().Subscribe(async () =>
             {
                 var result = await folderService.GetForlderList();
-                if (result.StatusCode == 200)
+                if (result.StatusCode == ServiceHelper.RequestOk)
                 {
                     List<FolderListDto> treeDeptList = result.Result;
                     Application.Current.Dispatcher.Invoke(() =>
@@ -163,13 +159,23 @@ namespace GenmCloud.Storage.ViewModels
 
                         if (treeDeptList != null && FileTreeNodeItemList == null)
                         {
-                            FileTreeNodeItemList = new ObservableCollection<FolderTreeNodeItemVO>();
+                            FileTreeNodeItemList = new ObservableCollection<FolderTreeNodeVO>();
                         }
                         UpdateDataHelper.UpdateFolderListVO(FileTreeNodeItemList, treeDeptList);
                     });
                 }
             });
-            Simulation();
+            this.eventAggregator.GetEvent<UpdateSelectedFolderEvent>().Subscribe(UpdateSelectedFolder);
+            //Simulation();
+        }
+
+        public void UpdateSelectedFolder(object obj)
+        {
+            if (obj == null) return;
+            FolderDto folder = (FolderDto)obj;
+            SelectedFolder = folder;
+
+            eventAggregator.GetEvent<UpdateFileListEvent>().Publish(obj);
         }
 
         private async void AddNewFolder(object obj)

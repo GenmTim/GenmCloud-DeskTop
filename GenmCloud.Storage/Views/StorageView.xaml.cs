@@ -3,6 +3,7 @@ using GenmCloud.Core.Service.Dialog;
 using GenmCloud.Core.Tools.Helper;
 using GenmCloud.Core.UserControls.Common.Views;
 using GenmCloud.Storage.Cmd;
+using GenmCloud.Storage.ViewModels;
 using Prism.Events;
 using Prism.Regions;
 using Prism.Services.Dialogs;
@@ -20,7 +21,11 @@ namespace GenmCloud.Storage.Views
     /// </summary>
     public partial class StorageView : UserControl
     {
+        public class ShrinkGridEvent : PubSubEvent { }
+        public class ExpandGridEvent : PubSubEvent { }
+
         private readonly IDialogHostService dialogHost;
+        private readonly IEventAggregator eventAggregator;
 
         public StorageView(IRegionManager regionManager, IEventAggregator eventAggregator, IDialogHostService dialogHost)
         {
@@ -33,13 +38,18 @@ namespace GenmCloud.Storage.Views
         private void StorageView_Loaded(object sender, RoutedEventArgs e)
         {
             eventAggregator.GetEvent<UpdateFolderListEvent>().Publish();
+            eventAggregator.GetEvent<ShrinkGridEvent>().Subscribe(ShrinkGrid);
+            eventAggregator.GetEvent<ExpandGridEvent>().Subscribe(ExpandGrid);
         }
 
-        private readonly IEventAggregator eventAggregator;
-
+        #region 拖拽上传
         private void OnDrop(object sender, DragEventArgs e)
         {
             fileDragMask.Visibility = Visibility.Collapsed;
+            if (((StorageViewModel)DataContext).SelectedFolder == null) {
+                return;
+            }
+
             var files = e.Data.GetData(DataFormats.FileDrop) as Array;
             foreach (string fileFullName in files)
             {
@@ -47,9 +57,11 @@ namespace GenmCloud.Storage.Views
 
                 var uploadFileTask = new UploadFileTask
                 {
+                    Id = Counter.NextUploadTaskID(),
                     FilePath = fileFullName,
                     FileSize = info.Length,
-                    FileName = info.Name
+                    FileName = info.Name,
+                    FolderId = ((StorageViewModel)DataContext).SelectedFolder.ID
                 };
 
                 // 发布上传任务
@@ -80,30 +92,14 @@ namespace GenmCloud.Storage.Views
             fileDragMask.Visibility = Visibility.Visible;
             e.Handled = false;
         }
+        #endregion
 
-        private void CheckToGridView(object sender, RoutedEventArgs e)
-        {
-            listView.Style = listView.FindResource("WrapModelViewer") as Style;
-        }
+        #region 视图收缩
 
-        private void CheckToListView(object sender, RoutedEventArgs e)
-        {
-            listView.Style = listView.FindResource("GridViewModelViewer") as Style;
-        }
-
-        private void ShrinkGrid(object sender, RoutedEventArgs e)
-        {
-            GridLengthAnimation d = new GridLengthAnimation
-            {
-                From = new GridLength(220, GridUnitType.Pixel),
-                To = new GridLength(0, GridUnitType.Pixel),
-                Duration = TimeSpan.FromSeconds(1.5),
-                EasingFunction = new PowerEase() { Power = 20, EasingMode = EasingMode.EaseOut }
-            };
-            mainGrid.ColumnDefinitions[1].BeginAnimation(ColumnDefinition.WidthProperty, d);
-        }
-
-        private void OpenGrid(object sender, RoutedEventArgs e)
+        /// <summary>
+        /// 左视图收缩
+        /// </summary>
+        private void ShrinkGrid()
         {
             GridLengthAnimation d = new GridLengthAnimation
             {
@@ -115,9 +111,26 @@ namespace GenmCloud.Storage.Views
             mainGrid.ColumnDefinitions[1].BeginAnimation(ColumnDefinition.WidthProperty, d);
         }
 
-        private void _content_SizeChanged(object sender, SizeChangedEventArgs e)
+        /// <summary>
+        /// 左视图伸展
+        /// </summary>
+        private void ExpandGrid()
         {
+            GridLengthAnimation d = new GridLengthAnimation
+            {
+                From = new GridLength(220, GridUnitType.Pixel),
+                To = new GridLength(0, GridUnitType.Pixel),
+                Duration = TimeSpan.FromSeconds(1.5),
+                EasingFunction = new PowerEase() { Power = 20, EasingMode = EasingMode.EaseOut }
+            };
+            mainGrid.ColumnDefinitions[1].BeginAnimation(ColumnDefinition.WidthProperty, d);
+        }
+        #endregion
 
+        private void FolderItemChange(object sender, RoutedPropertyChangedEventArgs<object> e)
+        {
+            var treeNode = (FolderTreeNodeVO)e.NewValue;
+            eventAggregator.GetEvent<UpdateSelectedFolderEvent>().Publish(treeNode.Folder);
         }
     }
 }

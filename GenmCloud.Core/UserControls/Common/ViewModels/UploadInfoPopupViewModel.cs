@@ -108,6 +108,7 @@ namespace GenmCloud.Core.UserControls.Common.ViewModels
             // 构建文件上传项视图
             UploadFileItemVO uploadFileItemVO = new UploadFileItemVO
             {
+                Id = fileTask.Id,
                 State = UploadFileState.上传中,
                 Size = fileTask.FileSize,
                 FullName = fileTask.FilePath,
@@ -120,10 +121,18 @@ namespace GenmCloud.Core.UserControls.Common.ViewModels
 
             Task.Run(async () =>
             {
-                var result = await fileService.Upload(fileTask.FilePath);
+                var result = await fileService.Upload(fileTask.FolderId, fileTask.FilePath);
                 Application.Current.Dispatcher.Invoke(new Action(() =>
                 {
                     IsShowPopup = true;
+                    UploadedFileSumSize += fileTask.FileSize;
+                    foreach (var item in UploadFileItemList)
+                    {
+                        if (item.Id == fileTask.Id)
+                        {
+                            item.Rate = 100;
+                        }
+                    }
                 }));
                 //FileStream fs = File.OpenRead(fileItem.FullName);
                 //long readedSize = 0;
@@ -153,6 +162,7 @@ namespace GenmCloud.Core.UserControls.Common.ViewModels
                     UploadFileItemNumber -= 1;
                     uploadFileItemVO.State = UploadFileState.上传完成;
                     this.eventAggregator.GetEvent<UploadedFileEvent>().Publish(fileTask);
+                    this.eventAggregator.GetEvent<UpdateFileListEvent>().Publish(null);
                 }));
                 //fs.Close();
             });

@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
   <PropertyGroup>
-    <TargetFrameworks>net48;net5.0-windows</TargetFrameworks>
+    <TargetFrameworks>net5.0-windows</TargetFrameworks>
     <UseWPF>true</UseWPF>
     <AssemblyName>GenmCloud.Contact</AssemblyName>
   </PropertyGroup>

@@ -11,5 +11,7 @@
         public static readonly string ContactInfoContent = nameof(ContactInfoContent);
 
         public static readonly string StorageContent = nameof(StorageContent);
+
+        public static readonly string FileListContent = nameof(FileListContent);
     }
 }

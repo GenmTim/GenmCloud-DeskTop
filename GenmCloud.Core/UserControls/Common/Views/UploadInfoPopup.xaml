@@ -11,230 +11,276 @@
     prism:ViewModelLocator.AutoWireViewModel="True"
     Visibility="{Binding IsShowPopup, Converter={StaticResource Boolean2VisibilityConverter}}"
     mc:Ignorable="d">
-    <Grid x:Name="grid">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="50" />
-            <RowDefinition Height="0" />
-        </Grid.RowDefinitions>
+    <hc:SimplePanel Effect="{StaticResource EffectShadow1}">
         <Border
             Grid.RowSpan="2"
             Background="White"
-            CornerRadius="10"
-            Effect="{StaticResource EffectShadow1}" />
-        <hc:SimplePanel>
-            <hc:SimplePanel>
+            BorderBrush="{StaticResource TMS_BorderBrush}"
+            BorderThickness="1"
+            CornerRadius="4"
+            Style="{StaticResource BorderClip}">
+            <Grid x:Name="grid">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="50" />
+                    <RowDefinition Height="0" MaxHeight="248" />
+                </Grid.RowDefinitions>
                 <hc:SimplePanel>
-                    <hc:SimplePanel.Style>
-                        <Style TargetType="hc:SimplePanel">
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding UploadFileItemNumber}" Value="0">
+                    <hc:SimplePanel>
+                        <hc:SimplePanel>
+                            <hc:SimplePanel.Style>
+                                <Style TargetType="hc:SimplePanel">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding UploadFileItemNumber}" Value="0">
+                                            <Setter Property="Visibility" Value="Collapsed" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </hc:SimplePanel.Style>
+                            <StackPanel
+                                Margin="20,0,0,0"
+                                VerticalAlignment="Center"
+                                Orientation="Horizontal">
+                                <StackPanel.Resources>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="FontWeight" Value="SemiBold" />
+                                        <Setter Property="Foreground" Value="#3b5663" />
+                                        <Setter Property="FontSize" Value="16" />
+                                    </Style>
+                                </StackPanel.Resources>
+                                <TextBlock>
+                                    <Run Text="上传  " />
+                                    <Run Text="{Binding UploadFileItemNumber}" />
+                                    <Run Text="  项中" />
+                                </TextBlock>
+                                <TextBlock
+                                    Margin="20,0,0,0"
+                                    Foreground="#1890ff"
+                                    Text="{Binding ProcessRate}" />
+                            </StackPanel>
+                        </hc:SimplePanel>
+                        <hc:SimplePanel>
+                            <hc:SimplePanel.Style>
+                                <Style TargetType="hc:SimplePanel">
                                     <Setter Property="Visibility" Value="Collapsed" />
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </hc:SimplePanel.Style>
-                    <StackPanel
-                        Margin="20,0,0,0"
-                        VerticalAlignment="Center"
-                        Orientation="Horizontal">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding UploadFileItemNumber}" Value="0">
+                                            <Setter Property="Visibility" Value="Visible" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </hc:SimplePanel.Style>
+                            <StackPanel
+                                Margin="20,0,0,0"
+                                VerticalAlignment="Center"
+                                Orientation="Horizontal">
+                                <TextBlock
+                                    VerticalAlignment="Center"
+                                    FontFamily="{StaticResource FIconFontFamily}"
+                                    FontSize="20"
+                                    FontWeight="Normal"
+                                    Foreground="{StaticResource SuccessBrush}"
+                                    Text="&#xe718;" />
+                                <TextBlock
+                                    Margin="8,0,0,0"
+                                    VerticalAlignment="Center"
+                                    FontSize="16"
+                                    FontWeight="SemiBold"
+                                    Foreground="#3b5663"
+                                    Text="全部上传完成" />
+                            </StackPanel>
+                        </hc:SimplePanel>
+                        <Border
+                            Width="{Binding ProcessBorderLength}"
+                            Height="4"
+                            Margin="-4,0"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Bottom"
+                            Background="{StaticResource PrimaryBrush}">
+                            <Border.Style>
+                                <Style TargetType="Border">
+                                    <Setter Property="Visibility" Value="Collapsed" />
+                                    <Style.Triggers>
+                                        <MultiDataTrigger>
+                                            <MultiDataTrigger.Conditions>
+                                                <Condition Binding="{Binding IsUploadCompleted}" Value="False" />
+                                                <Condition Binding="{Binding IsOpenPopup}" Value="False" />
+                                            </MultiDataTrigger.Conditions>
+                                            <Setter Property="Visibility" Value="Visible" />
+                                        </MultiDataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Border.Style>
+                        </Border>
+                    </hc:SimplePanel>
+                    <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
                         <StackPanel.Resources>
-                            <Style TargetType="TextBlock">
-                                <Setter Property="FontWeight" Value="SemiBold" />
-                                <Setter Property="Foreground" Value="#3b5663" />
-                                <Setter Property="FontSize" Value="16" />
+                            <Style BasedOn="{StaticResource ButtonBaseStyle}" TargetType="Button">
+                                <Setter Property="hc:BorderElement.CornerRadius" Value="6" />
+                                <Setter Property="Background" Value="{StaticResource TMS_TransparencyRegionBrush}" />
+                                <Setter Property="FontFamily" Value="/Resources/Fonts/Plus/#iconfont" />
+                                <Setter Property="Height" Value="24" />
+                                <Setter Property="Width" Value="24" />
+                                <Setter Property="Padding" Value="0" />
+                                <Setter Property="Foreground" Value="#7b8591" />
+                                <Setter Property="Margin" Value="0,0,15,0" />
+                                <Setter Property="Cursor" Value="Hand" />
+                                <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#e8e9e9" />
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                            <Style BasedOn="{StaticResource ToggleButtonCustom}" TargetType="ToggleButton">
+                                <Setter Property="hc:BorderElement.CornerRadius" Value="6" />
+                                <Setter Property="Background" Value="{StaticResource TMS_TransparencyRegionBrush}" />
+                                <Setter Property="Height" Value="24" />
+                                <Setter Property="Width" Value="24" />
+                                <Setter Property="Padding" Value="0" />
+                                <Setter Property="FontSize" Value="18" />
+                                <Setter Property="Foreground" Value="#7b8591" />
+                                <Setter Property="Margin" Value="0,0,15,0" />
+                                <Setter Property="Cursor" Value="Hand" />
+                                <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#e8e9e9" />
+                                    </Trigger>
+                                </Style.Triggers>
                             </Style>
                         </StackPanel.Resources>
-                        <TextBlock>
-                            <Run Text="上传  " />
-                            <Run Text="{Binding UploadFileItemNumber}" />
-                            <Run Text="  项中" />
-                        </TextBlock>
-                        <TextBlock Margin="20,0,0,0" Foreground="#1890ff">
-                            <TextBlock.Text>
-                                <MultiBinding Converter="{StaticResource Number2PercentageConverter}" StringFormat="{}{0} %">
-                                    <Binding Path="UploadedFileSumSize" />
-                                    <Binding Path="UploadFileSumSize" />
-                                </MultiBinding>
-                            </TextBlock.Text>
-                        </TextBlock>
-                    </StackPanel>
-                </hc:SimplePanel>
-                <hc:SimplePanel>
-                    <hc:SimplePanel.Style>
-                        <Style TargetType="hc:SimplePanel">
-                            <Setter Property="Visibility" Value="Collapsed" />
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding UploadFileItemNumber}" Value="0">
-                                    <Setter Property="Visibility" Value="Visible" />
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </hc:SimplePanel.Style>
-                    <TextBlock
-                        Margin="20,0,0,0"
-                        VerticalAlignment="Center"
-                        FontSize="16"
-                        FontWeight="SemiBold"
-                        Foreground="#3b5663">
-                        <Run
+                        <ToggleButton
+                            hc:StatusSwitchElement.HideUncheckedElement="True"
+                            Checked="OpenPopup"
                             FontFamily="{StaticResource FIconFontFamily}"
-                            FontWeight="Normal"
-                            Foreground="{StaticResource SuccessBrush}"
-                            Text="&#xe718;" />
-                        <Run Text="全部上传完成" />
-                    </TextBlock>
+                            IsChecked="{Binding IsOpenPopup}"
+                            Unchecked="ShrinkPopop">
+                            <hc:StatusSwitchElement.CheckedElement>
+                                <TextBlock Text="&#xe7c7;" />
+                            </hc:StatusSwitchElement.CheckedElement>
+                            <TextBlock Text="&#xe7c8;" />
+                        </ToggleButton>
+                        <Button
+                            Command="{Binding ClosePopupCmd}"
+                            Content="&#xe60c;"
+                            Cursor="Hand"
+                            FontFamily="{StaticResource FIconFontFamily}"
+                            FontSize="18" />
+                    </StackPanel>
+                    <Border BorderBrush="{StaticResource TMS_BorderBrush}" BorderThickness="0,0,0,1" />
                 </hc:SimplePanel>
-            </hc:SimplePanel>
-            <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
-                <StackPanel.Resources>
-                    <Style BasedOn="{StaticResource ButtonBaseStyle}" TargetType="Button">
-                        <Setter Property="hc:BorderElement.CornerRadius" Value="6" />
-                        <Setter Property="Background" Value="{StaticResource TMS_TransparencyRegionBrush}" />
-                        <Setter Property="FontFamily" Value="/Resources/Fonts/Plus/#iconfont" />
-                        <Setter Property="Height" Value="24" />
-                        <Setter Property="Width" Value="24" />
-                        <Setter Property="Padding" Value="0" />
-                        <Setter Property="Foreground" Value="#7b8591" />
-                        <Setter Property="Margin" Value="0,0,15,0" />
-                        <Setter Property="Cursor" Value="Hand" />
-                        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
-                        <Style.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Background" Value="#e8e9e9" />
-                            </Trigger>
-                        </Style.Triggers>
-                    </Style>
-                    <Style BasedOn="{StaticResource ToggleButtonCustom}" TargetType="ToggleButton">
-                        <Setter Property="hc:BorderElement.CornerRadius" Value="6" />
-                        <Setter Property="Background" Value="{StaticResource TMS_TransparencyRegionBrush}" />
-                        <Setter Property="Height" Value="24" />
-                        <Setter Property="Width" Value="24" />
-                        <Setter Property="Padding" Value="0" />
-                        <Setter Property="FontSize" Value="18" />
-                        <Setter Property="Foreground" Value="#7b8591" />
-                        <Setter Property="Margin" Value="0,0,15,0" />
-                        <Setter Property="Cursor" Value="Hand" />
-                        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
-                        <Style.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Background" Value="#e8e9e9" />
-                            </Trigger>
-                        </Style.Triggers>
-                    </Style>
-                </StackPanel.Resources>
-                <ToggleButton
-                    hc:StatusSwitchElement.HideUncheckedElement="True"
-                    Checked="OpenPopup"
-                    FontFamily="{StaticResource FIconFontFamily}"
-                    IsChecked="{Binding IsOpenPopup}"
-                    Unchecked="ShrinkPopop">
-                    <hc:StatusSwitchElement.CheckedElement>
-                        <TextBlock Text="&#xe7c7;" />
-                    </hc:StatusSwitchElement.CheckedElement>
-                    <TextBlock Text="&#xe7c8;" />
-                </ToggleButton>
-                <Button
-                    Command="{Binding ClosePopupCmd}"
-                    Content="&#xe60c;"
-                    Cursor="Hand"
-                    FontFamily="{StaticResource FIconFontFamily}"
-                    FontSize="18" />
-            </StackPanel>
-            <Border BorderBrush="{StaticResource TMS_BorderBrush}" BorderThickness="0,0,0,1" />
-        </hc:SimplePanel>
-        <Border BorderThickness="0,0,0,1" />
-        <hc:SimplePanel Grid.Row="1">
-            <hc:ScrollViewer x:Name="scrollViewer" MaxHeight="260">
-                <ItemsControl x:Name="listsControl" ItemsSource="{Binding UploadFileItemList}">
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <hc:SimplePanel>
-                                <Grid x:Name="grid" Height="36">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition />
-                                        <ColumnDefinition Width="80" />
-                                    </Grid.ColumnDefinitions>
-                                    <Grid Margin="20,0,0,0">
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="5*" />
-                                            <ColumnDefinition Width="Auto" />
-                                            <ColumnDefinition Width="1*" />
-                                        </Grid.ColumnDefinitions>
-                                        <Grid.Resources>
-                                            <Style TargetType="TextBlock">
-                                                <Setter Property="Foreground" Value="#6b7885" />
-                                                <Setter Property="FontSize" Value="14" />
-                                            </Style>
-                                        </Grid.Resources>
-                                        <Border
-                                            x:Name="border"
-                                            Grid.ColumnSpan="3"
-                                            CornerRadius="5" />
-                                        <TextBlock
-                                            Margin="10,0,0,0"
-                                            VerticalAlignment="Center"
-                                            Text="{Binding Name}" />
-                                        <hc:SimplePanel Grid.Column="1" Width="100">
-                                            <TextBlock
-                                                x:Name="fileSizeText"
-                                                HorizontalAlignment="Center"
-                                                VerticalAlignment="Center"
-                                                Text="{Binding Size, Converter={StaticResource FileSize2String}}"
-                                                Visibility="Collapsed" />
-                                            <ProgressBar
-                                                x:Name="fileUploadProgress"
-                                                Width="50"
-                                                HorizontalAlignment="Center"
-                                                VerticalAlignment="Center"
-                                                Foreground="#1890ff"
-                                                Style="{StaticResource ProgressBarFlat}"
-                                                Value="{Binding Rate}" />
+                <hc:SimplePanel Grid.Row="1">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="40" />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+                        <hc:SimplePanel>
+                            <Border Background="#f5f6f7" />
+                            <Border
+                                Width="{Binding ProcessBorderLength}"
+                                HorizontalAlignment="Left"
+                                Background="#e1eaff"
+                                Visibility="{Binding IsUploadCompleted, Converter={StaticResource Boolean2VisibilityReConverter}}" />
+                            <TextBlock
+                                Margin="24,0,0,0"
+                                VerticalAlignment="Center"
+                                FontSize="13"
+                                Foreground="#1f2329"
+                                Text="正在上传"
+                                Visibility="{Binding IsUploadCompleted, Converter={StaticResource Boolean2VisibilityReConverter}}" />
+                            <TextBlock
+                                Margin="24,0,0,0"
+                                VerticalAlignment="Center"
+                                FontSize="13"
+                                Foreground="#1f2329"
+                                Visibility="{Binding IsUploadCompleted, Converter={StaticResource Boolean2VisibilityConverter}}">
+                                <Run Text="已上传" />
+                                <Run Text="10" />
+                                <Run Text="个任务" />
+                                <Run Text="，共" />
+                                <Run Text="2.94" />
+                                <Run Text="MB" />
+                            </TextBlock>
+                        </hc:SimplePanel>
+                        <hc:ScrollViewer
+                            x:Name="scrollViewer"
+                            Grid.Row="1"
+                            MaxHeight="260">
+                            <ItemsControl x:Name="listsControl" ItemsSource="{Binding UploadFileItemList}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <hc:SimplePanel x:Name="root" Height="52">
+                                            <Border x:Name="border" Background="{StaticResource TMS_TransparencyRegionBrush}" />
+                                            <Grid Margin="24,0">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="5*" />
+                                                    <ColumnDefinition Width="*" />
+                                                    <ColumnDefinition Width="Auto" />
+                                                </Grid.ColumnDefinitions>
+                                                <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
+                                                    <Image
+                                                        Height="28"
+                                                        Margin="0,0,8,0"
+                                                        Source="pack://application:,,,/GenmCloud.Core;component/Resources/Icon/FileType/Exe.png" />
+                                                    <StackPanel VerticalAlignment="Center">
+                                                        <TextBlock
+                                                            FontSize="14"
+                                                            Foreground="#1f2329"
+                                                            Text="{Binding Name}" />
+                                                        <TextBlock
+                                                            Margin="0,4,0,0"
+                                                            FontSize="12"
+                                                            Foreground="#646a73">
+                                                            <Run Text="12.57 MB" />
+                                                            <Run Text="/" />
+                                                            <Run Text="174.13 MB" />
+                                                        </TextBlock>
+                                                    </StackPanel>
+                                                </StackPanel>
+                                                <hc:SimplePanel Grid.Column="2">
+                                                    <StackPanel
+                                                        x:Name="upload"
+                                                        VerticalAlignment="Center"
+                                                        Orientation="Horizontal">
+                                                        <TextBlock Foreground="#8f959e" Text="7%" />
+                                                        <hc:CircleProgressBar
+                                                            x:Name="fileUploadProgress"
+                                                            Width="16"
+                                                            Height="16"
+                                                            Margin="12,0,0,0"
+                                                            ArcThickness="2"
+                                                            Foreground="{StaticResource PrimaryBrush}"
+                                                            ShowText="False"
+                                                            Style="{StaticResource ProgressBarSuccessCircle}"
+                                                            Value="{Binding Rate}" />
+                                                    </StackPanel>
+                                                    <StackPanel
+                                                        x:Name="uploaded"
+                                                        VerticalAlignment="Center"
+                                                        Visibility="Collapsed">
+                                                        <TextBlock Foreground="{StaticResource SuccessBrush}" Text="上传完成" />
+                                                    </StackPanel>
+                                                </hc:SimplePanel>
+                                            </Grid>
                                         </hc:SimplePanel>
-                                        <Button
-                                            Grid.Column="2"
-                                            Margin="0,0,15,0"
-                                            HorizontalAlignment="Right"
-                                            Content="&#xe61a;"
-                                            Cursor="Hand"
-                                            FontFamily="{StaticResource FIconFontFamily}"
-                                            FontSize="14"
-                                            FontWeight="SemiBold"
-                                            Foreground="#6b7885"
-                                            Style="{StaticResource ButtonCustom}" />
-                                    </Grid>
-                                    <hc:SimplePanel Grid.Column="1">
-                                        <TextBlock Margin="0,0,0,2" VerticalAlignment="Center">
-                                            <TextBlock.Style>
-                                                <Style TargetType="TextBlock">
-                                                    <Style.Triggers>
-                                                        <DataTrigger Binding="{Binding State}" Value="{x:Static Member=vo:UploadFileState.上传完成}">
-                                                            <Setter Property="Foreground" Value="{StaticResource SuccessBrush}" />
-                                                            <Setter Property="Text" Value="上传完成" />
-                                                        </DataTrigger>
-                                                        <DataTrigger Binding="{Binding State}" Value="{x:Static Member=vo:UploadFileState.上传失败}">
-                                                            <Setter Property="Foreground" Value="{StaticResource DangerBrush}" />
-                                                            <Setter Property="Text" Value="上传失败" />
-                                                        </DataTrigger>
-                                                    </Style.Triggers>
-                                                </Style>
-                                            </TextBlock.Style>
-                                        </TextBlock>
-                                    </hc:SimplePanel>
-                                </Grid>
-                            </hc:SimplePanel>
-                            <DataTemplate.Triggers>
-                                <Trigger SourceName="grid" Property="IsMouseOver" Value="True">
-                                    <Setter TargetName="border" Property="Background" Value="#f5f5f5" />
-                                </Trigger>
-                                <DataTrigger Binding="{Binding Rate}" Value="100">
-                                    <Setter TargetName="fileSizeText" Property="Visibility" Value="Visible" />
-                                    <Setter TargetName="fileUploadProgress" Property="Visibility" Value="Collapsed" />
-                                </DataTrigger>
-                            </DataTemplate.Triggers>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
-            </hc:ScrollViewer>
-        </hc:SimplePanel>
-    </Grid>
+                                        <DataTemplate.Triggers>
+                                            <Trigger SourceName="root" Property="IsMouseOver" Value="True">
+                                                <Setter TargetName="border" Property="Background" Value="#eff0f1" />
+                                            </Trigger>
+                                            <DataTrigger Binding="{Binding Rate}" Value="100">
+                                                <Setter TargetName="upload" Property="Visibility" Value="Collapsed" />
+                                                <Setter TargetName="uploaded" Property="Visibility" Value="Visible" />
+                                            </DataTrigger>
+                                        </DataTemplate.Triggers>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </hc:ScrollViewer>
+                    </Grid>
+                </hc:SimplePanel>
+                <Border BorderThickness="0,0,0,1" />
+            </Grid>
+        </Border>
+    </hc:SimplePanel>
 </UserControl>

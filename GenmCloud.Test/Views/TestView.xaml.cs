@@ -1,12 +1,8 @@
-﻿using GenmCloud.Core.UserControls.Common.Views;
-using ICSharpCode.AvalonEdit;
-using System;
+﻿using ICSharpCode.AvalonEdit;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Media.Animation;
 
 namespace GenmCloud.Test.Views
 {
@@ -97,55 +93,7 @@ namespace GenmCloud.Test.Views
             //_textEditor["Golang"].Text = file_content_str;
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            listView.View = null;
-        }
 
-        private void CheckToGridView(object sender, RoutedEventArgs e)
-        {
-            listView.Style = listView.FindResource("WrapModelViewer") as Style;
-        }
 
-        private void CheckToListView(object sender, RoutedEventArgs e)
-        {
-            listView.Style = listView.FindResource("GridViewModelViewer") as Style;
-
-        }
-
-        private void ShrinkGrid(object sender, RoutedEventArgs e)
-        {
-            GridLengthAnimation d = new GridLengthAnimation
-            {
-                From = new GridLength(220, GridUnitType.Pixel),
-                To = new GridLength(0, GridUnitType.Pixel),
-                Duration = TimeSpan.FromSeconds(1.5),
-                EasingFunction = new PowerEase() { Power = 20, EasingMode = EasingMode.EaseOut }
-            };
-            mainGrid.ColumnDefinitions[2].BeginAnimation(ColumnDefinition.WidthProperty, d);
-        }
-
-        private void OpenGrid(object sender, RoutedEventArgs e)
-        {
-            GridLengthAnimation d = new GridLengthAnimation
-            {
-                From = new GridLength(0, GridUnitType.Pixel),
-                To = new GridLength(220, GridUnitType.Pixel),
-                Duration = TimeSpan.FromSeconds(1.5),
-                EasingFunction = new PowerEase() { Power = 20, EasingMode = EasingMode.EaseOut }
-            };
-            mainGrid.ColumnDefinitions[2].BeginAnimation(ColumnDefinition.WidthProperty, d);
-        }
-
-        private void SimplePanel_SizeChanged(object sender, SizeChangedEventArgs e)
-        {
-            if (listView.View is GridView gridView)
-            {
-                for (int i = 0; i < Math.Min(gridView.Columns.Count, referenceGrid.ColumnDefinitions.Count); i++)
-                {
-                    gridView.Columns[i].Width = referenceGrid.ColumnDefinitions[i].ActualWidth;
-                }
-            }
-        }
     }
 }

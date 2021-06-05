@@ -82,7 +82,7 @@
         <hc:SimplePanel>
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="240" />
+                    <ColumnDefinition Width="280" />
                     <ColumnDefinition />
                 </Grid.ColumnDefinitions>
                 <hc:SimplePanel Background="{StaticResource RegionBrush}">
@@ -291,7 +291,7 @@
                                         Tag="AddNewContact">
                                         <MenuItem.Header>
                                             <StackPanel Orientation="Horizontal">
-                                                <TextBlock Style="{StaticResource fIconTextStyle}" Text="&#xe60a;" />
+                                                <TextBlock Style="{StaticResource fIconTextStyle}" Text="&#xe60b;" />
                                                 <TextBlock Style="{StaticResource textStyle}" Text="添加联系人" />
                                             </StackPanel>
                                         </MenuItem.Header>
@@ -302,7 +302,7 @@
                                         Tag="JoinGroup">
                                         <MenuItem.Header>
                                             <StackPanel Orientation="Horizontal">
-                                                <TextBlock Style="{StaticResource fIconTextStyle}" Text="&#xe64b;" />
+                                                <TextBlock Style="{StaticResource fIconTextStyle}" Text="&#xe609;" />
                                                 <TextBlock Style="{StaticResource textStyle}" Text="加入群组" />
                                             </StackPanel>
                                         </MenuItem.Header>
@@ -310,7 +310,7 @@
                                     <MenuItem Click="MenuItem_Click" Style="{StaticResource menuItemStyle}">
                                         <MenuItem.Header>
                                             <StackPanel Orientation="Horizontal" Tag="CreateGroup">
-                                                <TextBlock Style="{StaticResource fIconTextStyle}" Text="&#xe64b;" />
+                                                <TextBlock Style="{StaticResource fIconTextStyle}" Text="&#xe60f;" />
                                                 <TextBlock Style="{StaticResource textStyle}" Text="创建群组" />
                                             </StackPanel>
                                         </MenuItem.Header>

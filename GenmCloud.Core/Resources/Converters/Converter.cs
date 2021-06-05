@@ -1,6 +1,8 @@
 ﻿using Genm.WPF.Tools.Helper;
 using System;
 using System.Globalization;
+using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -188,6 +190,26 @@ namespace GenmCloud.Core.Resources.Converters
         }
     }
 
+    public class TreeViewItemMarginConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            var left = 0.0;
+            UIElement element = value as TreeViewItem;
+            while (element != null && element.GetType() != typeof(TreeView))
+            {
+                element = (UIElement)VisualTreeHelper.GetParent(element);
+                if (element is TreeViewItem)
+                    left += 14.0;
+            }
+            return new Thickness(left, 0, 0, 0);
+        }
+        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
     //public class String2UriConverter : IValueConverter
     //{
     //    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
@@ -204,31 +226,31 @@ namespace GenmCloud.Core.Resources.Converters
     //    }
     //}
 
-    public class Number2PercentageConverter : IMultiValueConverter
-    {
-        public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
-        {
-            if (values == null || values.Length != 2) return .0;
+    //public class Number2PercentageConverter : IMultiValueConverter
+    //{
+    //    public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
+    //    {
+    //        if (values == null || values.Length != 2) return .0;
 
-            var obj1 = values[0];
-            var obj2 = values[1];
+    //        var obj1 = values[0];
+    //        var obj2 = values[1];
 
-            if (obj1 == null || obj2 == null) return .0;
+    //        if (obj1 == null || obj2 == null) return .0;
 
-            var str1 = values[0].ToString();
-            var str2 = values[1].ToString();
+    //        var str1 = values[0].ToString();
+    //        var str2 = values[1].ToString();
 
-            var v1 = double.Parse(str1);
-            var v2 = double.Parse(str2);
+    //        var v1 = double.Parse(str1);
+    //        var v2 = double.Parse(str2);
 
-            if (Math.Abs(v2) < 1E-06) return 100.0;
+    //        if (Math.Abs(v2) < 1E-06) return 100.0;
 
-            return Math.Round(v1 / v2 * 100, 0);
-        }
+    //        return Math.Round(v1 / v2 * 100, 0);
+    //    }
 
-        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
-        {
-            throw new NotImplementedException();
-        }
-    }
+    //    public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
+    //    {
+    //        throw new NotImplementedException();
+    //    }
+    //}
 }

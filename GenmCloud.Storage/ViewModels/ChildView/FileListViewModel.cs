@@ -5,12 +5,7 @@ using GenmCloud.Shared.Common;
 using GenmCloud.Shared.Dto;
 using Prism.Events;
 using Prism.Mvvm;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GenmCloud.Storage.ViewModels.ChildView
 {
@@ -28,8 +23,8 @@ namespace GenmCloud.Storage.ViewModels.ChildView
 
         private ObservableCollection<FileItemVO> fileList;
 
-        public ObservableCollection<FileItemVO> FileList 
-        { 
+        public ObservableCollection<FileItemVO> FileList
+        {
             get => fileList;
             set
             {
@@ -53,27 +48,31 @@ namespace GenmCloud.Storage.ViewModels.ChildView
             if (newContext == null)
             {
                 if (context == null) return;
-            } else
+            }
+            else
             {
                 context = (FolderDto)newContext;
             }
 
-            FileList ??= new ObservableCollection<FileItemVO>();
             var res = await folderService.GetFileListByFolder(context.ID);
             if (res.StatusCode == ServiceHelper.RequestOk)
             {
-                FileList.Clear();
+                FileList?.Clear();
+                if (res.Result.Count != 0) {
+                    FileList ??= new ObservableCollection<FileItemVO>();
+                }
                 foreach (var fileDto in res.Result)
                 {
                     FileList.Add(new FileItemVO
                     {
                         Name = fileDto.Name,
                         OwnerName = fileDto.OwnerName,
-                        LastUpdatedTime= "蔡承龙 最后更新于 3月22日 23:15",
+                        LastUpdatedTime = "蔡承龙 最后更新于 3月22日 23:15",
                         CreatedAt = fileDto.CreatedAt,
                     });
                 }
             }
+            if (FileList != null &&  FileList.Count == 0) FileList = null;
             //FileList ??= new ObservableCollection<FileItemVO>()
             //{
             //    new FileItemVO 

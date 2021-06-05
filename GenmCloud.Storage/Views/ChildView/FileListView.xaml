@@ -450,58 +450,87 @@
         </Style>
     </UserControl.Resources>
     <hc:SimplePanel SizeChanged="SimplePanel_SizeChanged">
-        <Grid x:Name="referenceGrid">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition />
-                <ColumnDefinition />
-                <ColumnDefinition />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-            <hc:SimplePanel x:Name="column1" Grid.Column="0" />
-            <hc:SimplePanel x:Name="column2" Grid.Column="1" />
-            <hc:SimplePanel x:Name="column3" Grid.Column="2" />
-            <hc:SimplePanel x:Name="column4" Grid.Column="3" />
-        </Grid>
-        <ListView
-            x:Name="listView"
-            Margin="0,0,0,0"
-            ItemsSource="{Binding FileList}"
-            Style="{StaticResource WrapModelViewer}" />
+        <hc:SimplePanel Visibility="{Binding FileList, Converter={StaticResource Object2VisibilityConverter}}">
+
+            <Grid x:Name="referenceGrid">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <hc:SimplePanel x:Name="column1" Grid.Column="0" />
+                <hc:SimplePanel x:Name="column2" Grid.Column="1" />
+                <hc:SimplePanel x:Name="column3" Grid.Column="2" />
+                <hc:SimplePanel x:Name="column4" Grid.Column="3" />
+            </Grid>
+            <ListView
+                x:Name="listView"
+                Margin="0,0,0,0"
+                ItemsSource="{Binding FileList}"
+                Style="{StaticResource WrapModelViewer}" />
+            <StackPanel
+                Height="42"
+                Margin="0,1,20,0"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Top"
+                Orientation="Horizontal">
+                <ToggleButton
+                    Padding="4"
+                    hc:StatusSwitchElement.HideUncheckedElement="True"
+                    Checked="CheckToListView"
+                    Content="&#xe815;"
+                    Cursor="Hand"
+                    FontFamily="{StaticResource FIconFontFamily}"
+                    FontSize="16"
+                    Style="{StaticResource ToggleButtonCustom}"
+                    Unchecked="CheckToGridView">
+                    <hc:StatusSwitchElement.CheckedElement>
+                        <TextBlock Text="&#xe814;" />
+                    </hc:StatusSwitchElement.CheckedElement>
+                </ToggleButton>
+                <ToggleButton
+                    Margin="2,0,0,0"
+                    Padding="0,0"
+                    hc:StatusSwitchElement.HideUncheckedElement="True"
+                    Checked="ExpandViewEvent"
+                    Content="&#xe7c9;"
+                    Cursor="Hand"
+                    FontFamily="{StaticResource FIconFontFamily}"
+                    FontSize="24"
+                    Style="{StaticResource ToggleButtonCustom}"
+                    Unchecked="ShrinkViewEvent">
+                    <hc:StatusSwitchElement.CheckedElement>
+                        <TextBlock Text="&#xe7ca;" />
+                    </hc:StatusSwitchElement.CheckedElement>
+                </ToggleButton>
+            </StackPanel>
+        </hc:SimplePanel>
         <StackPanel
-            Height="42"
-            Margin="0,1,20,0"
-            HorizontalAlignment="Right"
-            VerticalAlignment="Top"
-            Orientation="Horizontal">
-            <ToggleButton
-                Padding="4"
-                hc:StatusSwitchElement.HideUncheckedElement="True"
-                Checked="CheckToListView"
-                Content="&#xe815;"
-                Cursor="Hand"
-                FontFamily="{StaticResource FIconFontFamily}"
-                FontSize="16"
-                Style="{StaticResource ToggleButtonCustom}"
-                Unchecked="CheckToGridView">
-                <hc:StatusSwitchElement.CheckedElement>
-                    <TextBlock Text="&#xe814;" />
-                </hc:StatusSwitchElement.CheckedElement>
-            </ToggleButton>
-            <ToggleButton
-                Margin="2,0,0,0"
-                Padding="0,0"
-                hc:StatusSwitchElement.HideUncheckedElement="True"
-                Checked="ExpandViewEvent"
-                Content="&#xe7c9;"
-                Cursor="Hand"
-                FontFamily="{StaticResource FIconFontFamily}"
-                FontSize="24"
-                Style="{StaticResource ToggleButtonCustom}"
-                Unchecked="ShrinkViewEvent">
-                <hc:StatusSwitchElement.CheckedElement>
-                    <TextBlock Text="&#xe7ca;" />
-                </hc:StatusSwitchElement.CheckedElement>
-            </ToggleButton>
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            Visibility="{Binding FileList, Converter={StaticResource Object2VisibilityReConverter}}">
+            <Image
+                Width="{Binding Source.PixelWidth, Mode=OneWay, RelativeSource={RelativeSource Self}}"
+                Height="{Binding Source.PixelHeight, Mode=OneWay, RelativeSource={RelativeSource Self}}"
+                Source="pack://application:,,,/GenmCloud.Core;component/Resources/Images/Office.png" />
+            <hc:UniformSpacingPanel
+                Margin="0,20,0,0"
+                HorizontalAlignment="Center"
+                Spacing="20">
+                <Button
+                    Width="88"
+                    Content="创建文件夹"
+                    Style="{StaticResource ButtonPrimaryCustomStyle}" />
+                <Button
+                    Width="88"
+                    Content="添加"
+                    Style="{StaticResource ButtonPrimaryCustomStyle}" />
+                <Button
+                    Width="88"
+                    Content="上传"
+                    Style="{StaticResource ButtonPrimaryCustomStyle}" />
+            </hc:UniformSpacingPanel>
         </StackPanel>
     </hc:SimplePanel>
 </UserControl>

@@ -2,9 +2,7 @@
 using GenmCloud.Shared.Dto;
 using GenmCloud.Shared.HttpContact;
 using RestSharp;
-using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace GenmCloud.ApiService.Service.Impl

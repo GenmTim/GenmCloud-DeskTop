@@ -11,6 +11,7 @@
     <None Remove="Resources\Fonts\iconfont.ttf" />
     <None Remove="Resources\Fonts\Menu\iconfontmenu.ttf" />
     <None Remove="Resources\Images\cloud.png" />
+    <None Remove="Resources\Images\OnlineShopScenes.png" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="NLog" Version="4.7.9" />
@@ -30,6 +31,7 @@
     <Resource Include="Resources\Fonts\iconfont.ttf" />
     <Resource Include="Resources\Fonts\Menu\iconfontmenu.ttf" />
     <Resource Include="Resources\Images\cloud.png" />
+    <Resource Include="Resources\Images\OnlineShopScenes.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\Styles\" />

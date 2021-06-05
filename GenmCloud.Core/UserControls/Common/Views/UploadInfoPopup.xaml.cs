@@ -1,4 +1,7 @@
-﻿using System;
+﻿using GenmCloud.Core.UserControls.Common.ViewModels;
+using GenmCloud.Shared.Common;
+using Prism.Events;
+using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Animation;
@@ -92,9 +95,28 @@ namespace GenmCloud.Core.UserControls.Common.Views
     {
         private bool isFold { get; set; }
 
+        private readonly IEventAggregator eventAggregator;
+
         public UploadInfoPopup()
         {
             InitializeComponent();
+            eventAggregator = NetCoreProvider.Resolve<IEventAggregator>();
+            eventAggregator.GetEvent<UploadInfoPopupViewModel.UploadHeightEvent>().Subscribe(() => 
+            {
+                double gridHeight = 0;
+                if (DataContext is UploadInfoPopupViewModel vm)
+                {
+                    if (!vm.IsOpenPopup) return;
+                    gridHeight = Math.Min(248, vm.UploadFileItemList.Count * 52 + 40);
+                }
+                GridLengthAnimation d = new GridLengthAnimation
+                {
+                    From = new GridLength(grid.RowDefinitions[1].ActualHeight, GridUnitType.Pixel),
+                    To = new GridLength(gridHeight, GridUnitType.Pixel),
+                    Duration = TimeSpan.FromSeconds(0.15)
+                };
+                grid.RowDefinitions[1].BeginAnimation(RowDefinition.HeightProperty, d);
+            });
             listsControl.ItemContainerGenerator.ItemsChanged += ItemContainerGenerator_ItemsChanged;
         }
 
@@ -105,11 +127,16 @@ namespace GenmCloud.Core.UserControls.Common.Views
 
         private void OpenPopup(object sender, System.Windows.RoutedEventArgs e)
         {
+            double gridHeight = 0;
+            if (DataContext is UploadInfoPopupViewModel vm)
+            {
+                gridHeight = Math.Min(248, vm.UploadFileItemList.Count * 52 + 40);
+            }
             GridLengthAnimation d = new GridLengthAnimation
             {
                 From = new GridLength(0, GridUnitType.Pixel),
-                To = new GridLength(260, GridUnitType.Pixel),
-                Duration = TimeSpan.FromSeconds(0.2),
+                To = new GridLength(gridHeight, GridUnitType.Pixel),
+                Duration = TimeSpan.FromSeconds(0.15)
             };
             grid.RowDefinitions[1].BeginAnimation(RowDefinition.HeightProperty, d);
 
@@ -119,9 +146,9 @@ namespace GenmCloud.Core.UserControls.Common.Views
         {
             GridLengthAnimation d = new GridLengthAnimation
             {
-                From = new GridLength(260, GridUnitType.Pixel),
+                From = new GridLength(grid.RowDefinitions[1].ActualHeight, GridUnitType.Pixel),
                 To = new GridLength(0, GridUnitType.Pixel),
-                Duration = TimeSpan.FromSeconds(0.2),
+                Duration = TimeSpan.FromSeconds(0.15),
             };
             grid.RowDefinitions[1].BeginAnimation(RowDefinition.HeightProperty, d);
         }

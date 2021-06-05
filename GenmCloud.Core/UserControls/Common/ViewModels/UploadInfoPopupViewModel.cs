@@ -18,17 +18,56 @@ namespace GenmCloud.Core.UserControls.Common.ViewModels
         private readonly IEventAggregator eventAggregator;
         private IFileService fileService;
 
+        public class UploadHeightEvent : PubSubEvent { }
+
         public UploadInfoPopupViewModel(IEventAggregator eventAggregator)
         {
             this.eventAggregator = eventAggregator;
             this.fileService = NetCoreProvider.Resolve<IFileService>();
             eventAggregator.GetEvent<UploadFileEvent>().Subscribe(UploadFile);
-            ClosePopupCmd = new DelegateCommand(() => {
+            ClosePopupCmd = new DelegateCommand(() =>
+            {
                 IsShowPopup = false;
             });
         }
 
         #region Property
+
+        private bool isUploadCompleted;
+        public bool IsUploadCompleted
+        {
+            get => isUploadCompleted;
+            set
+            {
+                isUploadCompleted = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private long processBorderLength;
+        public long ProcessBorderLength
+        {
+            get => processBorderLength;
+            set
+            {
+                processBorderLength = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private long processRate;
+        public long ProcessRate
+        {
+            get => processRate;
+            set
+            {
+                processRate = value;
+                IsUploadCompleted = (processRate == 100);
+                ProcessBorderLength = 460 * processRate / 100;
+                RaisePropertyChanged();
+            }
+        }
+
         private int uploadFileItemNumber;
         public int UploadFileItemNumber
         {
@@ -68,7 +107,7 @@ namespace GenmCloud.Core.UserControls.Common.ViewModels
         {
             get => isOpenPopup;
             set
-            { 
+            {
                 isOpenPopup = value;
                 RaisePropertyChanged();
             }
@@ -85,9 +124,6 @@ namespace GenmCloud.Core.UserControls.Common.ViewModels
             }
         }
 
-
-
-
         private ObservableCollection<UploadFileItemVO> uploadFileItemList = new ObservableCollection<UploadFileItemVO>();
         public ObservableCollection<UploadFileItemVO> UploadFileItemList
         {
@@ -103,7 +139,7 @@ namespace GenmCloud.Core.UserControls.Common.ViewModels
 
         #endregion
 
-        private void UploadFile(UploadFileTask fileTask)
+        private async void UploadFile(UploadFileTask fileTask)
         {
             // 构建文件上传项视图
             UploadFileItemVO uploadFileItemVO = new UploadFileItemVO
@@ -118,54 +154,26 @@ namespace GenmCloud.Core.UserControls.Common.ViewModels
             UploadFileItemList.Add(uploadFileItemVO);
             UploadFileSumSize += uploadFileItemVO.Size;
             UploadFileItemNumber += 1;
+            eventAggregator.GetEvent<UploadHeightEvent>().Publish();
+            ProcessRate = UploadedFileSumSize * 100 / UploadFileSumSize;
 
-            Task.Run(async () =>
+            var result = await fileService.Upload(fileTask.FolderId, fileTask.FilePath);
+
+            IsShowPopup = true;
+            UploadedFileSumSize += fileTask.FileSize;
+            ProcessRate = UploadedFileSumSize * 100 / UploadFileSumSize;
+            foreach (var item in UploadFileItemList)
             {
-                var result = await fileService.Upload(fileTask.FolderId, fileTask.FilePath);
-                Application.Current.Dispatcher.Invoke(new Action(() =>
+                if (item.Id == fileTask.Id)
                 {
-                    IsShowPopup = true;
-                    UploadedFileSumSize += fileTask.FileSize;
-                    foreach (var item in UploadFileItemList)
-                    {
-                        if (item.Id == fileTask.Id)
-                        {
-                            item.Rate = 100;
-                        }
-                    }
-                }));
-                //FileStream fs = File.OpenRead(fileItem.FullName);
-                //long readedSize = 0;
-                //byte[] buffer = new byte[1024 * 1024];
-                //while (readedSize < fileSize)
-                //{
-                //    int readSize = fs.Read(buffer, 0, buffer.Length);
-                //    readedSize += readSize;
-                //    // 发送到服务端
+                    item.Rate = 100;
+                }
+            }
 
-                //    // 计算上传比例，传递到UI上
-                //    long nowRate = readedSize * 100 / fileSize;
-                //    Application.Current.Dispatcher.Invoke(new Action(() =>
-                //    {
-                //        UploadedFileSumSize += readSize;
-                //        foreach (var item in UploadFileItemList)
-                //        {
-                //            if (item.Id == fileItem.Id)
-                //            {
-                //                item.Rate = nowRate;
-                //            }
-                //        }
-                //    }));
-                //}
-                Application.Current.Dispatcher.Invoke(new Action(() =>
-                {
-                    UploadFileItemNumber -= 1;
-                    uploadFileItemVO.State = UploadFileState.上传完成;
-                    this.eventAggregator.GetEvent<UploadedFileEvent>().Publish(fileTask);
-                    this.eventAggregator.GetEvent<UpdateFileListEvent>().Publish(null);
-                }));
-                //fs.Close();
-            });
+            UploadFileItemNumber -= 1;
+            uploadFileItemVO.State = UploadFileState.上传完成;
+            this.eventAggregator.GetEvent<UploadedFileEvent>().Publish(fileTask);
+            this.eventAggregator.GetEvent<UpdateFileListEvent>().Publish(null);
         }
     }
 }

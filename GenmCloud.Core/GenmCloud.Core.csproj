@@ -14,6 +14,7 @@
     <None Remove="Resources\Icon\FileType\Word.png" />
     <None Remove="Resources\Icon\iconfont.ttf" />
     <None Remove="Resources\Images\office.png" />
+    <None Remove="Resources\Images\OnlineShopScenes.png" />
     <None Remove="Resources\Images\recruitment.png" />
     <None Remove="Resources\Styles\Go.xshd" />
     <None Remove="Resources\Styles\Lua.xshd" />
@@ -56,6 +57,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Resources\Images\office.png" />
+    <Resource Include="Resources\Images\OnlineShopScenes.png" />
     <Resource Include="Resources\Images\recruitment.png" />
     <Resource Include="Resources\Styles\Go.xshd">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>

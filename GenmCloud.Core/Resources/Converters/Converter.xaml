@@ -9,6 +9,6 @@
     <converter:String2FileTypeIconPath x:Key="String2FileTypeIconPath" />
     <converter:FileSize2String x:Key="FileSize2String" />
     <converter:Timestamp2String x:Key="Timestamp2String" />
-    <converter:Number2PercentageConverter x:Key="Number2PercentageConverter" />
+    <converter:TreeViewItemMarginConverter x:Key="TreeViewItemMarginConverter" />
     <converter:String2UriConverter x:Key="String2UriConverter" />
 </ResourceDictionary>

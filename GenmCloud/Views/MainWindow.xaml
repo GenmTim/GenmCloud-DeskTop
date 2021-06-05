@@ -173,7 +173,7 @@
                             </Grid>
                             <!--#region-->
                             <hc:SimplePanel>
-                                <ContentControl Grid.Column="1" prism:RegionManager.RegionName="{x:Static Member=token:RegionToken.MainContent}" />
+                                <ContentControl prism:RegionManager.RegionName="{x:Static Member=token:RegionToken.MainContent}" />
                             </hc:SimplePanel>
                             <!--#endregion-->
                         </DockPanel>

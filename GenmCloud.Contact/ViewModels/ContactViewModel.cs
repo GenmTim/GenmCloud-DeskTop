@@ -8,6 +8,7 @@ using GenmCloud.Shared.Dto;
 using Prism.Events;
 using Prism.Mvvm;
 using Prism.Regions;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using TMS.DeskTop.Tools.Helper;
 
@@ -59,19 +60,58 @@ namespace GenmCloud.Contact.ViewModels
             var result = await contactService.GetAllContact();
             if (result.StatusCode == ServiceHelper.RequestOk)
             {
+                var newContactList = result.Result;
+                if (newContactList == null || newContactList.Count == 0) ContactList = null;
+
                 if (ContactList == null)
                 {
                     ContactList = new ObservableCollection<ContactDto>();
                 }
-                else
+
+                // 删除掉已经不存在的联系人
+                Dictionary<uint, bool> set = new Dictionary<uint, bool>();
+                foreach (var contact in newContactList)
                 {
-                    ContactList.Clear();
+                    set.Add(contact.Id, true);
+                }
+                for (int i = ContactList.Count - 1; i >= 0; --i)
+                {
+                    if (!set.ContainsKey(ContactList[i].Id))
+                    {
+                        ContactList.Remove(ContactList[i]);
+                    }
                 }
 
-                foreach (var contact in result.Result)
+                // 添加本来不存在的联系人
+                var itr = result.Result.GetEnumerator();
+                var index = 0;
+                foreach (var contact in ContactList)
                 {
-                    ContactList.Add(contact);
+                    ContactDto nowContact;
+                    while (true)
+                    {
+                        if (false == itr.MoveNext())
+                        {
+                            goto loopEnd;
+                        }
+                        nowContact = itr.Current;
+                        if (0 > string.Compare(nowContact.Name, contact.Name))
+                        {
+                            ContactList.Insert(index, nowContact);
+                            index++;
+                        } else
+                        {
+                            break;
+                        }
+                    };
+                    index++;
                 }
+                while (itr.MoveNext() == true)
+                {
+                    ContactList.Add(itr.Current);
+                }
+            loopEnd:
+                return;
             }
 
         }

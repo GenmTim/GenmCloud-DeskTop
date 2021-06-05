@@ -209,7 +209,10 @@ namespace GenmCloud.Chat.Manager
                 {
                     var chatObjVO = chatObjData.GetChatObj(chatMsgDto.SenderId);
                     chatObjVO.LastMsg = chatMsgDto.Data;
-                    chatObjData.PutChatMsg(chatObjVO, ChatMsgDto2VOConvert.Convert(chatMsgDto));
+
+                    var chatMsgVO = ChatMsgDto2VOConvert.Convert(chatMsgDto);
+                    chatMsgVO.Avatar = new Uri(AvatarManager.GetInstance().Get(chatMsgDto.SenderId));
+                    chatObjData.PutChatMsg(chatObjVO, chatMsgVO);
                 });
             }
         }

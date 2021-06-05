@@ -572,23 +572,6 @@
         </Style.Triggers>
     </Style>
 
-    <Style
-        x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type viewbase:PlainView},
-                                     ResourceId=MyPlainViewDSK}"
-        BasedOn="{StaticResource {x:Type ListBox}}"
-        TargetType="{x:Type ListView}">
-        <Setter Property="HorizontalContentAlignment" Value="Center" />
-        <Setter Property="ItemContainerStyle" Value="{Binding (ListView.View).ItemContainerStyle, RelativeSource={RelativeSource Self}}" />
-        <Setter Property="ItemTemplate" Value="{Binding (ListView.View).ItemTemplate, RelativeSource={RelativeSource Self}}" />
-        <Setter Property="ItemsPanel">
-            <Setter.Value>
-                <ItemsPanelTemplate>
-                    <hc:UniformSpacingPanel Spacing="16" />
-                </ItemsPanelTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
-
     <Style x:Key="ListViewItemCustom" TargetType="{x:Type ListViewItem}">
         <Setter Property="SnapsToDevicePixels" Value="True" />
         <Setter Property="FocusVisualStyle" Value="{x:Null}" />
@@ -750,7 +733,6 @@
                                 SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
                         </Border>
                     </hc:SimplePanel>
-
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
@@ -759,5 +741,19 @@
                 <Setter Property="Background" Value="#e4e5e5" />
             </Trigger>
         </Style.Triggers>
+    </Style>
+
+    <Style
+        x:Key="ButtonPrimaryCustomStyle"
+        BasedOn="{StaticResource ButtonCustom}"
+        TargetType="Button">
+        <Setter Property="BorderBrush" Value="{StaticResource PrimaryBrush}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="hc:BorderElement.CornerRadius" Value="4" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="Height" Value="34" />
+        <Setter Property="Foreground" Value="#3370ff" />
+        <Setter Property="hc:BackgroundSwitchElement.MouseHoverBackground" Value="#e1eaff" />
+        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
     </Style>
 </ResourceDictionary>

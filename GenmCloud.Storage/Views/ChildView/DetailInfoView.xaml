@@ -44,7 +44,7 @@
                     Content="分享"
                     Cursor="Hand"
                     FontSize="14"
-                    Style="{StaticResource ButtonDashedPrimary}" />
+                    Style="{StaticResource ButtonPrimaryCustomStyle}" />
             </hc:SimplePanel>
         </Grid>
     </hc:SimplePanel>

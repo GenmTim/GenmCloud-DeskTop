@@ -4,14 +4,14 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:attach="clr-namespace:Genm.WPF.Attach;assembly=Genm.WPF"
     xmlns:child="clr-namespace:GenmCloud.Storage.Views.ChildView"
+    xmlns:cmd="clr-namespace:GenmCloud.Core.UserControls.Cmd;assembly=GenmCloud.Core"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:genm="clr-namespace:Genm.WPF.Controls;assembly=Genm.WPF"
     xmlns:hc="https://handyorg.github.io/handycontrol"
-    xmlns:local="clr-namespace:GenmCloud.Storage.Views"
+    xmlns:local="clr-namespace:GenmCloud.Storage.ViewModels"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:prism="http://prismlibrary.com/"
-    xmlns:storageCmd="clr-namespace:GenmCloud.Storage.Cmd"
     xmlns:system="clr-namespace:System;assembly=System.Runtime"
     xmlns:token="clr-namespace:GenmCloud.Core.Data.Token;assembly=GenmCloud.Core"
     xmlns:uc="clr-namespace:GenmCloud.Core.UserControls.Common.Views;assembly=GenmCloud.Core"
@@ -113,6 +113,7 @@
             </Setter>
         </Style>
     </UserControl.Resources>
+
     <materialDesign:DialogHost
         Margin="0,-30,0,0"
         CloseOnClickAway="True"
@@ -154,7 +155,7 @@
                 <hc:SimplePanel Grid.Row="2" Background="{StaticResource TMS_TransparencyRegionBrush}">
                     <hc:SimplePanel.ContextMenu>
                         <ContextMenu Width="150">
-                            <MenuItem Command="{Binding AddNewFolderCmd}" Header="新建文件夹" />
+                            <MenuItem Command="{Binding AddFolderCmd}" Header="新建文件夹" />
                         </ContextMenu>
                     </hc:SimplePanel.ContextMenu>
                     <TreeView
@@ -171,7 +172,22 @@
                         </TreeView.ItemContainerStyle>
                         <TreeView.ItemTemplate>
                             <HierarchicalDataTemplate ItemsSource="{Binding Children}">
-                                <StackPanel Height="40" Orientation="Horizontal">
+                                <StackPanel
+                                    Height="40"
+                                    Background="{StaticResource TMS_TransparencyRegionBrush}"
+                                    Orientation="Horizontal">
+                                    <StackPanel.ContextMenu>
+                                        <ContextMenu
+                                            MaxWidth="160"
+                                            ItemsSource="{Binding OptCmdList}"
+                                            Style="{StaticResource ContextMenuBaseStyle}">
+                                            <ContextMenu.ItemTemplate>
+                                                <DataTemplate>
+                                                    <MenuItem Command="{Binding Command}" Header="{Binding Header}" />
+                                                </DataTemplate>
+                                            </ContextMenu.ItemTemplate>
+                                        </ContextMenu>
+                                    </StackPanel.ContextMenu>
                                     <TextBlock
                                         Margin="4,0,0,0"
                                         VerticalAlignment="Center"

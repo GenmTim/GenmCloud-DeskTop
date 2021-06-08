@@ -14,11 +14,11 @@ namespace GenmCloud.ApiService.Service.Impl
         {
             if (id == 0)
             {
-                return await new BaseServiceRequest().GetRequest<BaseResponse<UserDto>>(string.Format("user?token={0}", SessionService.Token), null, Method.GET);
+                return await new BaseServiceRequest().GetRequest<BaseResponse<UserDto>>(string.Format("user"), null, Method.GET);
             }
             else
             {
-                return await new BaseServiceRequest().GetRequest<BaseResponse<UserDto>>(string.Format("user/{0}?token={1}", id, SessionService.Token), null, Method.GET);
+                return await new BaseServiceRequest().GetRequest<BaseResponse<UserDto>>(string.Format("user/{0}", id), null, Method.GET);
             }
         }
 

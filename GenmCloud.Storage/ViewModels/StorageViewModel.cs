@@ -4,6 +4,8 @@ using GenmCloud.Core.Service.Dialog;
 using GenmCloud.Core.Tools.Helper;
 using GenmCloud.Shared.Common;
 using GenmCloud.Shared.Dto;
+using HandyControl.Interactivity;
+using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
 using Prism.Services.Dialogs;
@@ -11,57 +13,10 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace GenmCloud.Storage.ViewModels
 {
-    public static class UpdateDataHelper
-    {
-        public static void UpdateFolderListVO(ObservableCollection<FolderTreeNodeVO> folderTreeList, List<FolderListDto> newTreeFolderList)
-        {
-            //var optList = new ObservableCollection<MenuItem> { new MenuItem { Header = "新建文件夹", Command = AddNewFolderCmd } };
-
-            var newTreeFolders = newTreeFolderList.ToArray();
-
-            for (int i = 0; i < newTreeFolders.Length; ++i)
-            {
-                if (i <= folderTreeList.Count - 1)
-                {
-                    folderTreeList[i].Folder = newTreeFolderList[i].Folder;
-                }
-                else
-                {
-                    folderTreeList.Add(new FolderTreeNodeVO
-                    {
-                        Folder = newTreeFolders[i].Folder,
-                        Icon= "\xe645",
-                        //OptCmdList =
-                    });
-                }
-
-                if (newTreeFolderList[i].Children != null)
-                {
-                    if (folderTreeList[i].Children == null)
-                    {
-                        folderTreeList[i].Children = new ObservableCollection<FolderTreeNodeVO>();
-                    }
-                    UpdateFolderListVO(folderTreeList[i].Children, newTreeFolderList[i].Children);
-                }
-                else
-                {
-                    if (folderTreeList[i].Children != null)
-                    {
-                        folderTreeList[i].Children = null;
-                    }
-                }
-            }
-
-            for (int i = folderTreeList.Count - 1; i > newTreeFolders.Length - 1; --i)
-            {
-                folderTreeList.RemoveAt(i);
-            }
-        }
-    }
-
     public class FolderTreeNodeVO : BindableBase
     {
         public string Icon { get; set; }
@@ -113,6 +68,8 @@ namespace GenmCloud.Storage.ViewModels
 
     public class StorageViewModel : BindableBase
     {
+        public DelegateCommand AddFolderCmd { get; private set; }
+
         private FolderDto selectedFolder;
         public FolderDto SelectedFolder
         {
@@ -157,18 +114,19 @@ namespace GenmCloud.Storage.ViewModels
                     {
                         if (treeDeptList == null)
                         {
-                            FileTreeNodeItemList = null;
+                            FileTreeNodeItemList[1].Children = null;
                             return;
                         }
 
-                        if (treeDeptList != null && FileTreeNodeItemList == null)
+                        if (treeDeptList != null && FileTreeNodeItemList[1].Children == null)
                         {
-                            FileTreeNodeItemList = new ObservableCollection<FolderTreeNodeVO>();
+                            FileTreeNodeItemList[1].Children = new ObservableCollection<FolderTreeNodeVO>();
                         }
-                        UpdateDataHelper.UpdateFolderListVO(FileTreeNodeItemList[1].Children, treeDeptList);
+                        UpdateFolderListVO(FileTreeNodeItemList[1].Children, treeDeptList);
                     });
                 }
             });
+            this.AddFolderCmd = new DelegateCommand(AddFolder);
             this.eventAggregator.GetEvent<UpdateSelectedFolderEvent>().Subscribe(UpdateSelectedFolder);
             //Simulation();
         }
@@ -182,6 +140,16 @@ namespace GenmCloud.Storage.ViewModels
             FileTreeNodeItemList.Add(new FolderTreeNodeVO { Folder = new FolderDto { Name="回收站", ParentID = uint.MaxValue }, Icon = "\xe861" });
         }
 
+        private async void AddFolder()
+        {
+            var result = await DialogHelper.ShowInputValueDialog(dialogHost, "StorageRoot", "添加新文件夹", "添加", "取消", "请输入新的文件夹名字");
+            if (result != null && result.Result == ButtonResult.OK)
+            {
+                string folderName = result.Parameters.GetValue<string>("value");
+                //AddNewFolderToServer(folderName);
+            }
+        }
+
         public void UpdateSelectedFolder(object obj)
         {
             if (obj == null) return;
@@ -189,26 +157,6 @@ namespace GenmCloud.Storage.ViewModels
             SelectedFolder = folder;
 
             eventAggregator.GetEvent<UpdateFileListEvent>().Publish(obj);
-        }
-
-        private async void AddNewFolder(object obj)
-        {
-            uint id;
-            if (obj == null)
-            {
-                id = 0;
-            }
-            else
-            {
-                id = (uint)obj;
-            }
-
-            var result = await DialogHelper.ShowInputValueDialog(dialogHost, "StorageRoot", "添加新文件夹", "添加", "取消", "请输入新的文件夹名字");
-            if (result != null && result.Result == ButtonResult.OK)
-            {
-                string folderName = result.Parameters.GetValue<string>("value");
-                //AddNewFolderToServer(folderName);
-            }
         }
 
         public void Simulation()
@@ -256,5 +204,50 @@ namespace GenmCloud.Storage.ViewModels
             FileItemVOList.Add(new FileItemVO { FileName = "汇报、考评关键字", OwnerName = "余浩臻", CreatedAt = "3月15日 19:35" });
         }
 
+
+        public void UpdateFolderListVO(ObservableCollection<FolderTreeNodeVO> folderTreeList, List<FolderListDto> newTreeFolderList)
+        {
+            //var optList = new ObservableCollection<MenuItem> { new MenuItem { Header = "新建文件夹", Command = AddNewFolderCmd } };
+
+            var newTreeFolders = newTreeFolderList.ToArray();
+
+            for (int i = 0; i < newTreeFolders.Length; ++i)
+            {
+                if (i <= folderTreeList.Count - 1)
+                {
+                    folderTreeList[i].Folder = newTreeFolderList[i].Folder;
+                }
+                else
+                {
+                    folderTreeList.Add(new FolderTreeNodeVO
+                    {
+                        Folder = newTreeFolders[i].Folder,
+                        Icon = "\xe645",
+                        OptCmdList = new ObservableCollection<MenuItem> { new MenuItem { Header = "新建文件夹", Command = AddFolderCmd } },
+                });
+                }
+
+                if (newTreeFolderList[i].Children != null)
+                {
+                    if (folderTreeList[i].Children == null)
+                    {
+                        folderTreeList[i].Children = new ObservableCollection<FolderTreeNodeVO>();
+                    }
+                    UpdateFolderListVO(folderTreeList[i].Children, newTreeFolderList[i].Children);
+                }
+                else
+                {
+                    if (folderTreeList[i].Children != null)
+                    {
+                        folderTreeList[i].Children = null;
+                    }
+                }
+            }
+
+            for (int i = folderTreeList.Count - 1; i > newTreeFolders.Length - 1; --i)
+            {
+                folderTreeList.RemoveAt(i);
+            }
+        }
     }
 }

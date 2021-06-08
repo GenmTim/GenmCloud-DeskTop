@@ -13,28 +13,28 @@ namespace GenmCloud.ApiService.Service.Impl
         {
             return await new BaseServiceRequest()
                 .GetRequest<BaseResponse<List<ChatMsgDto>>>
-                (string.Format("chat/history?user_id={0}&token={1}", UserId, SessionService.Token), null, Method.GET);
+                (string.Format("chat/history?user_id={0}", UserId), null, Method.GET);
         }
 
         public async Task<BaseResponse<ChatObjDto>> GetChatObj(uint id)
         {
             return await new BaseServiceRequest()
                 .GetRequest<BaseResponse<ChatObjDto>>
-                (string.Format("chat/obj/{0}?token={1}", id, SessionService.Token), null, Method.GET);
+                (string.Format("chat/obj/{0}", id), null, Method.GET);
         }
 
         public async Task<BaseResponse<List<uint>>> GetChatObjIdList()
         {
             return await new BaseServiceRequest()
                 .GetRequest<BaseResponse<List<uint>>>
-                (string.Format("chat/obj/ids?token={0}", SessionService.Token), null, Method.GET);
+                (string.Format("chat/obj/ids"), null, Method.GET);
         }
 
         public async Task<BaseResponse<ChatMsgDto>> GetLastChatMsgByObjId(uint id)
         {
             return await new BaseServiceRequest()
                 .GetRequest<BaseResponse<ChatMsgDto>>
-                (string.Format("chat/obj/{0}/lastMsg?token={1}", id, SessionService.Token), null, Method.GET);
+                (string.Format("chat/obj/{0}/lastMsg", id), null, Method.GET);
         }
     }
 }

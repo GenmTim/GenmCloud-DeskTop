@@ -2,15 +2,18 @@
 using GenmCloud.Core.Event;
 using GenmCloud.Core.Service.Dialog;
 using GenmCloud.Core.Tools.Helper;
+using GenmCloud.Core.UserControls.Cmd;
 using GenmCloud.Core.UserControls.Common.Views;
 using GenmCloud.Storage.ViewModels;
 using GenmCloud.Storage.Views.ChildView;
 using Prism.Events;
 using Prism.Regions;
+using Prism.Services.Dialogs;
 using System;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media.Animation;
 
 namespace GenmCloud.Storage.Views
@@ -131,6 +134,7 @@ namespace GenmCloud.Storage.Views
         private void FolderItemChange(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
             var treeNode = (FolderTreeNodeVO)e.NewValue;
+            if (treeNode.Folder == null) return;
             eventAggregator.GetEvent<UpdateSelectedFolderEvent>().Publish(treeNode.Folder);
         }
     }

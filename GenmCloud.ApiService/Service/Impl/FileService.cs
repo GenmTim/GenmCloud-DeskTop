@@ -13,7 +13,7 @@ namespace GenmCloud.ApiService.Service.Impl
         {
             var request = new RestRequest();
             request.AddFile("file", filePath);
-            var restClient = new RestClient { BaseUrl = new Uri(String.Format("http://localhost:1026/api/v1/file?token={0}&folder={1}", SessionService.Token, folderId)) };
+            var restClient = new RestClient { BaseUrl = new Uri(String.Format("http://localhost:1026/api/v1/file?folder={0}", folderId)) };
             var result = await restClient.ExecuteAsync(request, Method.PUT);
             if (result.StatusCode == System.Net.HttpStatusCode.OK)
             {

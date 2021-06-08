@@ -13,14 +13,14 @@ namespace GenmCloud.ApiService.Service.Impl
         {
             return await new BaseServiceRequest()
             .GetRequest<BaseResponse<List<FolderListDto>>>
-            (string.Format("folder/list?token={0}", SessionService.Token), null, Method.GET);
+            (string.Format("folder/list"), null, Method.GET);
         }
 
         public async Task<BaseResponse<List<FileDto>>> GetFileListByFolder(uint id)
         {
             return await new BaseServiceRequest()
             .GetRequest<BaseResponse<List<FileDto>>>
-            (string.Format("folder/{0}/list?token={1}", id, SessionService.Token), null, Method.GET);
+            (string.Format("folder/{0}/list", id), null, Method.GET);
         }
     }
 }

@@ -37,7 +37,7 @@ namespace GenmCloud.Service
             {
                 if (!string.IsNullOrEmpty(SessionService.Token))
                 {
-                    client.AddDefaultHeader("token", SessionService.Token);
+                    client.AddDefaultHeader("Authorization", SessionService.Token);
                 }
             }
             switch (method)

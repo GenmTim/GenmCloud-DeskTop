@@ -9,6 +9,7 @@ using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
 using Prism.Services.Dialogs;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows;
@@ -55,6 +56,8 @@ namespace GenmCloud.Storage.ViewModels
             }
         }
 
+        public string Tag { get; set; }
+
     }
 
     public class FileItemVO
@@ -68,7 +71,7 @@ namespace GenmCloud.Storage.ViewModels
 
     public class StorageViewModel : BindableBase
     {
-        public DelegateCommand AddFolderCmd { get; private set; }
+        public DelegateCommand<object> AddFolderCmd { get; private set; }
 
         private FolderDto selectedFolder;
         public FolderDto SelectedFolder
@@ -126,27 +129,37 @@ namespace GenmCloud.Storage.ViewModels
                     });
                 }
             });
-            this.AddFolderCmd = new DelegateCommand(AddFolder);
+            this.AddFolderCmd = new DelegateCommand<object>(AddFolder);
             this.eventAggregator.GetEvent<UpdateSelectedFolderEvent>().Subscribe(UpdateSelectedFolder);
             //Simulation();
         }
 
         private void InitTreeRootNode()
         {
-            FileTreeNodeItemList.Add(new FolderTreeNodeVO { Folder = new FolderDto { Name="主页", ParentID = uint.MaxValue, },  Icon = "\xe982" });
-            FileTreeNodeItemList.Add(new FolderTreeNodeVO { Folder = new FolderDto { Name="我的空间", ParentID = uint.MaxValue }, Icon = "\xe980", Children=new ObservableCollection<FolderTreeNodeVO>() });
-            FileTreeNodeItemList.Add(new FolderTreeNodeVO { Folder = new FolderDto { Name="共享空间", ParentID = uint.MaxValue }, Icon = "\xe97a", Children = new ObservableCollection<FolderTreeNodeVO>() });
-            FileTreeNodeItemList.Add(new FolderTreeNodeVO { Folder = new FolderDto { Name="收藏夹", ParentID = uint.MaxValue }, Icon = "\xe69c" });
-            FileTreeNodeItemList.Add(new FolderTreeNodeVO { Folder = new FolderDto { Name="回收站", ParentID = uint.MaxValue }, Icon = "\xe861" });
+            FileTreeNodeItemList.Add(new FolderTreeNodeVO { Folder = new FolderDto { Name="主页", ParentID = uint.MaxValue, },  Icon = "\xe982", Tag="Root" });
+            FileTreeNodeItemList.Add(new FolderTreeNodeVO { Folder = new FolderDto { Name="我的空间", ParentID = uint.MaxValue }, Icon = "\xe980", Children=new ObservableCollection<FolderTreeNodeVO>(), Tag = "Root" });
+            FileTreeNodeItemList.Add(new FolderTreeNodeVO { Folder = new FolderDto { Name="共享空间", ParentID = uint.MaxValue }, Icon = "\xe97a", Children = new ObservableCollection<FolderTreeNodeVO>(), Tag = "Root" });
+            FileTreeNodeItemList.Add(new FolderTreeNodeVO { Folder = new FolderDto { Name="收藏夹", ParentID = uint.MaxValue }, Icon = "\xe69c", Tag = "Root" });
+            FileTreeNodeItemList.Add(new FolderTreeNodeVO { Folder = new FolderDto { Name="回收站", ParentID = uint.MaxValue }, Icon = "\xe861", Tag = "Root" });
         }
 
-        private async void AddFolder()
+        public async void AddFolder(object obj)
         {
+            uint parentId = 0;
+            if (obj != null)
+            {
+                parentId = (uint)obj;
+            }
+
             var result = await DialogHelper.ShowInputValueDialog(dialogHost, "StorageRoot", "添加新文件夹", "添加", "取消", "请输入新的文件夹名字");
             if (result != null && result.Result == ButtonResult.OK)
             {
                 string folderName = result.Parameters.GetValue<string>("value");
-                //AddNewFolderToServer(folderName);
+                var res = await folderService.CreateFolder(parentId, folderName);
+                if (res.StatusCode == ServiceHelper.RequestOk)
+                {
+                    eventAggregator.GetEvent<UpdateFolderListEvent>().Publish();
+                }
             }
         }
 
@@ -223,7 +236,7 @@ namespace GenmCloud.Storage.ViewModels
                     {
                         Folder = newTreeFolders[i].Folder,
                         Icon = "\xe645",
-                        OptCmdList = new ObservableCollection<MenuItem> { new MenuItem { Header = "新建文件夹", Command = AddFolderCmd } },
+                        OptCmdList = new ObservableCollection<MenuItem> { new MenuItem { Header = "新建文件夹", Command = AddFolderCmd, CommandParameter=newTreeFolders[i].Folder.ID } },
                 });
                 }
 

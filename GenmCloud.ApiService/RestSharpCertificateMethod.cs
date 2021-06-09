@@ -60,6 +60,7 @@ namespace GenmCloud.Service
                     break;
                 case Method.PUT:
                     request.AddHeader("Content-Type", "application/json");
+                    request.AddJsonBody(pms);
                     break;
                 case Method.DELETE:
                     request.AddHeader("Content-Type", "application/json");

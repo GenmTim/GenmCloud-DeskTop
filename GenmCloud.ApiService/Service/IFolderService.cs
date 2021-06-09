@@ -10,5 +10,7 @@ namespace GenmCloud.ApiService.Service
         Task<BaseResponse<List<FolderListDto>>> GetForlderList();
 
         Task<BaseResponse<List<FileDto>>> GetFileListByFolder(uint id);
+
+        Task<BaseResponse> CreateFolder(uint parentFolderId, string newFolderName);
     }
 }

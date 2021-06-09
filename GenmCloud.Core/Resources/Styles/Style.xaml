@@ -708,6 +708,7 @@
     <Style x:Key="BackgroundBtnStyle" TargetType="Button">
         <Setter Property="Foreground" Value="#646a73" />
         <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
         <Setter Property="Padding" Value="2,4" />
         <Setter Property="FontSize" Value="14" />
         <Setter Property="BorderThickness" Value="0" />
@@ -733,14 +734,14 @@
                                 SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
                         </Border>
                     </hc:SimplePanel>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="Btnborder" Property="Background" Value="{Binding Path=(hc:BackgroundSwitchElement.MouseHoverBackground), RelativeSource={RelativeSource TemplatedParent}}" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
-        <Style.Triggers>
-            <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="#e4e5e5" />
-            </Trigger>
-        </Style.Triggers>
     </Style>
 
     <Style

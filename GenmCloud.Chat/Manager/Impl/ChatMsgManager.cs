@@ -4,6 +4,7 @@ using GenmCloud.Chat.Tools;
 using GenmCloud.Core.Data.VO;
 using GenmCloud.Core.Event;
 using GenmCloud.Core.Manager;
+using GenmCloud.Core.Manager.Impl;
 using GenmCloud.Core.Tools.Helper;
 using GenmCloud.Shared.Common;
 using GenmCloud.Shared.Common.Session;
@@ -143,11 +144,11 @@ namespace GenmCloud.Chat.Manager
         /// <param name="id">联系对象的ID</param>
         public async void AsyncGetChatObj(uint id)
         {
-            var result = await chatService.GetChatObj(id);
+            var result = await chatService.GetChatObj<UserDto>(id);
             if (!ServiceHelper.IsNullOrFail(result))
             {
                 var chatObjDto = result.Result;
-                AvatarManager.GetInstance().Store(chatObjDto.UserId, chatObjDto.Avatar);
+                UserInfoManager.GetInstance().Store(chatObjDto.Obj.ID, chatObjDto.Obj);
                 chatObjData.PutChatObj(ChatObjDto2VOConvert.Convert(chatObjDto));
             }
         }
@@ -177,11 +178,11 @@ namespace GenmCloud.Chat.Manager
                         var chatMsgVO = ChatMsgDto2VOConvert.Convert(chatMsgDto);
                         if (chatMsgVO.Role == Core.Data.Type.ChatRoleType.Me)
                         {
-                            chatMsgVO.Avatar = new Uri(AvatarManager.GetInstance().Get(SessionService.User.ID));
+                            chatMsgVO.User = SessionService.User;
                         }
                         else
                         {
-                            chatMsgVO.Avatar = new Uri(AvatarManager.GetInstance().Get(id));
+                            chatMsgVO.User = UserInfoManager.GetInstance().Get(id);
                         }
                         chatMsgList.Add(chatMsgVO);
                     }
@@ -211,7 +212,6 @@ namespace GenmCloud.Chat.Manager
                     chatObjVO.LastMsg = chatMsgDto.Data;
 
                     var chatMsgVO = ChatMsgDto2VOConvert.Convert(chatMsgDto);
-                    chatMsgVO.Avatar = new Uri(AvatarManager.GetInstance().Get(chatMsgDto.SenderId));
                     chatObjData.PutChatMsg(chatObjVO, chatMsgVO);
                 });
             }

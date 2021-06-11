@@ -1,6 +1,7 @@
 ﻿<ResourceDictionary
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:attach="clr-namespace:Genm.WPF.Attach;assembly=Genm.WPF"
     xmlns:avalonedit="http://icsharpcode.net/sharpdevelop/avalonedit"
     xmlns:genm="clr-namespace:Genm.WPF.Controls;assembly=Genm.WPF"
     xmlns:hc="https://handyorg.github.io/handycontrol"
@@ -170,6 +171,7 @@
         <Setter Property="Foreground" Value="{DynamicResource PrimaryBrush}" />
         <Setter Property="Cursor" Value="Hand" />
         <Setter Property="FontSize" Value="14" />
+        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
@@ -181,7 +183,22 @@
     <Style
         x:Key="TextBtnStyle"
         BasedOn="{StaticResource BtnCustomStyle}"
-        TargetType="Button" />
+        TargetType="Button">
+        <Setter Property="Foreground" Value="#8f959e" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <ContentPresenter />
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Foreground" Value="#3370ff" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+
+    </Style>
 
     <Style x:Key="TextEditorCustom" TargetType="avalonedit:TextEditor">
         <Setter Property="IsReadOnly" Value="True" />
@@ -648,8 +665,10 @@
         <Setter Property="HorizontalContentAlignment" Value="Center" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
         <Setter Property="Padding" Value="0" />
+        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
         <Setter Property="BorderThickness" Value="0" />
         <Setter Property="hc:BorderElement.CornerRadius" Value="0" />
+        <Setter Property="Cursor" Value="Hand" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ToggleButton}">
@@ -680,12 +699,8 @@
                         </hc:SimplePanel>
                     </Border>
                     <ControlTemplate.Triggers>
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Opacity" Value=".9" />
-                        </Trigger>
-                        <Trigger Property="IsPressed" Value="True">
-                            <Setter Property="Opacity" Value=".6" />
-                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="True" />
+                        <Trigger Property="IsPressed" Value="True" />
                         <Trigger Property="IsChecked" Value="True">
                             <Setter TargetName="CheckedElement" Property="Visibility" Value="Visible" />
                         </Trigger>
@@ -714,6 +729,7 @@
         <Setter Property="BorderThickness" Value="0" />
         <Setter Property="HorizontalAlignment" Value="Center" />
         <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="hc:BackgroundSwitchElement.MouseHoverBackground" Value="#e8e9e9" />
         <Setter Property="hc:BorderElement.CornerRadius" Value="4" />
         <Setter Property="Background" Value="{StaticResource TMS_TransparencyRegionBrush}" />
         <Setter Property="Template">

@@ -1,4 +1,5 @@
-﻿using Prism.Mvvm;
+﻿using GenmCloud.Shared.Dto;
+using Prism.Mvvm;
 
 namespace GenmCloud.Core.Data.VO
 {
@@ -12,7 +13,6 @@ namespace GenmCloud.Core.Data.VO
     public class ChatObjVO : BindableBase
     {
         public uint Id { get; set; }
-        public string Name { get; set; }
 
         private string lastMsg;
         public string LastMsg
@@ -49,7 +49,7 @@ namespace GenmCloud.Core.Data.VO
             }
         }
 
-        public string Avatar { get; set; }
+        public UserDto Obj { get; set; }
 
         public override bool Equals(object obj)
         {

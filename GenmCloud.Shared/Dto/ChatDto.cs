@@ -32,16 +32,10 @@ namespace GenmCloud.Shared.Dto
         public uint Token { get; set; }
     }
 
-    public class ChatObjDto
+    public class ChatObjDto<T>
     {
-        [JsonProperty("userId")]
-        public uint UserId { get; set; }
-
-        [JsonProperty("nickname")]
-        public string Nick { get; set; }
-
-        [JsonProperty("avatar")]
-        public string Avatar { get; set; }
+        [JsonProperty("obj")]
+        public T Obj { get; set; }
 
         [JsonProperty("lastMsg")]
         public ChatMsgDto LastMsg { get; set; }

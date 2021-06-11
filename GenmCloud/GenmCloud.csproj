@@ -4,7 +4,7 @@
     <TargetFrameworks>net5.0-windows</TargetFrameworks>
     <UseWPF>true</UseWPF>
     <AssemblyName>GenmCloud</AssemblyName>
-    <ApplicationIcon>h_aid.ico</ApplicationIcon>
+    <ApplicationIcon>genmcloud.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <None Remove="h_aid.ico" />
@@ -27,7 +27,6 @@
     <ProjectReference Include="..\GenmCloud.Test\GenmCloud.Test.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="h_aid.ico" />
     <Resource Include="Resources\Fonts\iconfont.ttf" />
     <Resource Include="Resources\Fonts\Menu\iconfontmenu.ttf" />
     <Resource Include="Resources\Images\cloud.png" />

@@ -7,6 +7,7 @@
     xmlns:hc="https://handyorg.github.io/handycontrol"
     xmlns:helper="clr-namespace:Genm.WPF.Tools.Helper;assembly=Genm.WPF"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:popup="clr-namespace:GenmCloud.Core.UserControls.Popups;assembly=GenmCloud.Core"
     xmlns:prism="http://prismlibrary.com/"
     xmlns:session="clr-namespace:GenmCloud.Shared.Common.Session;assembly=GenmCloud.Shared"
     xmlns:system="clr-namespace:System;assembly=mscorlib"
@@ -62,12 +63,19 @@
                                     <RowDefinition Height="*" />
                                 </Grid.RowDefinitions>
                                 <hc:SimplePanel>
-                                    <hc:Gravatar
-                                        Width="40"
-                                        Height="40"
-                                        RenderOptions.BitmapScalingMode="HighQuality"
-                                        Source="{Binding Avatar, TargetNullValue=http://localhost:1026/static/avatar/1.jpg}"
-                                        Style="{StaticResource GravatarCircleImg}" />
+                                    <ToggleButton x:Name="profileBtn" Style="{StaticResource ToggleButtonCustom}">
+                                        <hc:Gravatar
+                                            Width="40"
+                                            Height="40"
+                                            RenderOptions.BitmapScalingMode="HighQuality"
+                                            Source="{Binding User.Avatar, TargetNullValue=http://localhost:1026/static/avatar/1.jpg}"
+                                            Style="{StaticResource GravatarCircleImg}" />
+                                    </ToggleButton>
+                                    <popup:ProfilePopup
+                                        HorizontalOffset="10"
+                                        IsOpen="{Binding ElementName=profileBtn, Path=IsChecked}"
+                                        Placement="Right"
+                                        StaysOpen="False" />
                                 </hc:SimplePanel>
                                 <!--#region Left Grid - Menu-->
                                 <Grid Grid.Row="1">

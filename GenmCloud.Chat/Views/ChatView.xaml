@@ -142,7 +142,7 @@
                                                 <hc:Gravatar
                                                     Width="44"
                                                     Height="44"
-                                                    Source="{Binding Avatar, TargetNullValue=http://localhost:1026/static/avatar/3.jpg}"
+                                                    Source="{Binding Obj.Avatar, TargetNullValue=http://localhost:1026/static/avatar/3.jpg}"
                                                     Style="{StaticResource GravatarCircleImg}" />
                                                 <Grid
                                                     Grid.Column="1"
@@ -161,7 +161,7 @@
                                                         FontSize="14"
                                                         FontWeight="SemiBold"
                                                         Foreground="#151b33"
-                                                        Text="{Binding Name}" />
+                                                        Text="{Binding Obj.NickName}" />
                                                     <TextBlock
                                                         Grid.Row="1"
                                                         VerticalAlignment="Center"

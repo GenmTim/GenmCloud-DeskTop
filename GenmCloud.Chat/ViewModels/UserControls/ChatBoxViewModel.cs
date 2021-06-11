@@ -71,7 +71,6 @@ namespace GenmCloud.Chat.ViewModels.UserControls
             var chatMsgDto = ChatMsgDtoBuilder.BuilderStringMsg(Context.Id, newMsg);
 
             var chatMsgVO = ChatMsgDto2VOConvert.Convert(chatMsgDto);
-            chatMsgVO.Avatar = new Uri(AvatarManager.GetInstance().Get(SessionService.User.ID));
             ChatMsgList.Add(chatMsgVO);
             eventAggregator.GetEvent<SendChatMsgEvent>().Publish(chatMsgDto);
         }

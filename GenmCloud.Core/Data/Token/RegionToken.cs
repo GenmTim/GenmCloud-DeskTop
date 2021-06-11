@@ -13,5 +13,7 @@
         public static readonly string StorageContent = nameof(StorageContent);
 
         public static readonly string FileListContent = nameof(FileListContent);
+
+        public static readonly string StorageRightContent = nameof(StorageRightContent);
     }
 }

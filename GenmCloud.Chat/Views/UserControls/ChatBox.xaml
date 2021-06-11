@@ -64,7 +64,7 @@
                     FontSize="16"
                     FontWeight="SemiBold"
                     Foreground="#000235"
-                    Text="{Binding Context.Name}" />
+                    Text="{Binding Context.Obj.NickName}" />
                 <StackPanel
                     Margin="0,0,0,0"
                     HorizontalAlignment="Right"
@@ -103,8 +103,8 @@
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
                                     <local:ChatBubble
-                                        Margin="12,12"
-                                        attach:UriElement.Uri="{Binding Avatar}"
+                                        Margin="0,12"
+                                        attach:UriElement.Uri="{Binding User.Avatar}"
                                         Content="{Binding Content}"
                                         Loaded="ChatBubble_Loaded"
                                         Role="{Binding Role}"

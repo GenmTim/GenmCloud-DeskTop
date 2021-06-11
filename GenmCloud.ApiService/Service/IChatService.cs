@@ -33,6 +33,6 @@ namespace GenmCloud.ApiService.Service
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        Task<BaseResponse<ChatObjDto>> GetChatObj(uint id);
+        Task<BaseResponse<ChatObjDto<T>>> GetChatObj<T>(uint id);
     }
 }

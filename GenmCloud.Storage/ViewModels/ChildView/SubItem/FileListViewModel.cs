@@ -7,7 +7,7 @@ using Prism.Events;
 using Prism.Mvvm;
 using System.Collections.ObjectModel;
 
-namespace GenmCloud.Storage.ViewModels.ChildView
+namespace GenmCloud.Storage.ViewModels.ChildView.SubItem
 {
     public class FileItemVO
     {

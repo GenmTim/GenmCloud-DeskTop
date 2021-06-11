@@ -18,45 +18,129 @@
         Color="{StaticResource EffectShadowColor}" />
 
     <ControlTemplate x:Key="ChatBubbleStringBaseTemplate" TargetType="uc:ChatBubble">
-        <Grid>
+        <Grid Background="{StaticResource TMS_TransparencyRegionBrush}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
             <hc:Gravatar
                 x:Name="Gravatar"
-                Grid.Column="1"
+                Grid.Column="0"
                 Width="36"
                 Height="36"
-                Margin="4,0"
+                Margin="16,0,8,0"
                 VerticalAlignment="Top"
                 RenderOptions.BitmapScalingMode="HighQuality"
-                Source="{Binding Avatar}"
+                Source="{Binding User.Avatar}"
                 Style="{StaticResource GravatarCircleImg}" />
             <hc:SimplePanel
                 x:Name="MessageCarrier"
-                Grid.Column="0"
+                Grid.Column="1"
                 Margin="4,0">
-                <Border
-                    Name="Body"
-                    Margin="0,0,3,0"
-                    Background="{TemplateBinding Background}"
-                    CornerRadius="8"
-                    UseLayoutRounding="True">
-                    <TextBlock
-                        MaxWidth="225"
-                        Margin="{TemplateBinding Padding}"
-                        VerticalAlignment="Center"
-                        Text="{TemplateBinding Content}"
-                        TextWrapping="Wrap" />
-                </Border>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="20" />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <hc:SimplePanel>
+                        <hc:UniformSpacingPanel Spacing="8">
+                            <TextBlock Foreground="#8f959e" Text="{Binding User.NickName}" />
+                            <TextBlock
+                                x:Name="time"
+                                Foreground="#8f959e"
+                                Text="5月8日 14:16"
+                                Visibility="Hidden" />
+                        </hc:UniformSpacingPanel>
+                    </hc:SimplePanel>
+                    <StackPanel
+                        Grid.Row="1"
+                        Margin="0,0,120,0"
+                        Orientation="Horizontal">
+                        <Border
+                            Name="Body"
+                            Grid.Row="1"
+                            Background="{TemplateBinding Background}"
+                            CornerRadius="6"
+                            UseLayoutRounding="True">
+                            <TextBlock
+                                Margin="10"
+                                VerticalAlignment="Center"
+                                Text="{TemplateBinding Content}"
+                                TextWrapping="Wrap" />
+                        </Border>
+                        <hc:SimplePanel
+                            x:Name="opt"
+                            Width="100"
+                            Height="26"
+                            Margin="4,0,0,0"
+                            VerticalAlignment="Top"
+                            Visibility="Hidden">
+                            <Border
+                                Background="White"
+                                BorderBrush="#dee0e3"
+                                BorderThickness="1" />
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition />
+                                    <ColumnDefinition />
+                                    <ColumnDefinition />
+                                    <ColumnDefinition />
+                                </Grid.ColumnDefinitions>
+                                <Button
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Content="&#xe668;"
+                                    FontFamily="{StaticResource FIconFontFamily}"
+                                    Style="{StaticResource TextBtnStyle}" />
+                                <Border BorderBrush="#dee0e3" BorderThickness="0,0,1,0" />
+                                <Button
+                                    Grid.Column="1"
+                                    Margin="0,1,0,0"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Content="&#xe649;"
+                                    FontFamily="{StaticResource FIconFontFamily}"
+                                    Style="{StaticResource TextBtnStyle}" />
+                                <Border
+                                    Grid.Column="1"
+                                    BorderBrush="#dee0e3"
+                                    BorderThickness="0,0,1,0" />
+                                <Button
+                                    Grid.Column="2"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Content="&#xe716;"
+                                    FontFamily="{StaticResource FIconFontFamily}"
+                                    Style="{StaticResource TextBtnStyle}" />
+                                <Border
+                                    Grid.Column="2"
+                                    BorderBrush="#dee0e3"
+                                    BorderThickness="0,0,1,0" />
+                                <Button
+                                    Grid.Column="3"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Content="&#xe61a;"
+                                    FontFamily="{StaticResource FIconFontFamily}"
+                                    Style="{StaticResource TextBtnStyle}" />
+                                <Border
+                                    Grid.Column="3"
+                                    BorderBrush="#dee0e3"
+                                    BorderThickness="0,0,1,0" />
+                            </Grid>
+                        </hc:SimplePanel>
+                    </StackPanel>
+                </Grid>
             </hc:SimplePanel>
         </Grid>
         <ControlTemplate.Triggers>
             <Trigger Property="Role" Value="Other">
-                <Setter TargetName="Gravatar" Property="Grid.Column" Value="0" />
-                <Setter TargetName="MessageCarrier" Property="Grid.Column" Value="1" />
                 <Setter TargetName="Body" Property="Effect" Value="{StaticResource ChatBubbleEffectShadow}" />
+            </Trigger>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter TargetName="time" Property="Visibility" Value="Visible" />
+                <Setter TargetName="opt" Property="Visibility" Value="Visible" />
             </Trigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
@@ -69,36 +153,32 @@
             </Grid.ColumnDefinitions>
             <hc:Gravatar
                 x:Name="Gravatar"
-                Grid.Column="1"
+                Grid.Column="0"
                 Width="36"
                 Height="36"
-                Margin="4,0"
+                Margin="16,0,8,0"
                 VerticalAlignment="Top"
                 RenderOptions.BitmapScalingMode="HighQuality"
-                Source="{Binding Avatar}"
+                Source="{Binding User.Avatar}"
                 Style="{StaticResource GravatarCircleImg}" />
             <hc:SimplePanel
                 x:Name="MessageCarrier"
-                Grid.Column="0"
+                Grid.Column="1"
                 Margin="4,0">
-                <ContentControl VerticalAlignment="Center" Content="{Binding Content}" />
+                <ContentControl
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center"
+                    Content="{Binding Content}" />
             </hc:SimplePanel>
         </Grid>
-        <ControlTemplate.Triggers>
-            <Trigger Property="Role" Value="Other">
-                <Setter TargetName="Gravatar" Property="Grid.Column" Value="0" />
-                <Setter TargetName="MessageCarrier" Property="Grid.Column" Value="1" />
-            </Trigger>
-        </ControlTemplate.Triggers>
+        <ControlTemplate.Triggers />
     </ControlTemplate>
 
     <Style x:Key="ChatBubbleBaseStyle" TargetType="uc:ChatBubble">
         <Setter Property="Focusable" Value="False" />
-        <Setter Property="HorizontalAlignment" Value="Right" />
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
         <Setter Property="Background" Value="#D1D3E4" />
         <Setter Property="Foreground" Value="#303853" />
-        <Setter Property="Padding" Value="10" />
-        <Setter Property="Margin" Value="10" />
         <Setter Property="MinHeight" Value="30" />
         <Setter Property="MinWidth" Value="20" />
         <Setter Property="Template" Value="{StaticResource ChatBubbleStringBaseTemplate}" />
@@ -106,7 +186,6 @@
             <Trigger Property="Role" Value="Other">
                 <Setter Property="Background" Value="{DynamicResource RegionBrush}" />
                 <Setter Property="Foreground" Value="{DynamicResource PrimaryTextBrush}" />
-                <Setter Property="HorizontalAlignment" Value="Left" />
             </Trigger>
             <Trigger Property="Type" Value="Custom">
                 <Setter Property="Template" Value="{StaticResource ChatBubbleCustomBaseTemplate}" />

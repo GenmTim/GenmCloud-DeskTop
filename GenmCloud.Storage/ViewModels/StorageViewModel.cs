@@ -58,6 +58,7 @@ namespace GenmCloud.Storage.ViewModels
 
         public string Tag { get; set; }
 
+        public FolderTreeNodeVO ParentVO;
     }
 
     public class FileItemVO
@@ -73,16 +74,7 @@ namespace GenmCloud.Storage.ViewModels
     {
         public DelegateCommand<object> AddFolderCmd { get; private set; }
 
-        private FolderDto selectedFolder;
-        public FolderDto SelectedFolder
-        {
-            get => selectedFolder;
-            set
-            {
-                selectedFolder = value;
-                RaisePropertyChanged();
-            }
-        }
+
 
         private ObservableCollection<FolderTreeNodeVO> fileTreeNodeItemList = new ObservableCollection<FolderTreeNodeVO>();
         public ObservableCollection<FolderTreeNodeVO> FileTreeNodeItemList
@@ -106,32 +98,11 @@ namespace GenmCloud.Storage.ViewModels
             this.dialogHost = dialogHost;
             this.eventAggregator = NetCoreProvider.Resolve<IEventAggregator>();
             this.folderService = NetCoreProvider.Resolve<IFolderService>();
-            InitTreeRootNode();
-            this.eventAggregator.GetEvent<UpdateFolderListEvent>().Subscribe(async () =>
-            {
-                var result = await folderService.GetForlderList();
-                if (result.StatusCode == ServiceHelper.RequestOk)
-                {
-                    List<FolderListDto> treeDeptList = result.Result;
-                    Application.Current.Dispatcher.Invoke(() =>
-                    {
-                        if (treeDeptList == null)
-                        {
-                            FileTreeNodeItemList[1].Children = null;
-                            return;
-                        }
-
-                        if (treeDeptList != null && FileTreeNodeItemList[1].Children == null)
-                        {
-                            FileTreeNodeItemList[1].Children = new ObservableCollection<FolderTreeNodeVO>();
-                        }
-                        UpdateFolderListVO(FileTreeNodeItemList[1].Children, treeDeptList);
-                    });
-                }
-            });
             this.AddFolderCmd = new DelegateCommand<object>(AddFolder);
-            this.eventAggregator.GetEvent<UpdateSelectedFolderEvent>().Subscribe(UpdateSelectedFolder);
-            //Simulation();
+
+            InitTreeRootNode();
+
+            this.eventAggregator.GetEvent<UpdateFolderListEvent>().Subscribe(UpdateFolderList);
         }
 
         private void InitTreeRootNode()
@@ -163,103 +134,70 @@ namespace GenmCloud.Storage.ViewModels
             }
         }
 
-        public void UpdateSelectedFolder(object obj)
+        public async void UpdateFolderList()
         {
-            if (obj == null) return;
-            FolderDto folder = (FolderDto)obj;
-            SelectedFolder = folder;
+            var result = await folderService.GetForlderList();
+            if (result.StatusCode == ServiceHelper.RequestOk)
+            {
+                List<FolderListDto> treeDeptList = result.Result;
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    if (treeDeptList == null)
+                    {
+                        FileTreeNodeItemList[1].Children = null;
+                        return;
+                    }
 
-            eventAggregator.GetEvent<UpdateFileListEvent>().Publish(obj);
+                    if (treeDeptList != null && FileTreeNodeItemList[1].Children == null)
+                    {
+                        FileTreeNodeItemList[1].Children = new ObservableCollection<FolderTreeNodeVO>();
+                    }
+                    UpdateFolderListVO(FileTreeNodeItemList[1], treeDeptList);
+                });
+            }
         }
 
-        public void Simulation()
+        public void UpdateFolderListVO(FolderTreeNodeVO folderTreeNode, List<FolderListDto> newTreeFolderList)
         {
-
-            //var child1 = new FolderTreeNodeItemVO
-            //{
-            //    Id = 11,
-            //    Name = "测试1",
-            //    OptCmdList = optList,
-            //    Children = null,
-            //};
-
-            //var child2 = new FolderTreeNodeItemVO
-            //{
-            //    Id = 12,
-            //    Name = "测试2",
-            //    Children = null,
-            //};
-
-            //FileTreeNodeItemList.Add(new FolderTreeNodeItemVO
-            //{
-            //    Id = 1,
-            //    Name = "测试",
-            //    Children = new ObservableCollection<FolderTreeNodeItemVO>(),
-            //});
-            //FileTreeNodeItemList[0].Children.Add(child1);
-            //FileTreeNodeItemList[0].Children.Add(child2);
-
-            FileItemVOList.Add(new FileItemVO { FileName = "任务", OwnerName = "蔡承龙", CreatedAt = "3月22日 21:35" });
-            FileItemVOList.Add(new FileItemVO { FileName = "行业分类——2018国家统计局数据_行业分类——2018国家统计局数据", OwnerName = "余浩臻", CreatedAt = "3月22日 23:15" });
-            FileItemVOList.Add(new FileItemVO { FileName = "牛人认证", OwnerName = "蔡承龙", CreatedAt = "3月22日 23:12" });
-            FileItemVOList.Add(new FileItemVO { FileName = "企业认证关键字段", OwnerName = "蔡承龙", CreatedAt = "3月22日 13:32" });
-            FileItemVOList.Add(new FileItemVO { FileName = "企业认证", OwnerName = "余浩臻", CreatedAt = "3月22日 19:35" });
-            FileItemVOList.Add(new FileItemVO { FileName = "汇报、考评关键字", OwnerName = "余浩臻", CreatedAt = "3月15日 19:35" });
-            FileItemVOList.Add(new FileItemVO { FileName = "汇报、考评关键字", OwnerName = "余浩臻", CreatedAt = "3月15日 19:35" });
-            FileItemVOList.Add(new FileItemVO { FileName = "汇报、考评关键字", OwnerName = "余浩臻", CreatedAt = "3月15日 19:35" });
-            FileItemVOList.Add(new FileItemVO { FileName = "汇报、考评关键字", OwnerName = "余浩臻", CreatedAt = "3月15日 19:35" });
-            FileItemVOList.Add(new FileItemVO { FileName = "汇报、考评关键字", OwnerName = "余浩臻", CreatedAt = "3月15日 19:35" });
-            FileItemVOList.Add(new FileItemVO { FileName = "汇报、考评关键字", OwnerName = "余浩臻", CreatedAt = "3月15日 19:35" });
-            FileItemVOList.Add(new FileItemVO { FileName = "汇报、考评关键字", OwnerName = "余浩臻", CreatedAt = "3月15日 19:35" });
-            FileItemVOList.Add(new FileItemVO { FileName = "汇报、考评关键字", OwnerName = "余浩臻", CreatedAt = "3月15日 19:35" });
-            FileItemVOList.Add(new FileItemVO { FileName = "汇报、考评关键字", OwnerName = "余浩臻", CreatedAt = "3月15日 19:35" });
-            FileItemVOList.Add(new FileItemVO { FileName = "汇报、考评关键字", OwnerName = "余浩臻", CreatedAt = "3月15日 19:35" });
-            FileItemVOList.Add(new FileItemVO { FileName = "汇报、考评关键字", OwnerName = "余浩臻", CreatedAt = "3月15日 19:35" });
-        }
-
-
-        public void UpdateFolderListVO(ObservableCollection<FolderTreeNodeVO> folderTreeList, List<FolderListDto> newTreeFolderList)
-        {
-            //var optList = new ObservableCollection<MenuItem> { new MenuItem { Header = "新建文件夹", Command = AddNewFolderCmd } };
-
             var newTreeFolders = newTreeFolderList.ToArray();
 
             for (int i = 0; i < newTreeFolders.Length; ++i)
             {
-                if (i <= folderTreeList.Count - 1)
+                if (i <= folderTreeNode.Children.Count - 1)
                 {
-                    folderTreeList[i].Folder = newTreeFolderList[i].Folder;
+                    folderTreeNode.Children[i].Folder = newTreeFolderList[i].Folder;
                 }
                 else
                 {
-                    folderTreeList.Add(new FolderTreeNodeVO
+                    folderTreeNode.Children.Add(new FolderTreeNodeVO
                     {
                         Folder = newTreeFolders[i].Folder,
                         Icon = "\xe645",
+                        ParentVO = folderTreeNode,
                         OptCmdList = new ObservableCollection<MenuItem> { new MenuItem { Header = "新建文件夹", Command = AddFolderCmd, CommandParameter=newTreeFolders[i].Folder.ID } },
                 });
                 }
 
                 if (newTreeFolderList[i].Children != null)
                 {
-                    if (folderTreeList[i].Children == null)
+                    if (folderTreeNode.Children[i].Children == null)
                     {
-                        folderTreeList[i].Children = new ObservableCollection<FolderTreeNodeVO>();
+                        folderTreeNode.Children[i].Children = new ObservableCollection<FolderTreeNodeVO>();
                     }
-                    UpdateFolderListVO(folderTreeList[i].Children, newTreeFolderList[i].Children);
+                    UpdateFolderListVO(folderTreeNode.Children[i], newTreeFolderList[i].Children);
                 }
                 else
                 {
-                    if (folderTreeList[i].Children != null)
+                    if (folderTreeNode.Children[i].Children != null)
                     {
-                        folderTreeList[i].Children = null;
+                        folderTreeNode.Children[i].Children = null;
                     }
                 }
             }
 
-            for (int i = folderTreeList.Count - 1; i > newTreeFolders.Length - 1; --i)
+            for (int i = folderTreeNode.Children.Count - 1; i > newTreeFolders.Length - 1; --i)
             {
-                folderTreeList.RemoveAt(i);
+                folderTreeNode.Children.RemoveAt(i);
             }
         }
     }

@@ -6,6 +6,7 @@ using GenmCloud.Core.Data.Token;
 using GenmCloud.Core.Event;
 using GenmCloud.Shared.Common;
 using GenmCloud.Shared.Common.Session;
+using GenmCloud.Shared.Dto;
 using GenmCloud.Views;
 using Newtonsoft.Json;
 using Prism.Events;
@@ -41,13 +42,13 @@ namespace GenmCloud.ViewModels
             }
         }
 
-        private string avatar;
-        public string Avatar
+        private UserDto user;
+        public UserDto User
         {
-            get => avatar;
+            get => user;
             set
             {
-                avatar = value;
+                user = value;
                 RaisePropertyChanged();
             }
         }
@@ -89,7 +90,7 @@ namespace GenmCloud.ViewModels
             this.userService = NetCoreProvider.Resolve<IUserService>();
             this.eventAggregator.GetEvent<UserInfoUpdateEvent>().Subscribe(() =>
             {
-                Avatar = SessionService.User.Avatar;
+                User = SessionService.User;
             });
             this.eventAggregator.GetEvent<GoChatEvent>().Subscribe((id) =>
             {

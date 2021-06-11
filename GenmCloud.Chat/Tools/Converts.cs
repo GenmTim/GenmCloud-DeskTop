@@ -1,6 +1,8 @@
 ﻿using GenmCloud.Chat.ViewModels.UserControls.Bubble;
 using GenmCloud.Chat.Views.UserControls.Bubble;
 using GenmCloud.Core.Data.VO;
+using GenmCloud.Core.Manager;
+using GenmCloud.Core.Manager.Impl;
 using GenmCloud.Shared.Common;
 using GenmCloud.Shared.Common.Session;
 using GenmCloud.Shared.Dto;
@@ -9,13 +11,12 @@ namespace GenmCloud.Chat.Tools
 {
     public static class ChatObjDto2VOConvert
     {
-        public static ChatObjVO Convert(ChatObjDto chatObjDto)
+        public static ChatObjVO Convert(ChatObjDto<UserDto> chatObjDto)
         {
             return new ChatObjVO
             {
-                Id = chatObjDto.UserId,
-                Name = chatObjDto.Nick,
-                Avatar = chatObjDto.Avatar,
+                Id = chatObjDto.Obj.ID,
+                Obj = chatObjDto.Obj,
                 LastMsg = BuilderMsgRemark(chatObjDto.LastMsg),
             };
         }
@@ -41,8 +42,9 @@ namespace GenmCloud.Chat.Tools
         {
             var chatMsgVO = new ChatMsgVO
             {
-                Id = chatMsgDto.Id,
+                ID = chatMsgDto.Id,
                 Role = (chatMsgDto.SenderId == SessionService.User.ID ? Core.Data.Type.ChatRoleType.Me : Core.Data.Type.ChatRoleType.Other),
+                User = UserInfoManager.GetInstance().Get(chatMsgDto.Id),
             };
             switch (chatMsgDto.Type)
             {

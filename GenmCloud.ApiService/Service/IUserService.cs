@@ -12,5 +12,9 @@ namespace GenmCloud.ApiService.Service
         Task<BaseResponse<TokenDto>> RegisterAsync(string username, string passWord);
 
         Task<BaseResponse<UserDto>> GetUserInfo(uint id);
+
+        Task<BaseResponse<string>> GetNickName(uint id);
+
+        Task<BaseResponse<string>> GetAvatar(uint id);
     }
 }

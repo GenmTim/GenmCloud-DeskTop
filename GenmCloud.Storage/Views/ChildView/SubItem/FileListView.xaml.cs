@@ -3,8 +3,9 @@ using Prism.Events;
 using System;
 using System.Windows;
 using System.Windows.Controls;
+using static GenmCloud.Storage.Views.ChildView.MySpaceView;
 
-namespace GenmCloud.Storage.Views.ChildView
+namespace GenmCloud.Storage.Views.ChildView.SubItem
 {
     /// <summary>
     /// FileListView.xaml 的交互逻辑
@@ -37,7 +38,7 @@ namespace GenmCloud.Storage.Views.ChildView
         /// <param name="e"></param>
         private void ShrinkViewEvent(object sender, RoutedEventArgs e)
         {
-            eventAggregator.GetEvent<StorageView.ShrinkGridEvent>().Publish();
+            eventAggregator.GetEvent<ShrinkGridEvent>().Publish();
         }
 
         /// <summary>
@@ -47,7 +48,7 @@ namespace GenmCloud.Storage.Views.ChildView
         /// <param name="e"></param>
         private void ExpandViewEvent(object sender, RoutedEventArgs e)
         {
-            eventAggregator.GetEvent<StorageView.ExpandGridEvent>().Publish();
+            eventAggregator.GetEvent<ExpandGridEvent>().Publish();
         }
 
         private void SimplePanel_SizeChanged(object sender, SizeChangedEventArgs e)

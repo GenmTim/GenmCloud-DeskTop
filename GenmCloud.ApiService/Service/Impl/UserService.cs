@@ -10,6 +10,16 @@ namespace GenmCloud.ApiService.Service.Impl
 
     public class UserService : BaseService<UserDto>, IUserService
     {
+        public async Task<BaseResponse<string>> GetAvatar(uint id)
+        {
+            return await new BaseServiceRequest().GetRequest<BaseResponse<string>>(string.Format("/user/avatar/{0}", 3), null, Method.POST);
+        }
+
+        public async Task<BaseResponse<string>> GetNickName(uint id)
+        {
+            return await new BaseServiceRequest().GetRequest<BaseResponse<string>>(string.Format("/user/name/{0}", 3), null, Method.POST);
+        }
+
         public async Task<BaseResponse<UserDto>> GetUserInfo(uint id)
         {
             if (id == 0)

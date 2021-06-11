@@ -13,53 +13,48 @@
     xmlns:prism="http://prismlibrary.com/"
     xmlns:viewbase="clr-namespace:GenmCloud.Core.UserControls.ViewBases;assembly=GenmCloud.Core"
     xmlns:wpftk="clr-namespace:WpfToolkit.Controls;assembly=VirtualizingWrapPanel"
-    d:DesignHeight="300"
-    d:DesignWidth="300"
     prism:ViewModelLocator.AutoWireViewModel="True"
     mc:Ignorable="d">
     <hc:SimplePanel>
-        <ToggleButton
-            x:Name="btn"
-            ClickMode="Hover"
-            Content="测试" />
-        <Popup
-            IsOpen="{Binding ElementName=btn, Path=IsChecked}"
-            PlacementTarget="{Binding ElementName=btn}"
-            StaysOpen="True">
+        <StackPanel>
             <hc:SimplePanel
-                Width="345"
-                Height="240"
-                Margin="8"
-                Effect="{StaticResource DialogShadow}">
+                MaxWidth="300"
+                MaxHeight="300"
+                MouseDown="SimplePanel_MouseDown">
                 <Border
-                    Background="{StaticResource RegionBrush}"
-                    BorderBrush="{StaticResource TMS_BorderBrush}"
-                    BorderThickness="1"
-                    CornerRadius="4">
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="60" />
-                            <RowDefinition />
-                        </Grid.RowDefinitions>
-                        <hc:SimplePanel>
-                            <Grid>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition />
-                                    <RowDefinition />
-                                </Grid.RowDefinitions>
-                                <TextBlock Text="最近使用" />
-                                <hc:UniformSpacingPanel Spacing="20">
-                                    <TextBlock Text="" />
-                                </hc:UniformSpacingPanel>
-                            </Grid>
-                        </hc:SimplePanel>
-                        <Border BorderBrush="{StaticResource TMS_BorderBrush}" BorderThickness="0,0,0,1" />
-                        <hc:SimplePanel Grid.Row="1">
-                            <TextBlock />
-                        </hc:SimplePanel>
-                    </Grid>
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    BorderBrush="#dee0e3"
+                    BorderThickness="4"
+                    CornerRadius="8">
+                    <Border
+                        Margin="-1"
+                        CornerRadius="8"
+                        Style="{StaticResource BorderClip}">
+                        <Image Cursor="Hand" Source="http://localhost:1026/static/i1.jpg" />
+                    </Border>
                 </Border>
             </hc:SimplePanel>
-        </Popup>
+            <hc:SimplePanel
+                MaxWidth="300"
+                MaxHeight="300"
+                MouseDown="SimplePanel_MouseDown">
+                <Border
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    BorderBrush="#dee0e3"
+                    BorderThickness="4"
+                    CornerRadius="8">
+                    <Border
+                        Margin="-1"
+                        CornerRadius="8"
+                        Style="{StaticResource BorderClip}">
+                        <Image Cursor="Hand" Source="http://localhost:1026/static/p1.png" />
+                    </Border>
+                </Border>
+            </hc:SimplePanel>
+        </StackPanel>
+
+
     </hc:SimplePanel>
 </UserControl>

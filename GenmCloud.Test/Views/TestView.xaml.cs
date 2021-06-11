@@ -1,4 +1,6 @@
-﻿using ICSharpCode.AvalonEdit;
+﻿using HandyControl.Controls;
+using ICSharpCode.AvalonEdit;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows;
@@ -93,7 +95,9 @@ namespace GenmCloud.Test.Views
             //_textEditor["Golang"].Text = file_content_str;
         }
 
-
-
+        private void SimplePanel_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            new ImageBrowser(new Uri("http://localhost:1026/static/i1.jpg")).Show();
+        }
     }
 }

@@ -9,6 +9,7 @@ using GenmCloud.Contact.Views;
 using GenmCloud.Core.Data.Token;
 using GenmCloud.Core.Event;
 using GenmCloud.Core.Manager;
+using GenmCloud.Core.Manager.Impl;
 using GenmCloud.Core.Service.Dialog;
 using GenmCloud.Core.Tools.Helper;
 using GenmCloud.Core.UserControls.Dialog.Views;
@@ -61,7 +62,7 @@ namespace GenmCloud
             containerRegistry.RegisterSingleton<ChatMsgManager>(() => { return ChatMsgManager.GetInstance(); });
 
             // 注册头像管理
-            containerRegistry.RegisterSingleton<AvatarManager>(() => { return AvatarManager.GetInstance(); });
+            containerRegistry.RegisterSingleton<UserInfoManager>(() => { return UserInfoManager.GetInstance(); });
 
             // 注册日志服务
             containerRegistry.RegisterSingleton<ILog, GenmCloudNLog>();
@@ -199,7 +200,7 @@ namespace GenmCloud
             if (result.StatusCode == ServiceHelper.RequestOk)
             {
                 SessionService.User = result.Result;
-                AvatarManager.GetInstance().Store(SessionService.User.ID, SessionService.User.Avatar);
+                UserInfoManager.GetInstance().Store(SessionService.User.ID, SessionService.User);
                 Container.Resolve<IEventAggregator>().GetEvent<UserInfoUpdateEvent>().Publish();
             }
         }

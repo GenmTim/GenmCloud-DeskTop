@@ -1,6 +1,6 @@
 ﻿using System.Windows.Controls;
 
-namespace GenmCloud.Storage.Views.ChildView
+namespace GenmCloud.Storage.Views.ChildView.SubItem
 {
     /// <summary>
     /// DetailInfoView.xaml 的交互逻辑

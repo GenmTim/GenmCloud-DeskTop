@@ -16,10 +16,10 @@ namespace GenmCloud.ApiService.Service.Impl
                 (string.Format("chat/history?user_id={0}", UserId), null, Method.GET);
         }
 
-        public async Task<BaseResponse<ChatObjDto>> GetChatObj(uint id)
+        public async Task<BaseResponse<ChatObjDto<T>>> GetChatObj<T>(uint id)
         {
             return await new BaseServiceRequest()
-                .GetRequest<BaseResponse<ChatObjDto>>
+                .GetRequest<BaseResponse<ChatObjDto<T>>>
                 (string.Format("chat/obj/{0}", id), null, Method.GET);
         }
 

@@ -14,7 +14,7 @@ namespace ApiServiceTestProject
         public void TestUpload()
         {
             SessionService.Token = Token;
-            var service = new FileService();
+            var service = new UploadService();
             var res = service.Upload(3, @"Z:\tmp\TestFile.txt");
             res.Wait();
             Assert.IsTrue(res.Result.StatusCode == 200);

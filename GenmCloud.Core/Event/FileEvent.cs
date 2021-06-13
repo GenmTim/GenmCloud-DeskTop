@@ -1,4 +1,5 @@
 ﻿using Prism.Events;
+using System.Threading;
 
 namespace GenmCloud.Core.Event
 {
@@ -9,6 +10,9 @@ namespace GenmCloud.Core.Event
         public string FileName;
         public long FileSize;
         public uint FolderId;
+        public long FragmentNum;
+        public long FileOffset;
+        public Semaphore Sem;
     }
 
 

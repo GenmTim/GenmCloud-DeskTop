@@ -18,7 +18,7 @@
 
         #region 接口地址
 
-        public static string serverUrl = string.Empty;
+        public static string ServerUrl = string.Empty;
 
         #endregion
     }

@@ -14,7 +14,7 @@ namespace GenmCloud.ApiService
     /// </summary>
     public class BaseServiceRequest
     {
-        private readonly string _requestUrl = Contract.serverUrl;
+        private readonly string _requestUrl = Contract.ServerUrl;
 
         public string requestUrl
         {

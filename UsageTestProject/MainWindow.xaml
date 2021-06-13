@@ -1,0 +1,72 @@
+﻿<Window
+    x:Class="UsageTestProject.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:convert="clr-namespace:GenmCloud.Core.Resources.Converters;assembly=GenmCloud.Core"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:hc="https://handyorg.github.io/handycontrol"
+    xmlns:local="clr-namespace:UsageTestProject"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:prism="http://prismlibrary.com/"
+    xmlns:uc="clr-namespace:GenmCloud.Core.UserControls.Common.Views;assembly=GenmCloud.Core"
+    x:Name="window"
+    Title="MainWindow"
+    Width="800"
+    Height="450"
+    prism:ViewModelLocator.AutoWireViewModel="false"
+    mc:Ignorable="d">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30" />
+            <RowDefinition />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <hc:SimplePanel>
+            <hc:UniformSpacingPanel HorizontalAlignment="Center" Spacing="20">
+                <Button Command="{Binding ClickCmd}" Content="读取文件测试" />
+                <Button Command="{Binding PauseCmd}" Content="暂停" />
+                <Button Command="{Binding StartCmd}" Content="开始" />
+                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <Run Text="{Binding UploadRate, Converter={StaticResource FileSize2String}}" />
+                    <Run Text="/s" />
+                </TextBlock>
+            </hc:UniformSpacingPanel>
+        </hc:SimplePanel>
+        <Grid Grid.Row="1">
+            <ScrollViewer>
+                <ItemsControl ItemsSource="{Binding UploadList}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <hc:UniformSpacingPanel Spacing="20">
+                                    <TextBlock Text="{Binding Name}" />
+                                    <StackPanel
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        Orientation="Horizontal">
+                                        <TextBlock Text="{Binding UploadedSize, Converter={StaticResource FileSize2String}}" />
+                                        <TextBlock Text="/" />
+                                        <TextBlock Text="{Binding Size, Converter={StaticResource FileSize2String}}" />
+                                    </StackPanel>
+                                    <ToggleButton
+                                        hc:StatusSwitchElement.HideUncheckedElement="True"
+                                        Command="{Binding DataContext.SingleTaskCmd, ElementName=window}"
+                                        CommandParameter="{Binding .}"
+                                        Style="{StaticResource ToggleButtonCustom}">
+                                        <TextBlock Text="暂停" />
+                                        <hc:StatusSwitchElement.CheckedElement>
+                                            <TextBlock Text="开始" />
+                                        </hc:StatusSwitchElement.CheckedElement>
+                                    </ToggleButton>
+                                </hc:UniformSpacingPanel>
+                            </Grid>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+        </Grid>
+        <ScrollViewer Grid.Row="2">
+            <ItemsControl x:Name="text" ItemsSource="{Binding UploadedList}" />
+        </ScrollViewer>
+    </Grid>
+</Window>

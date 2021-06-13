@@ -1,13 +1,14 @@
-﻿using Prism.Mvvm;
+﻿using GenmCloud.Core.Event;
+using Prism.Mvvm;
 
 namespace GenmCloud.Core.Data.VO
 {
     public enum UploadFileState
     {
-        上传中,
-        暂停,
-        上传完成,
-        上传失败,
+        Uploading,
+        Pause,
+        Success,
+        Fail,
     }
 
     public class UploadFileItemVO : BindableBase
@@ -28,6 +29,18 @@ namespace GenmCloud.Core.Data.VO
             }
         }
 
+        private long uploadedSize;
+        public long UploadedSize
+        {
+            get => uploadedSize;
+            set
+            {
+                uploadedSize = value;
+                Rate = uploadedSize * 100 / Size;
+                RaisePropertyChanged();
+            }
+        }
+
         private double rate;
         public double Rate
         {
@@ -39,5 +52,6 @@ namespace GenmCloud.Core.Data.VO
             }
         }
 
+        public UploadFileTask Task;
     }
 }

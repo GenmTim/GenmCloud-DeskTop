@@ -120,7 +120,7 @@ namespace GenmCloud
 
         private void InitSetting()
         {
-            Contract.serverUrl = ConfigurationManager.AppSettings["serverAddress"];
+            Contract.ServerUrl = ConfigurationManager.AppSettings["serverAddress"];
 
             // 编辑器的高亮显示扩展
             TextEditorHelper.RegisterHighlighting("Go", new[] { ".go" }, "Go.xshd");
@@ -152,7 +152,7 @@ namespace GenmCloud
             containerRegistry.Register<IUserService, UserService>();
             containerRegistry.Register<IContactService, ContactService>();
             containerRegistry.Register<IChatService, ChatService>();
-            containerRegistry.Register<IFileService, FileService>();
+            containerRegistry.Register<IUploadService, UploadService>();
             containerRegistry.Register<IFolderService, FolderService>();
         }
 

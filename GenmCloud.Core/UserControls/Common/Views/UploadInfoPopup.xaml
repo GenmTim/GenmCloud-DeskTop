@@ -7,6 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:prism="http://prismlibrary.com/"
     xmlns:vo="clr-namespace:GenmCloud.Core.Data.VO"
+    x:Name="_view"
     Width="460"
     prism:ViewModelLocator.AutoWireViewModel="True"
     Visibility="{Binding IsShowPopup, Converter={StaticResource Boolean2VisibilityConverter}}"
@@ -56,6 +57,7 @@
                                     Margin="20,0,0,0"
                                     Foreground="#1890ff"
                                     Text="{Binding ProcessRate}" />
+                                <TextBlock Foreground="#1890ff" Text="%" />
                             </StackPanel>
                         </hc:SimplePanel>
                         <hc:SimplePanel>
@@ -177,18 +179,53 @@
                         </Grid.RowDefinitions>
                         <hc:SimplePanel>
                             <Border Background="#f5f6f7" />
-                            <Border
-                                Width="{Binding ProcessBorderLength}"
-                                HorizontalAlignment="Left"
-                                Background="#e1eaff"
-                                Visibility="{Binding IsUploadCompleted, Converter={StaticResource Boolean2VisibilityReConverter}}" />
-                            <TextBlock
-                                Margin="24,0,0,0"
-                                VerticalAlignment="Center"
-                                FontSize="13"
-                                Foreground="#1f2329"
-                                Text="正在上传"
-                                Visibility="{Binding IsUploadCompleted, Converter={StaticResource Boolean2VisibilityReConverter}}" />
+                            <hc:SimplePanel Visibility="{Binding IsUploadCompleted, Converter={StaticResource Boolean2VisibilityReConverter}}">
+                                <Border
+                                    Width="{Binding ProcessBorderLength}"
+                                    HorizontalAlignment="Left"
+                                    Background="#e1eaff" />
+                                <TextBlock
+                                    Margin="24,0,0,0"
+                                    VerticalAlignment="Center"
+                                    FontSize="13"
+                                    Foreground="#1f2329">
+                                    <TextBlock.Style>
+                                        <Style TargetType="TextBlock">
+                                            <Setter Property="Visibility" Value="Collapsed" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding UploadFileItemNumber}" Value="0">
+                                                    <Setter Property="Visibility" Value="Visible" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBlock.Style>
+                                    <Run Text="正在上传" />
+                                </TextBlock>
+                                <StackPanel Orientation="Horizontal">
+                                    <StackPanel.Style>
+                                        <Style TargetType="StackPanel">
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding UploadFileItemNumber}" Value="0">
+                                                    <Setter Property="Visibility" Value="Collapsed" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </StackPanel.Style>
+                                    <TextBlock
+                                        Margin="24,0,0,0"
+                                        VerticalAlignment="Center"
+                                        FontSize="13"
+                                        Foreground="#1f2329">
+                                        <Run Text="速度: " />
+                                        <Run Text="{Binding UploadRate, Converter={StaticResource FileSize2String}}" />
+                                    </TextBlock>
+                                    <TextBlock
+                                        VerticalAlignment="Center"
+                                        FontSize="13"
+                                        Foreground="#1f2329"
+                                        Text="/s" />
+                                </StackPanel>
+                            </hc:SimplePanel>
                             <TextBlock
                                 Margin="24,0,0,0"
                                 VerticalAlignment="Center"
@@ -196,18 +233,20 @@
                                 Foreground="#1f2329"
                                 Visibility="{Binding IsUploadCompleted, Converter={StaticResource Boolean2VisibilityConverter}}">
                                 <Run Text="已上传" />
-                                <Run Text="10" />
+                                <Run Text="{Binding UploadFileList.Count, Mode=OneWay}" />
                                 <Run Text="个任务" />
                                 <Run Text="，共" />
-                                <Run Text="2.94" />
-                                <Run Text="MB" />
+                                <Run Text="{Binding UploadFileSumSize, Converter={StaticResource FileSize2String}}" />
                             </TextBlock>
                         </hc:SimplePanel>
                         <hc:ScrollViewer
                             x:Name="scrollViewer"
                             Grid.Row="1"
                             MaxHeight="260">
-                            <ItemsControl x:Name="listsControl" ItemsSource="{Binding UploadFileItemList}">
+                            <ItemsControl
+                                x:Name="listsControl"
+                                FocusVisualStyle="{x:Null}"
+                                ItemsSource="{Binding UploadFileList}">
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
                                         <hc:SimplePanel x:Name="root" Height="52">
@@ -227,14 +266,15 @@
                                                         <TextBlock
                                                             FontSize="14"
                                                             Foreground="#1f2329"
-                                                            Text="{Binding Name}" />
+                                                            Text="{Binding Name}"
+                                                            TextTrimming="CharacterEllipsis" />
                                                         <TextBlock
                                                             Margin="0,4,0,0"
                                                             FontSize="12"
                                                             Foreground="#646a73">
-                                                            <Run Text="12.57 MB" />
+                                                            <Run Text="{Binding UploadedSize, Converter={StaticResource FileSize2String}}" />
                                                             <Run Text="/" />
-                                                            <Run Text="174.13 MB" />
+                                                            <Run Text="{Binding Size, Converter={StaticResource FileSize2String}}" />
                                                         </TextBlock>
                                                     </StackPanel>
                                                 </StackPanel>
@@ -243,17 +283,63 @@
                                                         x:Name="upload"
                                                         VerticalAlignment="Center"
                                                         Orientation="Horizontal">
-                                                        <TextBlock Foreground="#8f959e" Text="7%" />
-                                                        <hc:CircleProgressBar
-                                                            x:Name="fileUploadProgress"
-                                                            Width="16"
-                                                            Height="16"
-                                                            Margin="12,0,0,0"
-                                                            ArcThickness="2"
-                                                            Foreground="{StaticResource PrimaryBrush}"
-                                                            ShowText="False"
-                                                            Style="{StaticResource ProgressBarSuccessCircle}"
-                                                            Value="{Binding Rate}" />
+                                                        <StackPanel.Resources>
+                                                            <Button
+                                                                x:Key="PauseBtn"
+                                                                Padding="2"
+                                                                Command="{Binding DataContext.PauseCmd, ElementName=_view}"
+                                                                CommandParameter="{Binding .}"
+                                                                Content="&#xe60c;"
+                                                                FontFamily="{StaticResource FIconFontFamily}"
+                                                                FontSize="14"
+                                                                Style="{StaticResource BackgroundBtnStyle}" />
+                                                            <Button
+                                                                x:Key="StartBtn"
+                                                                Padding="2"
+                                                                Command="{Binding DataContext.StartCmd, ElementName=_view}"
+                                                                CommandParameter="{Binding .}"
+                                                                Content="&#xe650;"
+                                                                FontFamily="{StaticResource FIconFontFamily}"
+                                                                FontSize="14"
+                                                                Style="{StaticResource BackgroundBtnStyle}" />
+                                                        </StackPanel.Resources>
+                                                        <StackPanel
+                                                            Margin="0,0,0,2"
+                                                            VerticalAlignment="Center"
+                                                            Orientation="Horizontal">
+                                                            <TextBlock Foreground="#8f959e" Text="{Binding Rate}" />
+                                                            <TextBlock Foreground="#8f959e" Text="%" />
+                                                        </StackPanel>
+                                                        <hc:SimplePanel
+                                                            x:Name="optArea"
+                                                            Margin="4,0,0,0"
+                                                            HorizontalAlignment="Right">
+                                                            <hc:CircleProgressBar
+                                                                x:Name="fileUploadProgress"
+                                                                Width="18"
+                                                                Height="18"
+                                                                VerticalAlignment="Center"
+                                                                ArcThickness="2"
+                                                                Foreground="{StaticResource PrimaryBrush}"
+                                                                ShowText="False"
+                                                                Style="{StaticResource ProgressBarSuccessCircle}"
+                                                                Value="{Binding Rate}" />
+                                                            <ContentControl x:Name="optCmd" DataContext="{Binding .}">
+                                                                <ContentControl.Style>
+                                                                    <Style TargetType="ContentControl">
+                                                                        <Setter Property="Visibility" Value="Collapsed" />
+                                                                        <Style.Triggers>
+                                                                            <DataTrigger Binding="{Binding State}" Value="Uploading">
+                                                                                <Setter Property="Content" Value="{StaticResource PauseBtn}" />
+                                                                            </DataTrigger>
+                                                                            <DataTrigger Binding="{Binding State}" Value="Pause">
+                                                                                <Setter Property="Content" Value="{StaticResource StartBtn}" />
+                                                                            </DataTrigger>
+                                                                        </Style.Triggers>
+                                                                    </Style>
+                                                                </ContentControl.Style>
+                                                            </ContentControl>
+                                                        </hc:SimplePanel>
                                                     </StackPanel>
                                                     <StackPanel
                                                         x:Name="uploaded"
@@ -265,9 +351,14 @@
                                             </Grid>
                                         </hc:SimplePanel>
                                         <DataTemplate.Triggers>
-                                            <Trigger SourceName="root" Property="IsMouseOver" Value="True">
-                                                <Setter TargetName="border" Property="Background" Value="#eff0f1" />
+                                            <Trigger SourceName="optArea" Property="IsMouseOver" Value="True">
+                                                <Setter TargetName="fileUploadProgress" Property="Visibility" Value="Collapsed" />
+                                                <Setter TargetName="optCmd" Property="Visibility" Value="Visible" />
                                             </Trigger>
+                                            <DataTrigger Binding="{Binding State}" Value="Pause">
+                                                <Setter TargetName="fileUploadProgress" Property="Visibility" Value="Collapsed" />
+                                                <Setter TargetName="optCmd" Property="Visibility" Value="Visible" />
+                                            </DataTrigger>
                                             <DataTrigger Binding="{Binding Rate}" Value="100">
                                                 <Setter TargetName="upload" Property="Visibility" Value="Collapsed" />
                                                 <Setter TargetName="uploaded" Property="Visibility" Value="Visible" />

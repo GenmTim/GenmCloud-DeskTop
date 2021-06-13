@@ -667,6 +667,7 @@
         <Setter Property="Padding" Value="0" />
         <Setter Property="FocusVisualStyle" Value="{x:Null}" />
         <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="hc:StatusSwitchElement.HideUncheckedElement" Value="True" />
         <Setter Property="hc:BorderElement.CornerRadius" Value="0" />
         <Setter Property="Cursor" Value="Hand" />
         <Setter Property="Template">

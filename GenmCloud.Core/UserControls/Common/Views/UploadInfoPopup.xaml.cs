@@ -107,7 +107,7 @@ namespace GenmCloud.Core.UserControls.Common.Views
                 if (DataContext is UploadInfoPopupViewModel vm)
                 {
                     if (!vm.IsOpenPopup) return;
-                    gridHeight = Math.Min(248, vm.UploadFileItemList.Count * 52 + 40);
+                    gridHeight = Math.Min(248, vm.UploadFileList.Count * 52 + 40);
                 }
                 GridLengthAnimation d = new GridLengthAnimation
                 {
@@ -130,7 +130,7 @@ namespace GenmCloud.Core.UserControls.Common.Views
             double gridHeight = 0;
             if (DataContext is UploadInfoPopupViewModel vm)
             {
-                gridHeight = Math.Min(248, vm.UploadFileItemList.Count * 52 + 40);
+                gridHeight = Math.Min(248, vm.UploadFileList.Count * 52 + 40);
             }
             GridLengthAnimation d = new GridLengthAnimation
             {

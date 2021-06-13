@@ -27,7 +27,7 @@ namespace GenmCloud.Service
         /// <param name="isToken">是否Token</param>
         /// <param name="isJson">是否Json</param>
         /// <returns></returns>
-        [GlobalLoger]
+        //[GlobalLoger]
         public async Task<Response> RequestBehavior<Response>(string url, Method method, string pms,
             bool isToken = true, bool isJson = true) where Response : class
         {
@@ -59,8 +59,11 @@ namespace GenmCloud.Service
                     }
                     break;
                 case Method.PUT:
-                    request.AddHeader("Content-Type", "application/json");
-                    request.AddJsonBody(pms);
+                    if (isJson)
+                    {
+                        request.AddHeader("Content-Type", "application/json");
+                        request.AddJsonBody(pms);
+                    }
                     break;
                 case Method.DELETE:
                     request.AddHeader("Content-Type", "application/json");

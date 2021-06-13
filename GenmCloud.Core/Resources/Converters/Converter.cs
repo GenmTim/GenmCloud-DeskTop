@@ -110,7 +110,7 @@ namespace GenmCloud.Core.Resources.Converters
             {
                 suffix = "B";
             }
-            return size.ToString("#0.0") + " " + suffix;
+            return size.ToString("#0.00") + " " + suffix;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

@@ -1,4 +1,5 @@
-﻿using GenmCloud.Shared.Common.Session;
+﻿using GenmCloud.Shared.Common;
+using GenmCloud.Shared.Common.Session;
 using GenmCloud.Shared.HttpContact;
 using Newtonsoft.Json;
 using RestSharp;
@@ -36,7 +37,7 @@ namespace GenmCloud.ApiService.Service.Impl
         {
             var request = new RestRequest();
             request.AddFile("file", filePath);
-            var restClient = new RestClient { BaseUrl = new Uri(String.Format("http://localhost:1026/api/v1/file?folder={0}", folderId)) };
+            var restClient = new RestClient { BaseUrl = new Uri(string.Format(Contract.ServerUrl + "file?folder={0}", folderId)) };
             restClient.AddDefaultHeader("Authorization", SessionService.Token);
 
             var result = await restClient.ExecuteAsync(request, Method.PUT);
@@ -66,7 +67,7 @@ namespace GenmCloud.ApiService.Service.Impl
             var request = new RestRequest();
             request.AddFile("file", buf, token + info.Index);
 
-            var restClient = new RestClient { BaseUrl = new Uri(String.Format("http://localhost:1026/api/v1/file/upload/fragment?uploadToken={0}", token)) };
+            var restClient = new RestClient { BaseUrl = new Uri(string.Format(Contract.ServerUrl +  "file/upload/fragment?uploadToken={0}", token)) };
             restClient.AddDefaultHeader("Authorization", SessionService.Token);
 
             var result = await restClient.ExecuteAsync(request, Method.PUT);

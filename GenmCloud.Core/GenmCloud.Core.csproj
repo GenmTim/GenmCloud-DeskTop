@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFrameworks>net5.0-windows</TargetFrameworks>
     <UseWPF>true</UseWPF>
+    <Platforms>AnyCPU;x64</Platforms>
   </PropertyGroup>
 
   <ItemGroup>

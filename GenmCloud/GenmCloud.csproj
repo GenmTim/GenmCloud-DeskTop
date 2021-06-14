@@ -5,6 +5,7 @@
     <UseWPF>true</UseWPF>
     <AssemblyName>GenmCloud</AssemblyName>
     <ApplicationIcon>genmcloud.ico</ApplicationIcon>
+    <Platforms>AnyCPU;x64</Platforms>
   </PropertyGroup>
   <ItemGroup>
     <None Remove="h_aid.ico" />

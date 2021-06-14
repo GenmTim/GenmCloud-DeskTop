@@ -76,13 +76,13 @@ namespace GenmCloud.Core.UserControls.Common.ViewModels
 
     public class UploadInfoPopupViewModel : BindableBase
     {
-        private long uploadRate;
-        public long UploadRate
+        private long uploadSpeed;
+        public long UploadSpeed
         {
-            get => uploadRate;
+            get => uploadSpeed;
             set
             {
-                uploadRate = value;
+                uploadSpeed = value;
                 RaisePropertyChanged();
             }
         }
@@ -265,7 +265,7 @@ namespace GenmCloud.Core.UserControls.Common.ViewModels
 
             _timer.Interval = new TimeSpan(0, 0, 1);   //间隔1秒
             _timer.Tick += new EventHandler((s, e) => {
-                UploadRate = SecondUploaded;
+                UploadSpeed = SecondUploaded;
                 SecondUploaded = 0;
             });
         }
@@ -353,7 +353,7 @@ namespace GenmCloud.Core.UserControls.Common.ViewModels
                 }
 
                 var task = vo.Task;
-                task.FragmentNum = (vo.Size + UploadConfig.FragmentSize - 1) / UploadConfig.FragmentSize;
+                task.FragmentNum = (vo.Size - vo.Task.FileOffset + UploadConfig.FragmentSize - 1) / UploadConfig.FragmentSize;
                 using (FileStream stream = File.Open(task.FilePath, FileMode.Open))
                 {
                     long pos = 0;
@@ -396,11 +396,8 @@ namespace GenmCloud.Core.UserControls.Common.ViewModels
                                 SecondUploaded += readAmount;
                                 UploadedFileSumSize += readAmount;
 
-                                lock(task)
-                                {
-                                    task.FragmentNum -= 1;
-                                    task.FileOffset += fragmentInfo.Size;
-                                }
+                                task.FragmentNum -= 1;
+                                task.FileOffset += fragmentInfo.Size;
 
                                 // 当前任务的所有分片，已经上传完成
                                 if (task.FileOffset == task.FileSize)

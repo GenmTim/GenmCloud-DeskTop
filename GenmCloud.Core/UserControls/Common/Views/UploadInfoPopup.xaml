@@ -217,7 +217,7 @@
                                         FontSize="13"
                                         Foreground="#1f2329">
                                         <Run Text="速度: " />
-                                        <Run Text="{Binding UploadRate, Converter={StaticResource FileSize2String}}" />
+                                        <Run Text="{Binding UploadSpeed, Converter={StaticResource FileSize2String}}" />
                                     </TextBlock>
                                     <TextBlock
                                         VerticalAlignment="Center"

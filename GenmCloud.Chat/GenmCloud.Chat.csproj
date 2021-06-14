@@ -3,6 +3,7 @@
     <TargetFrameworks>net5.0-windows</TargetFrameworks>
     <UseWPF>true</UseWPF>
     <AssemblyName>GenmCloud.Chat</AssemblyName>
+    <Platforms>AnyCPU;x64</Platforms>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Prism.Wpf" Version="8.0.0.1909" />

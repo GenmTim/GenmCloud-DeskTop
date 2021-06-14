@@ -56,7 +56,7 @@ namespace GenmCloud
             containerRegistry.RegisterSingleton<Router>(() => { return Router.GetInstance(containerRegistry); });
 
             // 注册本地缓存服务
-            containerRegistry.RegisterSingleton<CacheManager>(() => { return CacheManager.GetInstance(); });
+            //containerRegistry.RegisterSingleton<CacheManager>(() => { return CacheManager.GetInstance(); });
 
             // 注册通信消息管理
             containerRegistry.RegisterSingleton<ChatMsgManager>(() => { return ChatMsgManager.GetInstance(); });
@@ -75,7 +75,7 @@ namespace GenmCloud
             RegisterDialog(containerRegistry);
 
             // 开启本地缓存服务
-            Container.Resolve<CacheManager>();
+            //Container.Resolve<CacheManager>();
         }
 
         protected override void ConfigureModuleCatalog(IModuleCatalog moduleCatalog)

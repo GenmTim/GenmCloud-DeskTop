@@ -15,9 +15,11 @@ namespace GenmCloud.Core.Resources.Converters
         {
             if (value is null) return "";
             Color color = (Color)ColorConverter.ConvertFromString((string)value); ;
-            LinearGradientBrush linearGradientBrush = new LinearGradientBrush();
-            linearGradientBrush.StartPoint = new System.Windows.Point(0, 0.5);
-            linearGradientBrush.EndPoint = new System.Windows.Point(8, 0.5);
+            LinearGradientBrush linearGradientBrush = new LinearGradientBrush
+            {
+                StartPoint = new Point(0, 0.5),
+                EndPoint = new Point(8, 0.5)
+            };
             linearGradientBrush.GradientStops.Add(new GradientStop(color, 0));
             linearGradientBrush.GradientStops.Add(new GradientStop(Colors.White, 1));
             return linearGradientBrush;
@@ -78,19 +80,17 @@ namespace GenmCloud.Core.Resources.Converters
 
     public class FileSize2String : IValueConverter
     {
-        private const Decimal OneKiloByte = 1024M;
-        private const Decimal OneMegaByte = OneKiloByte * 1024M;
-        private const Decimal OneGigaByte = OneMegaByte * 1024M;
+        private const decimal OneKiloByte = 1024M;
+        private const decimal OneMegaByte = OneKiloByte * 1024M;
+        private const decimal OneGigaByte = OneMegaByte * 1024M;
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             if (value is null) return null;
             long fileSize = (long)value;
-
-            Decimal size;
             string suffix;
 
-            size = System.Convert.ToDecimal(fileSize);
+            decimal size = System.Convert.ToDecimal(fileSize);
             if (size > OneGigaByte)
             {
                 size /= OneGigaByte;
@@ -126,7 +126,7 @@ namespace GenmCloud.Core.Resources.Converters
             if (value is null) return null;
             String aFile = (String)value;
             string fileTypeName = aFile.Substring(aFile.LastIndexOf(".") + 1, (aFile.Length - aFile.LastIndexOf(".") - 1));
-            string basePath = "pack://application:,,,/Resources/Images/Icon/FileType/";
+            string basePath = "http://localhost:1026/static/Icon/FileType/";
             string path = basePath;
 
             switch (fileTypeName)
@@ -145,6 +145,9 @@ namespace GenmCloud.Core.Resources.Converters
                     break;
                 case "pdf":
                     path += "PDF.png";
+                    break;
+                case "xlg":
+                    path += "Excel.png";
                     break;
                 default:
                     path += "Other.png";

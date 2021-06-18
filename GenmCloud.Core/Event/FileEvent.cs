@@ -13,6 +13,7 @@ namespace GenmCloud.Core.Event
         public long FragmentNum;
         public long FileOffset;
         public Semaphore Sem;
+        public string Token;
     }
 
 

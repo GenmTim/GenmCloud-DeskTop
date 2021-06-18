@@ -66,6 +66,7 @@ namespace GenmCloud.Storage.ViewModels
         public uint Id { get; set; }
         public string FileName { get; set; }
         public string OwnerName { get; set; }
+        public string ThumbAddr { get; set; }
         public string CreatedAt { get; set; }
     }
 

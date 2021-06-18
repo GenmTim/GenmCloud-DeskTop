@@ -5,7 +5,11 @@ using GenmCloud.Shared.Common;
 using GenmCloud.Shared.Dto;
 using Prism.Events;
 using Prism.Mvvm;
+using System;
 using System.Collections.ObjectModel;
+using System.Windows.Controls;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
 namespace GenmCloud.Storage.ViewModels.ChildView.SubItem
 {
@@ -13,6 +17,7 @@ namespace GenmCloud.Storage.ViewModels.ChildView.SubItem
     {
         public string Name { get; set; }
         public string OwnerName { get; set; }
+        public string Thumb { get; set; }
         public string LastUpdatedTime { get; set; }
         public string CreatedAt { get; set; }
     }
@@ -63,13 +68,18 @@ namespace GenmCloud.Storage.ViewModels.ChildView.SubItem
                 }
                 foreach (var fileDto in res.Result)
                 {
-                    FileList.Add(new FileItemVO
+                    var vo = new FileItemVO
                     {
                         Name = fileDto.Name,
                         OwnerName = fileDto.OwnerName,
                         LastUpdatedTime = "蔡承龙 最后更新于 3月22日 23:15",
                         CreatedAt = fileDto.CreatedAt,
-                    });
+                    };
+                    if (!string.IsNullOrEmpty(fileDto.ThumbAddr))
+                    {
+                        vo.Thumb = fileDto.ThumbAddr;
+                    }
+                    FileList.Add(vo);
                 }
             }
             if (FileList != null &&  FileList.Count == 0) FileList = null;
@@ -94,7 +104,6 @@ namespace GenmCloud.Storage.ViewModels.ChildView.SubItem
             //        LastUpdatedTime="蔡承龙 最后更新于 3月22日 23:15",
             //    },
             //};
-
         }
 
     }

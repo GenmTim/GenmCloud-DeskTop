@@ -8,7 +8,7 @@ namespace GenmCloud.ApiService.Service
     {
         Task<BaseResponse> Upload(uint folderId, string filePath);
 
-        Task<BaseResponse> Prepare();
+        Task<BaseResponse<UploadPrepareDto>> Prepare(string fileName, long fileSize, uint folderId);
 
         Task<BaseResponse> UploadFragment(byte[] buf, string token, FragmentInfo info);
 

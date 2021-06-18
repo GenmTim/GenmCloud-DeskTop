@@ -1,5 +1,6 @@
 ﻿using GenmCloud.Shared.Common;
 using GenmCloud.Shared.Common.Session;
+using GenmCloud.Shared.Dto;
 using GenmCloud.Shared.HttpContact;
 using Newtonsoft.Json;
 using RestSharp;
@@ -29,6 +30,7 @@ namespace GenmCloud.ApiService.Service.Impl
     {
         public int Index;
         public long Size;
+        public string Token;
     }
 
     public class UploadService : IUploadService
@@ -55,19 +57,26 @@ namespace GenmCloud.ApiService.Service.Impl
             }
         }
 
-        public async Task<BaseResponse> Prepare()
+        public async Task<BaseResponse<UploadPrepareDto>> Prepare(string fileName, long fileSize, uint folderId)
         {
+            var prepareInfoDto = new FileUploadPrepareInfo
+            {
+                FileName = fileName,
+                FileSize = fileSize,
+                OwnerFolderId = folderId,
+            };
+
             return await new BaseServiceRequest()
-               .GetRequest<BaseResponse>
-               (string.Format("file/upload/prepare"), null, Method.GET);
+               .GetRequest<BaseResponse<UploadPrepareDto>>
+               (string.Format("file/upload/prepare"), prepareInfoDto, Method.POST);
         }
 
         public async Task<BaseResponse> UploadFragment(byte[] buf, string token, FragmentInfo info)
         {
             var request = new RestRequest();
-            request.AddFile("file", buf, token + info.Index);
+            request.AddFile("file", buf, "" + info.Index);
 
-            var restClient = new RestClient { BaseUrl = new Uri(string.Format(Contract.ServerUrl +  "file/upload/fragment?uploadToken={0}", token)) };
+            var restClient = new RestClient { BaseUrl = new Uri(string.Format(Contract.ServerUrl + "file/upload/fragment?upload_token={0}", token)) };
             restClient.AddDefaultHeader("Authorization", SessionService.Token);
 
             var result = await restClient.ExecuteAsync(request, Method.PUT);
@@ -89,7 +98,7 @@ namespace GenmCloud.ApiService.Service.Impl
         {
             return await new BaseServiceRequest()
                .GetRequest<BaseResponse>
-               (string.Format("file/upload/complete?uploadToken={0}", token), null, Method.GET);
+               (string.Format("file/upload/complete?upload_token={0}", token), null, Method.GET);
         }
 
         public Task<BaseResponse> Cancel(string token)

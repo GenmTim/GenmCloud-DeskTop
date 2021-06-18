@@ -61,7 +61,7 @@ namespace GenmCloud.Core.UserControls.Common.ViewModels
 
         public async void Upload(byte[] buf, FragmentInfo fragmentInfo, Action<bool> f)
         {
-            var res = await uploadService.UploadFragment(buf, "token", fragmentInfo);
+            var res = await uploadService.UploadFragment(buf, fragmentInfo.Token, fragmentInfo);
             if (res.StatusCode == ServiceHelper.RequestOk)
             {
                 f(true);
@@ -346,8 +346,12 @@ namespace GenmCloud.Core.UserControls.Common.ViewModels
             vo.State = UploadFileState.Uploading;
 
             await Task.Run(async () => {
-                var res = await uploadService.Prepare();
-                if (res.StatusCode != ServiceHelper.RequestOk)
+                var res = await uploadService.Prepare(vo.Task.FileName, vo.Task.FileSize, vo.Task.FolderId);
+                if (res.StatusCode == ServiceHelper.RequestOk)
+                {
+                    var info = res.Result;
+                    vo.Task.Token = info.Token;
+                } else
                 {
                     return;
                 }
@@ -381,30 +385,11 @@ namespace GenmCloud.Core.UserControls.Common.ViewModels
                         byte[] tmpBuf = new byte[readAmount];
                         Array.Copy(buf, tmpBuf, readAmount);
 
-                        var fragmentInfo = new FragmentInfo { Index = index, Size = readAmount };
+                        var fragmentInfo = new FragmentInfo { Index = index, Size = readAmount, Token=task.Token };
 
                         // 开始分片的远程上传
                         UploadManager.GetInstance().RunUpload(tmpBuf, fragmentInfo, (isOK) => {
-                            if (!isOK)
-                            {
-                                UploadFail(vo);
-                                return;
-                            }
-
-                            // 全局变量更新
-                            Application.Current.Dispatcher.Invoke(() => {
-                                SecondUploaded += readAmount;
-                                UploadedFileSumSize += readAmount;
-
-                                task.FragmentNum -= 1;
-                                task.FileOffset += fragmentInfo.Size;
-
-                                // 当前任务的所有分片，已经上传完成
-                                if (task.FileOffset == task.FileSize)
-                                {
-                                    UploadedSingleFile(vo);
-                                }
-                            });
+                            FragmentUploaded(isOK, fragmentInfo, vo);
                         });
 
                         if (vo.State != UploadFileState.Uploading)
@@ -428,15 +413,42 @@ namespace GenmCloud.Core.UserControls.Common.ViewModels
                 }
             });
 
-            var res = await uploadService.Complete("token");
+            var res = await uploadService.Complete(vo.Task.Token);
             if (res.StatusCode == ServiceHelper.RequestOk)
             {
                 vo.State = UploadFileState.Success;
+                eventAggregator.GetEvent<UpdateFileListEvent>().Publish(null);
             }
             else
             {
                 vo.State = UploadFileState.Fail;
             }
+        }
+
+        private void FragmentUploaded(bool isOk, FragmentInfo fragmentInfo, UploadFileItemVO vo)
+        {
+            if (!isOk)
+            {
+                UploadFail(vo);
+                return;
+            }
+
+            var task = vo.Task;
+
+            // 全局变量更新
+            Application.Current.Dispatcher.Invoke(() => {
+                SecondUploaded += fragmentInfo.Size;
+                UploadedFileSumSize += fragmentInfo.Size;
+
+                task.FragmentNum -= 1;
+                task.FileOffset += fragmentInfo.Size;
+
+                // 当前任务的所有分片，已经上传完成
+                if (task.FileOffset == task.FileSize)
+                {
+                    UploadedSingleFile(vo);
+                }
+            });
         }
 
         private void UploadFail(UploadFileItemVO vo)

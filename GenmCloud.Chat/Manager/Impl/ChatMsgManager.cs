@@ -3,7 +3,6 @@ using GenmCloud.ApiService.Service;
 using GenmCloud.Chat.Tools;
 using GenmCloud.Core.Data.VO;
 using GenmCloud.Core.Event;
-using GenmCloud.Core.Manager;
 using GenmCloud.Core.Manager.Impl;
 using GenmCloud.Core.Tools.Helper;
 using GenmCloud.Shared.Common;

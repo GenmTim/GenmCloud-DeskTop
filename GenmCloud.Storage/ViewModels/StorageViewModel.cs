@@ -1,80 +1,77 @@
 ﻿using GenmCloud.ApiService.Service;
-using GenmCloud.Core.Event;
+using GenmCloud.Core.Data.Token;
 using GenmCloud.Core.Service.Dialog;
 using GenmCloud.Core.Tools.Helper;
 using GenmCloud.Shared.Common;
 using GenmCloud.Shared.Dto;
-using HandyControl.Interactivity;
+using GenmCloud.Storage.Data.Event;
+using GenmCloud.Storage.Data.VO;
+using GenmCloud.Storage.Views.ChildView;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
+using Prism.Regions;
 using Prism.Services.Dialogs;
-using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
+using TMS.DeskTop.Tools.Helper;
 
 namespace GenmCloud.Storage.ViewModels
 {
-    public class FolderTreeNodeVO : BindableBase
-    {
-        public string Icon { get; set; }
-
-
-        private FolderDto folder;
-        public FolderDto Folder
-        {
-            get => folder;
-            set
-            {
-                folder = value;
-                RaisePropertyChanged();
-            }
-        }
-
-        private ObservableCollection<FolderTreeNodeVO> children;
-        public ObservableCollection<FolderTreeNodeVO> Children
-        {
-            get => children;
-            set
-            {
-                children = value;
-                RaisePropertyChanged();
-            }
-        }
-
-        private ObservableCollection<MenuItem> optCmdList;
-        public ObservableCollection<MenuItem> OptCmdList
-        {
-            get => optCmdList;
-            set
-            {
-                optCmdList = value;
-                RaisePropertyChanged();
-            }
-        }
-
-        public string Tag { get; set; }
-
-        public FolderTreeNodeVO ParentVO;
-    }
-
-    public class FileItemVO
-    {
-        public uint Id { get; set; }
-        public string FileName { get; set; }
-        public string OwnerName { get; set; }
-        public string ThumbAddr { get; set; }
-        public string CreatedAt { get; set; }
-    }
-
-
     public class StorageViewModel : BindableBase
     {
         public DelegateCommand<object> AddFolderCmd { get; private set; }
 
+        private FolderTreeNodeVO selectedFolder;
+        public FolderTreeNodeVO SelectedFolder
+        {
+            get => selectedFolder;
+            set
+            {
+                selectedFolder = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public void UpdateSelectedFolder(object obj)
+        {
+            if (obj == null) return;
+            FolderTreeNodeVO folderContext = (FolderTreeNodeVO)obj;
+            SelectedFolder = folderContext;
+            eventAggregator.GetEvent<UpdateFileListEvent>().Publish(folderContext.Folder);
+
+            if (SelectedFolder.Tag == "Root")
+            {
+                switch (SelectedFolder.Folder.Name)
+                {
+                    case "主页":
+                        RegionHelper.RequestNavigate(regionManager, RegionToken.StorageRightContent, typeof(HomeView));
+                        break;
+                    case "我的空间":
+                        RegionHelper.RequestNavigate(regionManager, RegionToken.StorageRightContent, typeof(MySpaceView));
+                        break;
+                    case "共享空间":
+                        RegionHelper.RequestNavigate(regionManager, RegionToken.StorageRightContent, typeof(ShareSpaceView));
+                        break;
+                    case "收藏夹":
+                        RegionHelper.RequestNavigate(regionManager, RegionToken.StorageRightContent, typeof(FavoriteView));
+                        break;
+                    case "回收站":
+                        RegionHelper.RequestNavigate(regionManager, RegionToken.StorageRightContent, typeof(TrashView));
+                        break;
+                }
+            }
+            else
+            {
+                var param = new NavigationParameters
+                {
+                    { "context", SelectedFolder.Folder }
+                };
+                RegionHelper.RequestNavigate(regionManager, RegionToken.StorageRightContent, typeof(FolderView), param);
+            }
+        }
 
 
         private ObservableCollection<FolderTreeNodeVO> fileTreeNodeItemList = new ObservableCollection<FolderTreeNodeVO>();
@@ -90,6 +87,7 @@ namespace GenmCloud.Storage.ViewModels
         private readonly IDialogHostService dialogHost;
         private readonly IEventAggregator eventAggregator;
         private readonly IFolderService folderService;
+        private readonly IRegionManager regionManager;
 
         private ObservableCollection<FileItemVO> fileItemVOList = new ObservableCollection<FileItemVO>();
         public ObservableCollection<FileItemVO> FileItemVOList { get => fileItemVOList; set => fileItemVOList = value; }
@@ -99,20 +97,21 @@ namespace GenmCloud.Storage.ViewModels
             this.dialogHost = dialogHost;
             this.eventAggregator = NetCoreProvider.Resolve<IEventAggregator>();
             this.folderService = NetCoreProvider.Resolve<IFolderService>();
+            this.regionManager = NetCoreProvider.Resolve<IRegionManager>();
             this.AddFolderCmd = new DelegateCommand<object>(AddFolder);
 
             InitTreeRootNode();
-
+            this.eventAggregator.GetEvent<UpdateSelectedFolderEvent>().Subscribe(UpdateSelectedFolder);
             this.eventAggregator.GetEvent<UpdateFolderListEvent>().Subscribe(UpdateFolderList);
         }
 
         private void InitTreeRootNode()
         {
-            FileTreeNodeItemList.Add(new FolderTreeNodeVO { Folder = new FolderDto { Name="主页", ParentID = uint.MaxValue, },  Icon = "\xe982", Tag="Root" });
-            FileTreeNodeItemList.Add(new FolderTreeNodeVO { Folder = new FolderDto { Name="我的空间", ParentID = uint.MaxValue }, Icon = "\xe980", Children=new ObservableCollection<FolderTreeNodeVO>(), Tag = "Root" });
-            FileTreeNodeItemList.Add(new FolderTreeNodeVO { Folder = new FolderDto { Name="共享空间", ParentID = uint.MaxValue }, Icon = "\xe97a", Children = new ObservableCollection<FolderTreeNodeVO>(), Tag = "Root" });
-            FileTreeNodeItemList.Add(new FolderTreeNodeVO { Folder = new FolderDto { Name="收藏夹", ParentID = uint.MaxValue }, Icon = "\xe69c", Tag = "Root" });
-            FileTreeNodeItemList.Add(new FolderTreeNodeVO { Folder = new FolderDto { Name="回收站", ParentID = uint.MaxValue }, Icon = "\xe861", Tag = "Root" });
+            FileTreeNodeItemList.Add(new FolderTreeNodeVO { Folder = new FolderDto { Name = "主页", ParentID = uint.MaxValue, }, Icon = "\xe982", Tag = "Root" });
+            FileTreeNodeItemList.Add(new FolderTreeNodeVO { Folder = new FolderDto { Name = "我的空间", ParentID = uint.MaxValue }, Icon = "\xe980", Children = new ObservableCollection<FolderTreeNodeVO>(), Tag = "Root" });
+            FileTreeNodeItemList.Add(new FolderTreeNodeVO { Folder = new FolderDto { Name = "共享空间", ParentID = uint.MaxValue }, Icon = "\xe97a", Children = new ObservableCollection<FolderTreeNodeVO>(), Tag = "Root" });
+            FileTreeNodeItemList.Add(new FolderTreeNodeVO { Folder = new FolderDto { Name = "收藏夹", ParentID = uint.MaxValue }, Icon = "\xe69c", Tag = "Root" });
+            FileTreeNodeItemList.Add(new FolderTreeNodeVO { Folder = new FolderDto { Name = "回收站", ParentID = uint.MaxValue }, Icon = "\xe861", Tag = "Root" });
         }
 
         public async void AddFolder(object obj)
@@ -175,8 +174,8 @@ namespace GenmCloud.Storage.ViewModels
                         Folder = newTreeFolders[i].Folder,
                         Icon = "\xe645",
                         ParentVO = folderTreeNode,
-                        OptCmdList = new ObservableCollection<MenuItem> { new MenuItem { Header = "新建文件夹", Command = AddFolderCmd, CommandParameter=newTreeFolders[i].Folder.ID } },
-                });
+                        OptCmdList = new ObservableCollection<MenuItem> { new MenuItem { Header = "新建文件夹", Command = AddFolderCmd, CommandParameter = newTreeFolders[i].Folder.ID } },
+                    });
                 }
 
                 if (newTreeFolderList[i].Children != null)

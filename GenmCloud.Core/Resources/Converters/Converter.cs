@@ -149,6 +149,10 @@ namespace GenmCloud.Core.Resources.Converters
                 case "xlg":
                     path += "Excel.png";
                     break;
+                case "jpg":
+                case "png":
+                    path += "Img.png";
+                    break;
                 default:
                     path += "Other.png";
                     break;
@@ -210,6 +214,53 @@ namespace GenmCloud.Core.Resources.Converters
         public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
             throw new NotImplementedException();
+        }
+    }
+
+    public sealed class UriToBitmapConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            Uri uri = (Uri)value;
+            BitmapImage bmp = new BitmapImage();
+            bmp.DecodePixelHeight = 250; // 确定解码高度，宽度不同时设置
+            bmp.BeginInit();
+            // 延迟，必要时创建
+            bmp.CreateOptions = BitmapCreateOptions.DelayCreation;
+            bmp.CacheOption = BitmapCacheOption.OnLoad;
+            bmp.UriSource = uri;
+            bmp.EndInit(); //结束初始化
+            return bmp;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return null;
+        }
+    }
+
+    public sealed class StringToBitmapConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            string uriStr = (string)value;
+            if (uriStr == null) return null;
+
+            Uri uri = new Uri(uriStr);
+            BitmapImage bmp = new BitmapImage();
+            bmp.DecodePixelHeight = 250; // 确定解码高度，宽度不同时设置
+            bmp.BeginInit();
+            // 延迟，必要时创建
+            bmp.CreateOptions = BitmapCreateOptions.DelayCreation;
+            bmp.CacheOption = BitmapCacheOption.OnLoad;
+            bmp.UriSource = uri;
+            bmp.EndInit(); //结束初始化
+            return bmp;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return null;
         }
     }
 

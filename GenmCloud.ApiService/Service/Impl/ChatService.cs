@@ -1,5 +1,4 @@
-﻿using GenmCloud.Shared.Common.Session;
-using GenmCloud.Shared.Dto;
+﻿using GenmCloud.Shared.Dto;
 using GenmCloud.Shared.HttpContact;
 using RestSharp;
 using System.Collections.Generic;

@@ -1,5 +1,6 @@
 ﻿using GenmCloud.Service;
 using GenmCloud.Shared.Common;
+using GenmCloud.Shared.Common.Conf;
 using GenmCloud.Shared.HttpContact;
 using Newtonsoft.Json;
 using RestSharp;
@@ -14,7 +15,7 @@ namespace GenmCloud.ApiService
     /// </summary>
     public class BaseServiceRequest
     {
-        private readonly string _requestUrl = Contract.ServerUrl;
+        private readonly string _requestUrl = Conf.ServerUrl;
 
         public string requestUrl
         {

@@ -4,6 +4,9 @@ using GenmCloud.Core.Data.VO;
 using GenmCloud.Core.Event;
 using GenmCloud.Core.Tools.Helper;
 using GenmCloud.Shared.Common;
+using GenmCloud.Storage.Data.Event;
+using GenmCloud.Storage.Data.Task;
+using GenmCloud.Storage.Data.VO;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
@@ -15,7 +18,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
 
-namespace GenmCloud.Core.UserControls.Common.ViewModels
+namespace GenmCloud.Storage.ViewModels.Component
 {
 
     public static class UploadConfig
@@ -30,15 +33,13 @@ namespace GenmCloud.Core.UserControls.Common.ViewModels
         public static long ShowSize = 256 * 1024;
     }
 
-
-
-
     public class UploadManager
     {
         private UploadManager()
         {
 
         }
+
         private static UploadManager instance;
         private UploadService uploadService = new UploadService();
 
@@ -145,7 +146,8 @@ namespace GenmCloud.Core.UserControls.Common.ViewModels
                     {
                         _timer.Stop();
                     }
-                } else
+                }
+                else
                 {
                     if (_timer != null && _timer.IsEnabled)
                     {
@@ -264,7 +266,8 @@ namespace GenmCloud.Core.UserControls.Common.ViewModels
             });
 
             _timer.Interval = new TimeSpan(0, 0, 1);   //间隔1秒
-            _timer.Tick += new EventHandler((s, e) => {
+            _timer.Tick += new EventHandler((s, e) =>
+            {
                 UploadSpeed = SecondUploaded;
                 SecondUploaded = 0;
             });
@@ -345,13 +348,15 @@ namespace GenmCloud.Core.UserControls.Common.ViewModels
             IncreaseTaskNum();
             vo.State = UploadFileState.Uploading;
 
-            await Task.Run(async () => {
+            await Task.Run(async () =>
+            {
                 var res = await uploadService.Prepare(vo.Task.FileName, vo.Task.FileSize, vo.Task.FolderId);
                 if (res.StatusCode == ServiceHelper.RequestOk)
                 {
                     var info = res.Result;
                     vo.Task.Token = info.Token;
-                } else
+                }
+                else
                 {
                     return;
                 }
@@ -385,10 +390,11 @@ namespace GenmCloud.Core.UserControls.Common.ViewModels
                         byte[] tmpBuf = new byte[readAmount];
                         Array.Copy(buf, tmpBuf, readAmount);
 
-                        var fragmentInfo = new FragmentInfo { Index = index, Size = readAmount, Token=task.Token };
+                        var fragmentInfo = new FragmentInfo { Index = index, Size = readAmount, Token = task.Token };
 
                         // 开始分片的远程上传
-                        UploadManager.GetInstance().RunUpload(tmpBuf, fragmentInfo, (isOK) => {
+                        UploadManager.GetInstance().RunUpload(tmpBuf, fragmentInfo, (isOK) =>
+                        {
                             FragmentUploaded(isOK, fragmentInfo, vo);
                         });
 
@@ -398,7 +404,7 @@ namespace GenmCloud.Core.UserControls.Common.ViewModels
                         }
                     }
                 }
-                streamEnd:
+            streamEnd:
                 vo.Task.Sem.Release();
             });
         }
@@ -436,7 +442,8 @@ namespace GenmCloud.Core.UserControls.Common.ViewModels
             var task = vo.Task;
 
             // 全局变量更新
-            Application.Current.Dispatcher.Invoke(() => {
+            Application.Current.Dispatcher.Invoke(() =>
+            {
                 SecondUploaded += fragmentInfo.Size;
                 UploadedFileSumSize += fragmentInfo.Size;
 

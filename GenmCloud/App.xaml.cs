@@ -14,6 +14,7 @@ using GenmCloud.Core.Service.Dialog;
 using GenmCloud.Core.Tools.Helper;
 using GenmCloud.Core.UserControls.Dialog.Views;
 using GenmCloud.Shared.Common;
+using GenmCloud.Shared.Common.Conf;
 using GenmCloud.Shared.Common.Session;
 using GenmCloud.Shared.DataInterfaces;
 using GenmCloud.Storage.Views;
@@ -120,7 +121,7 @@ namespace GenmCloud
 
         private void InitSetting()
         {
-            Contract.ServerUrl = ConfigurationManager.AppSettings["serverAddress"];
+            Conf.ServerUrl = ConfigurationManager.AppSettings["serverAddress"];
 
             // 编辑器的高亮显示扩展
             TextEditorHelper.RegisterHighlighting("Go", new[] { ".go" }, "Go.xshd");
@@ -154,6 +155,7 @@ namespace GenmCloud
             containerRegistry.Register<IChatService, ChatService>();
             containerRegistry.Register<IUploadService, UploadService>();
             containerRegistry.Register<IFolderService, FolderService>();
+            containerRegistry.Register<IDownloadService, DownloadService>();
         }
 
         // 注册视图路由

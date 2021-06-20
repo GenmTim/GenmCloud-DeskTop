@@ -1,7 +1,6 @@
 ﻿using GenmCloud.Chat.ViewModels.UserControls.Bubble;
 using GenmCloud.Chat.Views.UserControls.Bubble;
 using GenmCloud.Core.Data.VO;
-using GenmCloud.Core.Manager;
 using GenmCloud.Core.Manager.Impl;
 using GenmCloud.Shared.Common;
 using GenmCloud.Shared.Common.Session;

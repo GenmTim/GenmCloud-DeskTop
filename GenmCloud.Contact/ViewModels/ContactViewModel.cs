@@ -99,7 +99,8 @@ namespace GenmCloud.Contact.ViewModels
                         {
                             ContactList.Insert(index, nowContact);
                             index++;
-                        } else
+                        }
+                        else
                         {
                             break;
                         }

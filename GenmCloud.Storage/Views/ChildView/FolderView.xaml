@@ -1,0 +1,102 @@
+﻿<UserControl
+    x:Class="GenmCloud.Storage.Views.ChildView.FolderView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:child="clr-namespace:GenmCloud.Storage.Views.ChildView.SubItem"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:hc="https://handyorg.github.io/handycontrol"
+    xmlns:local="clr-namespace:GenmCloud.Storage.Views.ChildView"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:prism="http://prismlibrary.com/"
+    xmlns:token="clr-namespace:GenmCloud.Core.Data.Token;assembly=GenmCloud.Core"
+    xmlns:uc="clr-namespace:GenmCloud.Core.UserControls.Common.Views;assembly=GenmCloud.Core"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    prism:ViewModelLocator.AutoWireViewModel="True"
+    mc:Ignorable="d">
+    <hc:SimplePanel Margin="24,30,24,0">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="40" />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <hc:SimplePanel VerticalAlignment="Center">
+                <StackPanel Orientation="Horizontal">
+                    <Button Padding="4,0" Style="{StaticResource BackgroundBtnStyle}">
+                        <TextBlock
+                            FontSize="20"
+                            Foreground="#646a73"
+                            Text="我的空间" />
+                    </Button>
+                    <TextBlock
+                        Margin="6,2,6,0"
+                        VerticalAlignment="Center"
+                        FontFamily="{StaticResource FIconFontFamily}"
+                        FontSize="24"
+                        Foreground="#646a73"
+                        Text="&#xe7c9;" />
+                    <TextBlock
+                        VerticalAlignment="Center"
+                        FontSize="20"
+                        Foreground="#1f2329"
+                        Text="{Binding Context.Name}" />
+                </StackPanel>
+                <hc:UniformSpacingPanel
+                    HorizontalAlignment="Right"
+                    Orientation="Horizontal"
+                    Spacing="20">
+                    <Button
+                        Width="90"
+                        Content="添加"
+                        Cursor="Hand"
+                        FontSize="14">
+                        <Button.Style>
+                            <Style BasedOn="{StaticResource ButtonDashedPrimary}" TargetType="Button">
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#e1eaff" />
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+                    <Button
+                        Width="90"
+                        Cursor="Hand"
+                        FontSize="14"
+                        Style="{StaticResource ButtonPrimary}">
+                        <WrapPanel>
+                            <TextBlock VerticalAlignment="Center" Text="上传" />
+                            <TextBlock
+                                Margin="4,0,0,0"
+                                VerticalAlignment="Center"
+                                FontFamily="{StaticResource FIconFontFamily}"
+                                FontSize="8"
+                                Text="&#xe6bb;" />
+                        </WrapPanel>
+                    </Button>
+                </hc:UniformSpacingPanel>
+            </hc:SimplePanel>
+            <hc:SimplePanel Grid.Row="1">
+                <hc:SimplePanel Background="White">
+                    <hc:SimplePanel>
+                        <Grid x:Name="mainGrid">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition />
+                                <ColumnDefinition MaxWidth="220" />
+                            </Grid.ColumnDefinitions>
+                            <!--#region 文件列表视图-->
+                            <hc:SimplePanel Grid.Column="0">
+                                <child:FileListView />
+                            </hc:SimplePanel>
+                            <hc:SimplePanel Grid.Column="1" Margin="20,0,0,0">
+                                <child:DetailInfoView />
+                            </hc:SimplePanel>
+                            <!--#endregion-->
+                        </Grid>
+                    </hc:SimplePanel>
+                </hc:SimplePanel>
+            </hc:SimplePanel>
+        </Grid>
+    </hc:SimplePanel>
+</UserControl>

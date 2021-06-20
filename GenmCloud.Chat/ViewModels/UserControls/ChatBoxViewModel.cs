@@ -3,14 +3,11 @@ using GenmCloud.Chat.Manager;
 using GenmCloud.Chat.Tools;
 using GenmCloud.Core.Data.VO;
 using GenmCloud.Core.Event;
-using GenmCloud.Core.Manager;
 using GenmCloud.Shared.Common;
-using GenmCloud.Shared.Common.Session;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
 using Prism.Regions;
-using System;
 using System.Collections.ObjectModel;
 using static GenmCloud.Chat.Manager.ChatMsgManager;
 

@@ -1,18 +1,18 @@
 ﻿<UserControl
-    x:Class="GenmCloud.Core.UserControls.Common.Views.UploadInfoPopup"
+    x:Class="GenmCloud.Storage.Views.Component.DownloadPopup"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:hc="https://handyorg.github.io/handycontrol"
+    xmlns:local="clr-namespace:GenmCloud.Storage.Views.Component"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:prism="http://prismlibrary.com/"
-    xmlns:vo="clr-namespace:GenmCloud.Core.Data.VO"
     x:Name="_view"
     Width="460"
     prism:ViewModelLocator.AutoWireViewModel="True"
     Visibility="{Binding IsShowPopup, Converter={StaticResource Boolean2VisibilityConverter}}"
     mc:Ignorable="d">
-    <hc:SimplePanel Effect="{StaticResource EffectShadow1}">
+    <hc:SimplePanel>
         <Border
             Grid.RowSpan="2"
             Background="White"
@@ -31,7 +31,7 @@
                             <hc:SimplePanel.Style>
                                 <Style TargetType="hc:SimplePanel">
                                     <Style.Triggers>
-                                        <DataTrigger Binding="{Binding UploadFileItemNumber}" Value="0">
+                                        <DataTrigger Binding="{Binding DownloadFileItemNumber}" Value="0">
                                             <Setter Property="Visibility" Value="Collapsed" />
                                         </DataTrigger>
                                     </Style.Triggers>
@@ -49,8 +49,8 @@
                                     </Style>
                                 </StackPanel.Resources>
                                 <TextBlock>
-                                    <Run Text="上传  " />
-                                    <Run Text="{Binding UploadFileItemNumber}" />
+                                    <Run Text="下载  " />
+                                    <Run Text="{Binding DownloadFileItemNumber}" />
                                     <Run Text="  项中" />
                                 </TextBlock>
                                 <TextBlock
@@ -65,7 +65,7 @@
                                 <Style TargetType="hc:SimplePanel">
                                     <Setter Property="Visibility" Value="Collapsed" />
                                     <Style.Triggers>
-                                        <DataTrigger Binding="{Binding UploadFileItemNumber}" Value="0">
+                                        <DataTrigger Binding="{Binding DownloadFileItemNumber}" Value="0">
                                             <Setter Property="Visibility" Value="Visible" />
                                         </DataTrigger>
                                     </Style.Triggers>
@@ -88,7 +88,7 @@
                                     FontSize="16"
                                     FontWeight="SemiBold"
                                     Foreground="#3b5663"
-                                    Text="全部上传完成" />
+                                    Text="全部下载完成" />
                             </StackPanel>
                         </hc:SimplePanel>
                         <Border
@@ -104,7 +104,7 @@
                                     <Style.Triggers>
                                         <MultiDataTrigger>
                                             <MultiDataTrigger.Conditions>
-                                                <Condition Binding="{Binding IsUploadCompleted}" Value="False" />
+                                                <Condition Binding="{Binding IsDownloadCompleted}" Value="False" />
                                                 <Condition Binding="{Binding IsOpenPopup}" Value="False" />
                                             </MultiDataTrigger.Conditions>
                                             <Setter Property="Visibility" Value="Visible" />
@@ -156,7 +156,7 @@
                             Checked="OpenPopup"
                             FontFamily="{StaticResource FIconFontFamily}"
                             IsChecked="{Binding IsOpenPopup}"
-                            Unchecked="ShrinkPopop">
+                            Unchecked="ShrinkPopop" Cursor="Hand">
                             <hc:StatusSwitchElement.CheckedElement>
                                 <TextBlock Text="&#xe7c7;" />
                             </hc:StatusSwitchElement.CheckedElement>
@@ -179,7 +179,7 @@
                         </Grid.RowDefinitions>
                         <hc:SimplePanel>
                             <Border Background="#f5f6f7" />
-                            <hc:SimplePanel Visibility="{Binding IsUploadCompleted, Converter={StaticResource Boolean2VisibilityReConverter}}">
+                            <hc:SimplePanel Visibility="{Binding IsDownloadCompleted, Converter={StaticResource Boolean2VisibilityReConverter}}">
                                 <Border
                                     Width="{Binding ProcessBorderLength}"
                                     HorizontalAlignment="Left"
@@ -193,19 +193,19 @@
                                         <Style TargetType="TextBlock">
                                             <Setter Property="Visibility" Value="Collapsed" />
                                             <Style.Triggers>
-                                                <DataTrigger Binding="{Binding UploadFileItemNumber}" Value="0">
+                                                <DataTrigger Binding="{Binding DownloadFileItemNumber}" Value="0">
                                                     <Setter Property="Visibility" Value="Visible" />
                                                 </DataTrigger>
                                             </Style.Triggers>
                                         </Style>
                                     </TextBlock.Style>
-                                    <Run Text="正在上传" />
+                                    <Run Text="正在下载" />
                                 </TextBlock>
                                 <StackPanel Orientation="Horizontal">
                                     <StackPanel.Style>
                                         <Style TargetType="StackPanel">
                                             <Style.Triggers>
-                                                <DataTrigger Binding="{Binding UploadFileItemNumber}" Value="0">
+                                                <DataTrigger Binding="{Binding DownloadFileItemNumber}" Value="0">
                                                     <Setter Property="Visibility" Value="Collapsed" />
                                                 </DataTrigger>
                                             </Style.Triggers>
@@ -217,7 +217,7 @@
                                         FontSize="13"
                                         Foreground="#1f2329">
                                         <Run Text="速度: " />
-                                        <Run Text="{Binding UploadSpeed, Converter={StaticResource FileSize2String}}" />
+                                        <Run Text="{Binding DownloadSpeed, Converter={StaticResource FileSize2String}}" />
                                     </TextBlock>
                                     <TextBlock
                                         VerticalAlignment="Center"
@@ -231,12 +231,12 @@
                                 VerticalAlignment="Center"
                                 FontSize="13"
                                 Foreground="#1f2329"
-                                Visibility="{Binding IsUploadCompleted, Converter={StaticResource Boolean2VisibilityConverter}}">
-                                <Run Text="已上传" />
-                                <Run Text="{Binding UploadFileList.Count, Mode=OneWay}" />
+                                Visibility="{Binding IsDownloadCompleted, Converter={StaticResource Boolean2VisibilityConverter}}">
+                                <Run Text="已下载" />
+                                <Run Text="{Binding DownloadFileList.Count, Mode=OneWay}" />
                                 <Run Text="个任务" />
                                 <Run Text="，共" />
-                                <Run Text="{Binding UploadFileSumSize, Converter={StaticResource FileSize2String}}" />
+                                <Run Text="{Binding DownloadFileSumSize, Converter={StaticResource FileSize2String}}" />
                             </TextBlock>
                         </hc:SimplePanel>
                         <hc:ScrollViewer
@@ -246,7 +246,7 @@
                             <ItemsControl
                                 x:Name="listsControl"
                                 FocusVisualStyle="{x:Null}"
-                                ItemsSource="{Binding UploadFileList}">
+                                ItemsSource="{Binding DownloadFileList}">
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
                                         <hc:SimplePanel x:Name="root" Height="52">
@@ -272,7 +272,7 @@
                                                             Margin="0,4,0,0"
                                                             FontSize="12"
                                                             Foreground="#646a73">
-                                                            <Run Text="{Binding UploadedSize, Converter={StaticResource FileSize2String}}" />
+                                                            <Run Text="{Binding DownloadedSize, Converter={StaticResource FileSize2String}}" />
                                                             <Run Text="/" />
                                                             <Run Text="{Binding Size, Converter={StaticResource FileSize2String}}" />
                                                         </TextBlock>
@@ -280,7 +280,7 @@
                                                 </StackPanel>
                                                 <hc:SimplePanel Grid.Column="2">
                                                     <StackPanel
-                                                        x:Name="upload"
+                                                        x:Name="onGoing"
                                                         VerticalAlignment="Center"
                                                         Orientation="Horizontal">
                                                         <StackPanel.Resources>
@@ -315,7 +315,7 @@
                                                             Margin="4,0,0,0"
                                                             HorizontalAlignment="Right">
                                                             <hc:CircleProgressBar
-                                                                x:Name="fileUploadProgress"
+                                                                x:Name="fileDownloadProgress"
                                                                 Width="18"
                                                                 Height="18"
                                                                 VerticalAlignment="Center"
@@ -329,7 +329,7 @@
                                                                     <Style TargetType="ContentControl">
                                                                         <Setter Property="Visibility" Value="Collapsed" />
                                                                         <Style.Triggers>
-                                                                            <DataTrigger Binding="{Binding State}" Value="Uploading">
+                                                                            <DataTrigger Binding="{Binding State}" Value="Downloading">
                                                                                 <Setter Property="Content" Value="{StaticResource PauseBtn}" />
                                                                             </DataTrigger>
                                                                             <DataTrigger Binding="{Binding State}" Value="Pause">
@@ -342,26 +342,26 @@
                                                         </hc:SimplePanel>
                                                     </StackPanel>
                                                     <StackPanel
-                                                        x:Name="uploaded"
+                                                        x:Name="completeInfo"
                                                         VerticalAlignment="Center"
                                                         Visibility="Collapsed">
-                                                        <TextBlock Foreground="{StaticResource SuccessBrush}" Text="上传完成" />
+                                                        <TextBlock Foreground="{StaticResource SuccessBrush}" Text="下载完成" />
                                                     </StackPanel>
                                                 </hc:SimplePanel>
                                             </Grid>
                                         </hc:SimplePanel>
                                         <DataTemplate.Triggers>
                                             <Trigger SourceName="optArea" Property="IsMouseOver" Value="True">
-                                                <Setter TargetName="fileUploadProgress" Property="Visibility" Value="Collapsed" />
+                                                <Setter TargetName="fileDownloadProgress" Property="Visibility" Value="Collapsed" />
                                                 <Setter TargetName="optCmd" Property="Visibility" Value="Visible" />
                                             </Trigger>
                                             <DataTrigger Binding="{Binding State}" Value="Pause">
-                                                <Setter TargetName="fileUploadProgress" Property="Visibility" Value="Collapsed" />
+                                                <Setter TargetName="fileDownloadProgress" Property="Visibility" Value="Collapsed" />
                                                 <Setter TargetName="optCmd" Property="Visibility" Value="Visible" />
                                             </DataTrigger>
                                             <DataTrigger Binding="{Binding Rate}" Value="100">
-                                                <Setter TargetName="upload" Property="Visibility" Value="Collapsed" />
-                                                <Setter TargetName="uploaded" Property="Visibility" Value="Visible" />
+                                                <Setter TargetName="onGoing" Property="Visibility" Value="Collapsed" />
+                                                <Setter TargetName="completeInfo" Property="Visibility" Value="Visible" />
                                             </DataTrigger>
                                         </DataTemplate.Triggers>
                                     </DataTemplate>

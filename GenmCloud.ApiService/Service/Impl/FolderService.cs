@@ -1,5 +1,4 @@
-﻿using GenmCloud.Shared.Common.Session;
-using GenmCloud.Shared.Dto;
+﻿using GenmCloud.Shared.Dto;
 using GenmCloud.Shared.HttpContact;
 using Newtonsoft.Json;
 using RestSharp;
@@ -36,8 +35,8 @@ namespace GenmCloud.ApiService.Service.Impl
 
         public async Task<BaseResponse> CreateFolder(uint parentFolderId, string newFolderName)
         {
-            return await new BaseServiceRequest().GetRequest<BaseResponse>("folder", 
-                new NewFolder { ParentID=parentFolderId, FolderName=newFolderName}, Method.PUT);
+            return await new BaseServiceRequest().GetRequest<BaseResponse>("folder",
+                new NewFolder { ParentID = parentFolderId, FolderName = newFolderName }, Method.PUT);
         }
     }
 }

@@ -11,4 +11,5 @@
     <converter:Timestamp2String x:Key="Timestamp2String" />
     <converter:TreeViewItemMarginConverter x:Key="TreeViewItemMarginConverter" />
     <converter:String2UriConverter x:Key="String2UriConverter" />
+    <converter:StringToBitmapConverter x:Key="StringToBitmapConverter" />
 </ResourceDictionary>

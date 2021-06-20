@@ -6,7 +6,6 @@
 
 namespace GenmCloud.Service
 {
-    using GenmCloud.Shared.Common.Aop;
     using GenmCloud.Shared.Common.Session;
     using GenmCloud.Shared.HttpContact;
     using Newtonsoft.Json;

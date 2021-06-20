@@ -11,7 +11,7 @@ namespace GenmCloud.Shared.Dto
         public string Name { get; set; }
 
         [JsonProperty("size")]
-        public string Size { get; set; }
+        public long Size { get; set; }
 
         [JsonProperty("owner_name")]
         public string OwnerName { get; set; }
@@ -36,5 +36,5 @@ namespace GenmCloud.Shared.Dto
 
         [JsonProperty("folder_id")]
         public uint OwnerFolderId { get; set; }
-    }   
+    }
 }

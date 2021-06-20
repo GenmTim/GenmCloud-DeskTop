@@ -1,9 +1,5 @@
 ﻿using GenmCloud.Shared.Dto;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GenmCloud.Core.Manager.Impl
 {
@@ -44,7 +40,7 @@ namespace GenmCloud.Core.Manager.Impl
             }
             else
             {
-                return new UserDto { Avatar= DefaultAvatar, NickName=DefaultNickName };
+                return new UserDto { Avatar = DefaultAvatar, NickName = DefaultNickName };
             }
         }
 

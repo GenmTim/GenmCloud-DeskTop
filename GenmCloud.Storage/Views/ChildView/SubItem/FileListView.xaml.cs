@@ -3,7 +3,7 @@ using Prism.Events;
 using System;
 using System.Windows;
 using System.Windows.Controls;
-using static GenmCloud.Storage.Views.ChildView.MySpaceView;
+using static GenmCloud.Storage.Views.ChildView.FolderView;
 
 namespace GenmCloud.Storage.Views.ChildView.SubItem
 {

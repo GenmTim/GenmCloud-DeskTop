@@ -1,7 +1,6 @@
 ﻿using GenmCloud.Core.Data.Type;
 using GenmCloud.Shared.Dto;
 using Prism.Mvvm;
-using System;
 
 namespace GenmCloud.Core.Data.VO
 {
@@ -26,7 +25,7 @@ namespace GenmCloud.Core.Data.VO
         public ChatMessageType Type { get; set; }
 
         private UserDto user;
-        public UserDto User 
+        public UserDto User
         {
             get => user;
             set

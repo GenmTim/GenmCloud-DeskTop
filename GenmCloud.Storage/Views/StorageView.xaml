@@ -5,6 +5,7 @@
     xmlns:attach="clr-namespace:Genm.WPF.Attach;assembly=Genm.WPF"
     xmlns:child="clr-namespace:GenmCloud.Storage.Views.ChildView"
     xmlns:cmd="clr-namespace:GenmCloud.Core.UserControls.Cmd;assembly=GenmCloud.Core"
+    xmlns:component="clr-namespace:GenmCloud.Storage.Views.Component"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:genm="clr-namespace:Genm.WPF.Controls;assembly=Genm.WPF"
     xmlns:hc="https://handyorg.github.io/handycontrol"
@@ -14,7 +15,6 @@
     xmlns:prism="http://prismlibrary.com/"
     xmlns:system="clr-namespace:System;assembly=System.Runtime"
     xmlns:token="clr-namespace:GenmCloud.Core.Data.Token;assembly=GenmCloud.Core"
-    xmlns:uc="clr-namespace:GenmCloud.Core.UserControls.Common.Views;assembly=GenmCloud.Core"
     x:Name="storageView"
     prism:ViewModelLocator.AutoWireViewModel="True"
     mc:Ignorable="d">
@@ -119,135 +119,226 @@
         CloseOnClickAway="True"
         Identifier="StorageRoot"
         OverlayBackground="#DF000000">
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="200" />
-                <ColumnDefinition />
-            </Grid.ColumnDefinitions>
-            <Grid Grid.Column="0" Background="#f8f9fa">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="24" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition />
-                </Grid.RowDefinitions>
-                <Border
-                    Grid.RowSpan="3"
-                    BorderBrush="{StaticResource TMS_BorderBrush}"
-                    BorderThickness="0,0,0,0" />
-                <StackPanel Grid.Row="1">
-                    <TextBlock
-                        Margin="20,15,0,0"
-                        FontSize="20"
-                        FontWeight="Bold"
-                        Foreground="#030852"
-                        Text="云存储" />
-                    <hc:SearchBar
-                        Height="33"
-                        Margin="12,15,12,18"
-                        hc:BorderElement.CornerRadius="16" />
-                    <!--<TextBlock
-                        Margin="20,15,0,0"
-                        FontSize="16"
-                        FontWeight="Bold"
-                        Foreground="{StaticResource PrimaryBrush}"
-                        Text="" />-->
-                </StackPanel>
-                <hc:SimplePanel Grid.Row="2" Background="{StaticResource TMS_TransparencyRegionBrush}">
-                    <hc:SimplePanel.ContextMenu>
-                        <ContextMenu Width="150">
-                            <MenuItem Command="{Binding AddFolderCmd}" Header="新建文件夹" />
-                        </ContextMenu>
-                    </hc:SimplePanel.ContextMenu>
-                    <TreeView
-                        x:Name="folderTreeView"
-                        Margin="0,0,0,0"
-                        hc:BorderElement.CornerRadius="0"
-                        Background="Transparent"
-                        BorderThickness="0"
-                        Foreground="#333f87"
-                        ItemsSource="{Binding FileTreeNodeItemList}"
-                        SelectedItemChanged="FolderItemChange"
-                        Style="{StaticResource TreeViewBaseStyle}">
-                        <TreeView.ItemContainerStyle>
-                            <Style BasedOn="{StaticResource cloudTreeViewItemStyle}" TargetType="TreeViewItem" />
-                        </TreeView.ItemContainerStyle>
-                        <TreeView.ItemTemplate>
-                            <HierarchicalDataTemplate ItemsSource="{Binding Children}">
-                                <hc:SimplePanel>
-                                    <StackPanel
-                                        Height="40"
-                                        Background="{StaticResource TMS_TransparencyRegionBrush}"
-                                        Orientation="Horizontal">
-                                        <StackPanel.ContextMenu>
-                                            <ContextMenu
-                                                MaxWidth="160"
-                                                ItemsSource="{Binding OptCmdList}"
-                                                Style="{StaticResource ContextMenuBaseStyle}"
-                                                Visibility="{Binding OptCmdList, Converter={StaticResource Object2VisibilityConverter}}" />
-                                        </StackPanel.ContextMenu>
-                                        <TextBlock
-                                            Margin="4,0,0,0"
-                                            VerticalAlignment="Center"
-                                            FontFamily="{StaticResource FIconFontFamily}"
-                                            FontSize="20"
-                                            Foreground="{Binding Path=(attach:IconFontElement.Color), RelativeSource={RelativeSource AncestorType=TreeViewItem, Mode=FindAncestor}}"
-                                            Text="{Binding Icon}" />
-                                        <TextBlock
-                                            Margin="10,0,0,0"
-                                            VerticalAlignment="Center"
-                                            FontSize="14"
-                                            Foreground="{Binding Path=Foreground, RelativeSource={RelativeSource AncestorType=TreeViewItem, Mode=FindAncestor}}"
-                                            Text="{Binding Folder.Name}" />
-                                    </StackPanel>
-                                    <ContentControl
-                                        Margin="0,0,12,0"
-                                        HorizontalAlignment="Right"
-                                        Visibility="{Binding IsMouseOver, RelativeSource={RelativeSource Mode=TemplatedParent}, Converter={StaticResource Boolean2VisibilityConverter}}">
-                                        <ContentControl.Resources>
-                                            <DataTemplate x:Key="rootOptArea">
-                                                <Button
-                                                    Width="24"
-                                                    Height="24"
-                                                    Padding="0"
-                                                    hc:BackgroundSwitchElement.MouseHoverBackground="#dadcdc"
-                                                    Command="{Binding DataContext.AddFolderCmd, ElementName=storageView}"
-                                                    Content="&#xe61d;"
-                                                    FontFamily="{StaticResource FIconFontFamily}"
-                                                    FontSize="20"
-                                                    Foreground="#86888b"
-                                                    Style="{StaticResource BackgroundBtnStyle}">
-                                                    <hc:Poptip.Instance>
-                                                        <hc:Poptip PlacementType="Right" Offset="6">
-                                                            <hc:Poptip.Content>
-                                                                <TextBlock FontSize="12" Text="创建文件夹" />
-                                                            </hc:Poptip.Content>
-                                                        </hc:Poptip>
-                                                    </hc:Poptip.Instance>
-                                                </Button>
-                                            </DataTemplate>
-                                        </ContentControl.Resources>
-                                        <ContentControl.Style>
-                                            <Style TargetType="ContentControl">
-                                                <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding Tag}" Value="Root">
-                                                        <Setter Property="ContentTemplate" Value="{StaticResource rootOptArea}" />
-                                                    </DataTrigger>
-                                                </Style.Triggers>
-                                            </Style>
-                                        </ContentControl.Style>
-                                    </ContentControl>
-                                </hc:SimplePanel>
-                            </HierarchicalDataTemplate>
-                        </TreeView.ItemTemplate>
-                    </TreeView>
+        <hc:SimplePanel
+            AllowDrop="True"
+            DragEnter="OnDragEnter"
+            DragLeave="OnDragLeave"
+            DragOver="OnDragOver"
+            Drop="OnDrop">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="200" />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <Grid Grid.Column="0" Background="#f8f9fa">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="24" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <Border
+                        Grid.RowSpan="3"
+                        BorderBrush="{StaticResource TMS_BorderBrush}"
+                        BorderThickness="0,0,0,0" />
+                    <StackPanel Grid.Row="1">
+                        <TextBlock
+                            Margin="20,15,0,0"
+                            FontSize="20"
+                            FontWeight="Bold"
+                            Foreground="#030852"
+                            Text="云存储" />
+                        <hc:SearchBar
+                            Height="33"
+                            Margin="12,15,12,18"
+                            hc:BorderElement.CornerRadius="16" />
+                    </StackPanel>
+                    <hc:SimplePanel Grid.Row="2" Background="{StaticResource TMS_TransparencyRegionBrush}">
+                        <hc:SimplePanel.ContextMenu>
+                            <ContextMenu Width="150">
+                                <MenuItem Command="{Binding AddFolderCmd}" Header="新建文件夹" />
+                            </ContextMenu>
+                        </hc:SimplePanel.ContextMenu>
+                        <TreeView
+                            x:Name="folderTreeView"
+                            Margin="0,0,0,0"
+                            hc:BorderElement.CornerRadius="0"
+                            Background="Transparent"
+                            BorderThickness="0"
+                            Foreground="#333f87"
+                            ItemsSource="{Binding FileTreeNodeItemList}"
+                            SelectedItemChanged="FolderItemChange"
+                            Style="{StaticResource TreeViewBaseStyle}">
+                            <TreeView.ItemContainerStyle>
+                                <Style BasedOn="{StaticResource cloudTreeViewItemStyle}" TargetType="TreeViewItem" />
+                            </TreeView.ItemContainerStyle>
+                            <TreeView.ItemTemplate>
+                                <HierarchicalDataTemplate ItemsSource="{Binding Children}">
+                                    <hc:SimplePanel>
+                                        <StackPanel
+                                            Height="40"
+                                            Background="{StaticResource TMS_TransparencyRegionBrush}"
+                                            Orientation="Horizontal">
+                                            <StackPanel.ContextMenu>
+                                                <ContextMenu
+                                                    MaxWidth="160"
+                                                    ItemsSource="{Binding OptCmdList}"
+                                                    Style="{StaticResource ContextMenuBaseStyle}"
+                                                    Visibility="{Binding OptCmdList, Converter={StaticResource Object2VisibilityConverter}}" />
+                                            </StackPanel.ContextMenu>
+                                            <TextBlock
+                                                Margin="4,0,0,0"
+                                                VerticalAlignment="Center"
+                                                FontFamily="{StaticResource FIconFontFamily}"
+                                                FontSize="20"
+                                                Foreground="{Binding Path=(attach:IconFontElement.Color), RelativeSource={RelativeSource AncestorType=TreeViewItem, Mode=FindAncestor}}"
+                                                Text="{Binding Icon}" />
+                                            <TextBlock
+                                                Margin="10,0,0,0"
+                                                VerticalAlignment="Center"
+                                                FontSize="14"
+                                                Foreground="{Binding Path=Foreground, RelativeSource={RelativeSource AncestorType=TreeViewItem, Mode=FindAncestor}}"
+                                                Text="{Binding Folder.Name}" />
+                                        </StackPanel>
+                                        <ContentControl
+                                            Margin="0,0,12,0"
+                                            HorizontalAlignment="Right"
+                                            Visibility="{Binding IsMouseOver, RelativeSource={RelativeSource Mode=TemplatedParent}, Converter={StaticResource Boolean2VisibilityConverter}}">
+                                            <ContentControl.Resources>
+                                                <DataTemplate x:Key="rootOptArea">
+                                                    <Button
+                                                        Width="24"
+                                                        Height="24"
+                                                        Padding="0"
+                                                        hc:BackgroundSwitchElement.MouseHoverBackground="#dadcdc"
+                                                        Command="{Binding DataContext.AddFolderCmd, ElementName=storageView}"
+                                                        Content="&#xe61d;"
+                                                        FontFamily="{StaticResource FIconFontFamily}"
+                                                        FontSize="20"
+                                                        Foreground="#86888b"
+                                                        Style="{StaticResource BackgroundBtnStyle}">
+                                                        <hc:Poptip.Instance>
+                                                            <hc:Poptip PlacementType="Right" Offset="6">
+                                                                <hc:Poptip.Content>
+                                                                    <TextBlock FontSize="12" Text="创建文件夹" />
+                                                                </hc:Poptip.Content>
+                                                            </hc:Poptip>
+                                                        </hc:Poptip.Instance>
+                                                    </Button>
+                                                </DataTemplate>
+                                            </ContentControl.Resources>
+                                            <ContentControl.Style>
+                                                <Style TargetType="ContentControl">
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding Tag}" Value="Root">
+                                                            <Setter Property="ContentTemplate" Value="{StaticResource rootOptArea}" />
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </ContentControl.Style>
+                                        </ContentControl>
+                                    </hc:SimplePanel>
+                                </HierarchicalDataTemplate>
+                            </TreeView.ItemTemplate>
+                        </TreeView>
+                    </hc:SimplePanel>
+                </Grid>
+                <!--#region 右边区域-->
+                <!--#region 内容区域-->
+                <hc:SimplePanel Grid.Column="1">
+
+                    <ContentControl prism:RegionManager.RegionName="{x:Static Member=token:RegionToken.StorageRightContent}" />
+
                 </hc:SimplePanel>
+                <!--#endregion-->
             </Grid>
-            <!--#region 右边区域-->
-            <!--#region 内容区域-->
-            <hc:SimplePanel Grid.Column="1">
-                <ContentControl x:Name="rightContent" />
+
+            <!--#region 上传列表Popup-->
+            <hc:UniformSpacingPanel
+                Margin="0,0,32,32"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Bottom"
+                Orientation="Vertical"
+                Spacing="12">
+                <component:UploadInfoPopup Effect="{StaticResource EffectShadow1}" />
+                <component:DownloadPopup Effect="{StaticResource EffectShadow1}" />
+            </hc:UniformSpacingPanel>
+
+            <!--#endregion-->
+
+            <!--#region 上传蒙版区域-->
+            <hc:SimplePanel
+                x:Name="fileDragMask"
+                Opacity="0"
+                Visibility="Collapsed">
+                <hc:SimplePanel.Style>
+                    <Style TargetType="hc:SimplePanel">
+                        <Style.Triggers>
+                            <Trigger Property="Visibility" Value="Visible">
+                                <Trigger.EnterActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation
+                                                Storyboard.TargetProperty="Opacity"
+                                                To="1"
+                                                Duration="0:0:0.1" />
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.EnterActions>
+                                <Trigger.ExitActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation
+                                                Storyboard.TargetProperty="Opacity"
+                                                To="0"
+                                                Duration="0:0:0.2" />
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.ExitActions>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </hc:SimplePanel.Style>
+                <hc:DashedBorder
+                    Margin="20,30"
+                    hc:BorderElement.CornerRadius="8"
+                    Background="#CFFFFFFF"
+                    BorderBrush="{StaticResource PrimaryBrush}"
+                    BorderDashArray="3,2"
+                    BorderThickness="1"
+                    CornerRadius="8" />
+                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <Image
+                        Width="300"
+                        Height="300"
+                        Margin="0,0,23,0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        RenderOptions.BitmapScalingMode="HighQuality"
+                        Source="pack://application:,,,/GenmCloud.Core;component/Resources/Images/recruitment.png" />
+                    <TextBlock
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        FontSize="18"
+                        FontWeight="Bold"
+                        Text="上传您的文件" />
+                    <StackPanel
+                        Margin="0,10,0,0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Orientation="Horizontal">
+                        <TextBlock
+                            VerticalAlignment="Center"
+                            Foreground="{StaticResource SecondaryTextBrush}"
+                            Text="将会上传到 " />
+                        <TextBlock
+                            VerticalAlignment="Center"
+                            Foreground="#1890ff"
+                            Text="{Binding SelectedFolder.Folder.Name}" />
+                        <TextBlock Foreground="{StaticResource SecondaryTextBrush}" Text=" 中" />
+                    </StackPanel>
+                </StackPanel>
             </hc:SimplePanel>
             <!--#endregion-->
-        </Grid>
+        </hc:SimplePanel>
     </materialDesign:DialogHost>
 </UserControl>

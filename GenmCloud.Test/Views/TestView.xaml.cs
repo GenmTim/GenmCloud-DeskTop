@@ -1,5 +1,8 @@
-﻿using HandyControl.Controls;
+﻿using Genm.WPF.Data.Event;
+using GenmCloud.Shared.Common;
+using HandyControl.Controls;
 using ICSharpCode.AvalonEdit;
+using Prism.Events;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -14,10 +17,12 @@ namespace GenmCloud.Test.Views
     public partial class TestView : UserControl
     {
         private ObservableCollection<DataGridColumn> columns;
+        private IEventAggregator eventAggregator;
 
         public TestView()
         {
             InitializeComponent();
+            eventAggregator = NetCoreProvider.Resolve<IEventAggregator>();
 
         }
 
@@ -98,6 +103,11 @@ namespace GenmCloud.Test.Views
         private void SimplePanel_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             new ImageBrowser(new Uri("http://localhost:1026/static/i1.jpg")).Show();
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            eventAggregator.GetEvent<ToastShowEvent>().Publish("测试");
         }
     }
 }

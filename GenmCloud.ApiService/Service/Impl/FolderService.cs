@@ -38,5 +38,11 @@ namespace GenmCloud.ApiService.Service.Impl
             return await new BaseServiceRequest().GetRequest<BaseResponse>("folder",
                 new NewFolder { ParentID = parentFolderId, FolderName = newFolderName }, Method.PUT);
         }
+
+        public async Task<BaseResponse> DeleteFolder(uint id)
+        {
+            await Task.Delay(1);
+            return new BaseResponse();
+        }
     }
 }

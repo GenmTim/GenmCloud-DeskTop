@@ -237,6 +237,16 @@
                         </ScrollViewer>
                     </Grid>
                     <uc:NameCardView />
+
+                    <hc:SimplePanel
+                        Margin="0,40,0,0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Top">
+                        <genm:Toast
+                            x:Name="toast"
+                            Message="Test_Message"
+                            Duration="0:0:0:3" />
+                    </hc:SimplePanel>
                     <!--<genm:Popup
                         AllowsTransparency="True"
                         HorizontalOffset="24"

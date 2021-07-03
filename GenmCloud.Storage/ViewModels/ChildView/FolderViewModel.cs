@@ -1,4 +1,6 @@
-﻿using GenmCloud.ApiService.Service;
+﻿using Genm.WPF.Data.Event;
+using GenmCloud.ApiService.Service;
+using GenmCloud.ApiService.Service.Impl;
 using GenmCloud.Core.Tools.Helper;
 using GenmCloud.Shared.Common;
 using GenmCloud.Shared.Dto;
@@ -46,15 +48,18 @@ namespace GenmCloud.Storage.ViewModels.ChildView
 
         private readonly IEventAggregator eventAggregator;
         private readonly IRegionManager regionManager;
+        private readonly IFileService fileService;
         private readonly IFolderService folderService;
 
         public DelegateCommand<object> DownloadCmd { get; private set; }
+        public DelegateCommand<object> DeleteCmd { get; private set; }
 
         public FolderViewModel()
         {
             this.eventAggregator = NetCoreProvider.Resolve<IEventAggregator>();
             this.folderService = NetCoreProvider.Resolve<IFolderService>();
             this.regionManager = NetCoreProvider.Resolve<IRegionManager>();
+            this.fileService = NetCoreProvider.Resolve<IFileService>();
             eventAggregator.GetEvent<UpdateFileListEvent>().Subscribe(UpdateFileList);
         }
 
@@ -72,6 +77,7 @@ namespace GenmCloud.Storage.ViewModels.ChildView
             Context = navigationContext.Parameters.GetValue<FolderDto>("context");
             eventAggregator.GetEvent<UpdateFileListEvent>().Publish(null);
             this.DownloadCmd = new DelegateCommand<object>(Download);
+            this.DeleteCmd = new DelegateCommand<object>(Delete);
         }
 
         public async void UpdateFileList(object newContext)
@@ -159,11 +165,20 @@ namespace GenmCloud.Storage.ViewModels.ChildView
             eventAggregator.GetEvent<DownloadFileEvent>().Publish(new DownloadFileTask { FileID = vo.ID, FileSize = vo.Size, FileName = vo.Name, TargetAddr=storagePath });
         }
 
+        private void Delete(object obj)
+        {
+            var vo = (FileItemVO)(obj);
+
+            fileService.DeleteFile(vo.ID);
+            eventAggregator.GetEvent<ToastShowEvent>().Publish("成功删除文件");
+        }
+
         private void AttachContextMenu(FileItemVO vo)
         {
             vo.ContextMenus = new ObservableCollection<MenuItem>();
             var contextMenus = vo.ContextMenus;
             contextMenus.Add(new MenuItem { Header = "下载", Command=DownloadCmd, CommandParameter=vo });
+            contextMenus.Add(new MenuItem { Header = "删除", Command=DeleteCmd, CommandParameter=vo });
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Genm.WPF.Controls;
+using Genm.WPF.Data.Event;
 using Genm.WPF.Data.Interface;
 using Genm.WPF.Data.VO;
 using GenmCloud.Core.Data.Token;
@@ -24,6 +25,7 @@ namespace GenmCloud.Views
             this.regionManager = regionManager;
             this.eventAggregator = eventAggregator;
             Loaded += RegisterDefaultRegionView;
+            eventAggregator.GetEvent<ToastShowEvent>().Subscribe(ToastShow);
         }
 
         public static string GetRouteRegionName()
@@ -34,6 +36,11 @@ namespace GenmCloud.Views
         private void EliminateFocusEvent(object sender, MouseButtonEventArgs e)
         {
             this.panel.Focus();
+        }
+
+        private void ToastShow(string message)
+        {
+            toast.Show(message);
         }
 
         public void RegisterDefaultRegionView(object sender, RoutedEventArgs e)

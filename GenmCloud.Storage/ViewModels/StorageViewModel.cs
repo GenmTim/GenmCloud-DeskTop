@@ -1,4 +1,5 @@
-﻿using GenmCloud.ApiService.Service;
+﻿using Genm.WPF.Data.Event;
+using GenmCloud.ApiService.Service;
 using GenmCloud.Core.Data.Token;
 using GenmCloud.Core.Service.Dialog;
 using GenmCloud.Core.Tools.Helper;
@@ -23,6 +24,7 @@ namespace GenmCloud.Storage.ViewModels
     public class StorageViewModel : BindableBase
     {
         public DelegateCommand<object> AddFolderCmd { get; private set; }
+        public DelegateCommand<object> DeleteFolderCmd { get; private set; }
 
         private FolderTreeNodeVO selectedFolder;
         public FolderTreeNodeVO SelectedFolder
@@ -42,7 +44,7 @@ namespace GenmCloud.Storage.ViewModels
             SelectedFolder = folderContext;
             eventAggregator.GetEvent<UpdateFileListEvent>().Publish(folderContext.Folder);
 
-            if (SelectedFolder.Tag == "Root")
+            if (!string.IsNullOrEmpty(SelectedFolder.Tag))
             {
                 switch (SelectedFolder.Folder.Name)
                 {
@@ -99,6 +101,7 @@ namespace GenmCloud.Storage.ViewModels
             this.folderService = NetCoreProvider.Resolve<IFolderService>();
             this.regionManager = NetCoreProvider.Resolve<IRegionManager>();
             this.AddFolderCmd = new DelegateCommand<object>(AddFolder);
+            this.DeleteFolderCmd = new DelegateCommand<object>(DeleteFolder);
 
             InitTreeRootNode();
             this.eventAggregator.GetEvent<UpdateSelectedFolderEvent>().Subscribe(UpdateSelectedFolder);
@@ -107,11 +110,11 @@ namespace GenmCloud.Storage.ViewModels
 
         private void InitTreeRootNode()
         {
-            FileTreeNodeItemList.Add(new FolderTreeNodeVO { Folder = new FolderDto { Name = "主页", ParentID = uint.MaxValue, }, Icon = "\xe982", Tag = "Root" });
+            FileTreeNodeItemList.Add(new FolderTreeNodeVO { Folder = new FolderDto { Name = "主页", ParentID = uint.MaxValue, }, Icon = "\xe982", Tag = "Root:Dummy" });
             FileTreeNodeItemList.Add(new FolderTreeNodeVO { Folder = new FolderDto { Name = "我的空间", ParentID = uint.MaxValue }, Icon = "\xe980", Children = new ObservableCollection<FolderTreeNodeVO>(), Tag = "Root" });
             FileTreeNodeItemList.Add(new FolderTreeNodeVO { Folder = new FolderDto { Name = "共享空间", ParentID = uint.MaxValue }, Icon = "\xe97a", Children = new ObservableCollection<FolderTreeNodeVO>(), Tag = "Root" });
-            FileTreeNodeItemList.Add(new FolderTreeNodeVO { Folder = new FolderDto { Name = "收藏夹", ParentID = uint.MaxValue }, Icon = "\xe69c", Tag = "Root" });
-            FileTreeNodeItemList.Add(new FolderTreeNodeVO { Folder = new FolderDto { Name = "回收站", ParentID = uint.MaxValue }, Icon = "\xe861", Tag = "Root" });
+            FileTreeNodeItemList.Add(new FolderTreeNodeVO { Folder = new FolderDto { Name = "收藏夹", ParentID = uint.MaxValue }, Icon = "\xe69c", Tag = "Root:Dummy" });
+            FileTreeNodeItemList.Add(new FolderTreeNodeVO { Folder = new FolderDto { Name = "回收站", ParentID = uint.MaxValue }, Icon = "\xe861", Tag = "Root:Dummy" });
         }
 
         public async void AddFolder(object obj)
@@ -133,6 +136,19 @@ namespace GenmCloud.Storage.ViewModels
                 }
             }
         }
+
+        private async void DeleteFolder(object obj)
+        {
+            uint id = 0;
+            if (obj != null)
+            {
+                id = (uint)obj;
+            }
+
+           var result = await folderService.DeleteFolder(id);
+
+            eventAggregator.GetEvent<ToastShowEvent>().Publish("成功删除文件夹");
+        } 
 
         public async void UpdateFolderList()
         {
@@ -174,7 +190,8 @@ namespace GenmCloud.Storage.ViewModels
                         Folder = newTreeFolders[i].Folder,
                         Icon = "\xe645",
                         ParentVO = folderTreeNode,
-                        OptCmdList = new ObservableCollection<MenuItem> { new MenuItem { Header = "新建文件夹", Command = AddFolderCmd, CommandParameter = newTreeFolders[i].Folder.ID } },
+                        OptCmdList = new ObservableCollection<MenuItem> { new MenuItem { Header = "新建文件夹", Command = AddFolderCmd, CommandParameter = newTreeFolders[i].Folder.ID },
+                                                                         new MenuItem { Header = "删除文件夹", Command = DeleteFolderCmd, CommandParameter = newTreeFolders[i].Folder.ID} }
                     });
                 }
 

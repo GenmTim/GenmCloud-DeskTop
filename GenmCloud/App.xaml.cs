@@ -156,6 +156,7 @@ namespace GenmCloud
             containerRegistry.Register<IUploadService, UploadService>();
             containerRegistry.Register<IFolderService, FolderService>();
             containerRegistry.Register<IDownloadService, DownloadService>();
+            containerRegistry.Register<IFileService, FileService>();
         }
 
         // 注册视图路由

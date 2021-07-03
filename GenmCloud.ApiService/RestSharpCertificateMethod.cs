@@ -72,7 +72,7 @@ namespace GenmCloud.Service
                     break;
             }
             var response = await client.ExecuteAsync(request);
-            if (response.StatusCode == System.Net.HttpStatusCode.OK)
+            if (response != null)
             {
                 return JsonConvert.DeserializeObject<Response>(response.Content);
             }

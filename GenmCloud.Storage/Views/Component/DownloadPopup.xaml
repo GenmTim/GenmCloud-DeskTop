@@ -154,9 +154,10 @@
                         <ToggleButton
                             hc:StatusSwitchElement.HideUncheckedElement="True"
                             Checked="OpenPopup"
+                            Cursor="Hand"
                             FontFamily="{StaticResource FIconFontFamily}"
                             IsChecked="{Binding IsOpenPopup}"
-                            Unchecked="ShrinkPopop" Cursor="Hand">
+                            Unchecked="ShrinkPopop">
                             <hc:StatusSwitchElement.CheckedElement>
                                 <TextBlock Text="&#xe7c7;" />
                             </hc:StatusSwitchElement.CheckedElement>
@@ -261,7 +262,7 @@
                                                     <Image
                                                         Height="28"
                                                         Margin="0,0,8,0"
-                                                        Source="pack://application:,,,/GenmCloud.Core;component/Resources/Icon/FileType/Exe.png" />
+                                                        Source="{Binding Name, Converter={StaticResource String2FileTypeIconPath}}" />
                                                     <StackPanel VerticalAlignment="Center">
                                                         <TextBlock
                                                             FontSize="14"

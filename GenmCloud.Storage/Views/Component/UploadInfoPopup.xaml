@@ -260,7 +260,7 @@
                                                     <Image
                                                         Height="28"
                                                         Margin="0,0,8,0"
-                                                        Source="pack://application:,,,/GenmCloud.Core;component/Resources/Icon/FileType/Exe.png" />
+                                                        Source="{Binding Name, Converter={StaticResource String2FileTypeIconPath}}" />
                                                     <StackPanel VerticalAlignment="Center">
                                                         <TextBlock
                                                             FontSize="14"

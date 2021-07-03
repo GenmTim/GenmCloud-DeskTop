@@ -53,6 +53,7 @@
                     </Border>
                 </Border>
             </hc:SimplePanel>
+            <Button Content="Toast测试"  Click="Button_Click"/>
         </StackPanel>
 
 

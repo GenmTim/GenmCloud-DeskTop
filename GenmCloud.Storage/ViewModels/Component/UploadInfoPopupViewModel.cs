@@ -2,6 +2,7 @@
 using GenmCloud.ApiService.Service.Impl;
 using GenmCloud.Core.Data.VO;
 using GenmCloud.Core.Event;
+using GenmCloud.Core.Manager.Impl;
 using GenmCloud.Core.Tools.Helper;
 using GenmCloud.Shared.Common;
 using GenmCloud.Storage.Data.Event;
@@ -20,63 +21,18 @@ using System.Windows.Threading;
 
 namespace GenmCloud.Storage.ViewModels.Component
 {
-
-    public static class UploadConfig
-    {
-        // 分片大小
-        public static long FragmentSize = 4 * 1024 * 1024;
-
-        // 每次读取的大小
-        public static int ReadSize = 8 * 1024;
-
-        // 读取完指定大小，就进行页面显示
-        public static long ShowSize = 256 * 1024;
-    }
-
-    public class UploadManager
-    {
-        private UploadManager()
-        {
-
-        }
-
-        private static UploadManager instance;
-        private UploadService uploadService = new UploadService();
-
-        public static UploadManager GetInstance()
-        {
-            if (instance == null)
-            {
-                instance = new UploadManager();
-            }
-            return instance;
-        }
-
-        private Semaphore semaphore = new Semaphore(2, 2);
-
-        public void RunUpload(byte[] buf, FragmentInfo fragmentInfo, Action<bool> f)
-        {
-            semaphore.WaitOne();
-            Upload(buf, fragmentInfo, f);
-        }
-
-        public async void Upload(byte[] buf, FragmentInfo fragmentInfo, Action<bool> f)
-        {
-            var res = await uploadService.UploadFragment(buf, fragmentInfo.Token, fragmentInfo);
-            if (res.StatusCode == ServiceHelper.RequestOk)
-            {
-                f(true);
-            }
-            else
-            {
-                f(false);
-            }
-            semaphore.Release();
-        }
-    }
-
     public class UploadInfoPopupViewModel : BindableBase
     {
+        public class UploadHeightEvent : PubSubEvent { }
+
+
+
+        // 每秒上传数
+        private long SecondUploaded;
+        private DispatcherTimer _timer = new DispatcherTimer();
+
+        #region Property
+        // 上传速率
         private long uploadSpeed;
         public long UploadSpeed
         {
@@ -88,12 +44,6 @@ namespace GenmCloud.Storage.ViewModels.Component
             }
         }
 
-        private long SecondUploaded;
-
-        private DispatcherTimer _timer = new DispatcherTimer();
-
-
-        #region Property
         // 表示所有任务上传完成
         private bool isUploadCompleted;
         public bool IsUploadCompleted
@@ -209,6 +159,7 @@ namespace GenmCloud.Storage.ViewModels.Component
             }
         }
 
+        // 上传任务链表
         private ObservableCollection<UploadFileItemVO> uploadFileList = new ObservableCollection<UploadFileItemVO>();
         public ObservableCollection<UploadFileItemVO> UploadFileList
         {
@@ -219,7 +170,9 @@ namespace GenmCloud.Storage.ViewModels.Component
                 RaisePropertyChanged();
             }
         }
+        #endregion
 
+        #region Command
         public DelegateCommand ClosePopupCmd { get; private set; }
         public DelegateCommand<object> PauseCmd { get; private set; }
         public DelegateCommand<object> StartCmd { get; private set; }
@@ -230,9 +183,6 @@ namespace GenmCloud.Storage.ViewModels.Component
         private readonly IEventAggregator eventAggregator;
         private readonly IUploadService uploadService;
 
-
-
-        public class UploadHeightEvent : PubSubEvent { }
 
         public UploadInfoPopupViewModel()
         {
@@ -350,6 +300,9 @@ namespace GenmCloud.Storage.ViewModels.Component
 
             await Task.Run(async () =>
             {
+                // 上传的预备工作。
+                // 1. 检查服务器空间是否足够.
+                // 2. 是否允许上传文件.
                 var res = await uploadService.Prepare(vo.Task.FileName, vo.Task.FileSize, vo.Task.FolderId);
                 if (res.StatusCode == ServiceHelper.RequestOk)
                 {
@@ -361,6 +314,7 @@ namespace GenmCloud.Storage.ViewModels.Component
                     return;
                 }
 
+                // 开始文件上传任务
                 var task = vo.Task;
                 task.FragmentNum = (vo.Size - vo.Task.FileOffset + UploadConfig.FragmentSize - 1) / UploadConfig.FragmentSize;
                 using (FileStream stream = File.Open(task.FilePath, FileMode.Open))

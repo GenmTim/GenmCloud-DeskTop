@@ -20,22 +20,22 @@ namespace GenmCloud.Shared.HttpContact
         public object Result { get; set; }
     }
 
-    public class BaseResponse<T>
+    public class BaseResponse<T> : BaseResponse
     {
-        /// <summary>
-        /// 后台消息
-        /// </summary>
-        [JsonProperty("msg")]
-        public string Message { get; set; }
+        ///// <summary>
+        ///// 后台消息
+        ///// </summary>
+        //[JsonProperty("msg")]
+        //public string Message { get; set; }
 
-        /// <summary>
-        /// 返回状态
-        /// </summary>
-        [JsonProperty("code")]
-        public int StatusCode { get; set; }
+        ///// <summary>
+        ///// 返回状态
+        ///// </summary>
+        //[JsonProperty("code")]
+        //public int StatusCode { get; set; }
 
         [JsonProperty("data")]
-        public T Result { get; set; }
+        public new T Result { get; set; }
     }
 }
 

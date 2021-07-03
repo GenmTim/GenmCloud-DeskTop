@@ -90,7 +90,7 @@
                                 <child:FileListView />
                             </hc:SimplePanel>
                             <hc:SimplePanel Grid.Column="1" Margin="20,0,0,0">
-                                <child:DetailInfoView />
+                                <!--<child:DetailInfoView />-->
                             </hc:SimplePanel>
                             <!--#endregion-->
                         </Grid>
